@@ -67,17 +67,152 @@ let stretchPaused=false;
 let stretchSideSwitched=false;
 
 function stretchArt(type){
-  const figures={
-    calf:`<svg viewBox="0 0 320 190" role="img" aria-label="Wadendehnung an der Wand"><path class="wall" d="M270 20v150"/><circle cx="155" cy="38" r="15"/><path d="M155 53l8 53M163 72l44 25M160 73l-32 34M163 106l-47 54M163 106l70 54"/><path class="focus-line" d="M225 125l15 35"/></svg>`,
-    quad:`<svg viewBox="0 0 320 190" role="img" aria-label="Dehnung Oberschenkelvorderseite"><circle cx="160" cy="35" r="15"/><path d="M160 50v58M160 70l-35 30M160 70l35 24M160 108l-28 60M160 108l38 35 20-42"/><path class="focus-line" d="M194 117l22-18"/></svg>`,
-    hamstring:`<svg viewBox="0 0 320 190" role="img" aria-label="Dehnung Oberschenkelrückseite"><circle cx="145" cy="40" r="15"/><path d="M145 55l30 48M158 72l46 25M149 75l-37 30M175 103l-65 55M175 103l78 55"/><path class="ground" d="M55 160h220"/><path class="focus-line" d="M118 144l45-36"/></svg>`,
-    hip:`<svg viewBox="0 0 320 190" role="img" aria-label="Hüftbeugerdehnung"><circle cx="160" cy="35" r="15"/><path d="M160 50v57M160 73l-38 28M160 73l38 26M160 107l-55 45M160 107l65 48"/><path class="ground" d="M65 158h205"/><path class="focus-line" d="M153 108l-32 32"/></svg>`,
-    glute:`<svg viewBox="0 0 320 190" role="img" aria-label="Gesäßdehnung im Sitzen"><circle cx="155" cy="35" r="15"/><path d="M155 50l18 58M165 72l40 28M160 73l-35 32M173 108l-65 38M173 108l65 38M125 120l52 25"/><path class="seat" d="M80 148h175"/><path class="focus-line" d="M142 113l35 29"/></svg>`,
-    chest:`<svg viewBox="0 0 320 190" role="img" aria-label="Brust- und Schulterdehnung an der Wand"><path class="wall" d="M255 20v150"/><circle cx="160" cy="38" r="15"/><path d="M160 53v60M160 72l-45 34M160 72l78 8M160 113l-35 52M160 113l40 52"/><path class="focus-line" d="M188 73l45 7"/></svg>`,
-    plantar:`<svg viewBox="0 0 320 190" role="img" aria-label="Plantarfasziendehnung an der Wand"><path class="wall" d="M255 20v150"/><circle cx="145" cy="35" r="15"/><path d="M145 50v60M145 72l-35 32M145 72l36 30M145 110l-45 50M145 110l75 48"/><path class="focus-line" d="M218 156l25-20"/></svg>`,
-    ankle:`<svg viewBox="0 0 320 190" role="img" aria-label="Sprunggelenkmobilisation Knie zur Wand"><path class="wall" d="M255 20v150"/><circle cx="150" cy="36" r="15"/><path d="M150 51l25 57M160 72l52 24M153 74l-35 31M175 108l-58 51M175 108l65 50"/><path class="focus-line" d="M230 142l13 17"/></svg>`
+  const commonStart = `<svg viewBox="0 0 360 240" role="img" aria-hidden="true">
+    <defs>
+      <linearGradient id="skin" x1="0" x2="1"><stop offset="0" stop-color="#f2c7a5"/><stop offset="1" stop-color="#d99d78"/></linearGradient>
+      <linearGradient id="shirt" x1="0" x2="1"><stop offset="0" stop-color="#1f2937"/><stop offset="1" stop-color="#374151"/></linearGradient>
+      <linearGradient id="shorts" x1="0" x2="1"><stop offset="0" stop-color="#94a3b8"/><stop offset="1" stop-color="#64748b"/></linearGradient>
+      <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity=".16"/></filter>
+    </defs>`;
+  const commonEnd = `</svg>`;
+  const scenes = {
+    calf:`${commonStart}
+      <rect x="292" y="24" width="10" height="190" rx="5" fill="#cbd5e1"/>
+      <ellipse cx="178" cy="216" rx="118" ry="10" fill="#dbe3ea"/>
+      <g filter="url(#shadow)">
+        <circle cx="164" cy="45" r="19" fill="url(#skin)"/>
+        <path d="M151 65 Q165 57 179 67 L187 128 Q170 140 145 128 Z" fill="url(#shirt)"/>
+        <path d="M156 80 L116 110" stroke="url(#skin)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M178 82 L236 102" stroke="url(#skin)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M236 102 L286 100" stroke="url(#skin)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M149 127 L117 196" stroke="url(#shorts)" stroke-width="19" stroke-linecap="round"/>
+        <path d="M182 128 L244 195" stroke="url(#shorts)" stroke-width="19" stroke-linecap="round"/>
+        <path d="M112 199 L92 211" stroke="#111827" stroke-width="12" stroke-linecap="round"/>
+        <path d="M244 197 L269 210" stroke="#111827" stroke-width="12" stroke-linecap="round"/>
+        <path d="M222 170 L248 198" stroke="#f59e0b" stroke-width="18" stroke-linecap="round" opacity=".75"/>
+      </g>
+      <path d="M225 148 C241 158 250 172 254 187" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
+      <text x="32" y="32" font-size="18" font-weight="800" fill="#475569">Ferse bleibt unten</text>
+    ${commonEnd}`,
+    quad:`${commonStart}
+      <ellipse cx="180" cy="216" rx="105" ry="10" fill="#dbe3ea"/>
+      <g filter="url(#shadow)">
+        <circle cx="180" cy="42" r="19" fill="url(#skin)"/>
+        <path d="M163 62 Q180 55 197 63 L203 126 Q180 139 158 126 Z" fill="url(#shirt)"/>
+        <path d="M165 82 L128 105" stroke="url(#skin)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M195 82 L218 116" stroke="url(#skin)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M165 126 L151 202" stroke="url(#shorts)" stroke-width="20" stroke-linecap="round"/>
+        <path d="M195 126 L220 164" stroke="url(#shorts)" stroke-width="20" stroke-linecap="round"/>
+        <path d="M220 164 L244 118" stroke="url(#skin)" stroke-width="16" stroke-linecap="round"/>
+        <path d="M242 118 L225 108" stroke="#111827" stroke-width="12" stroke-linecap="round"/>
+        <path d="M150 202 L132 211" stroke="#111827" stroke-width="12" stroke-linecap="round"/>
+        <path d="M194 137 L218 165" stroke="#f59e0b" stroke-width="19" stroke-linecap="round" opacity=".75"/>
+      </g>
+      <path d="M256 125 C247 145 232 161 219 169" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
+      <text x="32" y="32" font-size="18" font-weight="800" fill="#475569">Knie nebeneinander</text>
+    ${commonEnd}`,
+    hamstring:`${commonStart}
+      <ellipse cx="182" cy="216" rx="122" ry="10" fill="#dbe3ea"/>
+      <g filter="url(#shadow)">
+        <circle cx="151" cy="48" r="19" fill="url(#skin)"/>
+        <path d="M142 65 Q164 61 183 76 L209 122 Q192 140 168 135 L136 92 Z" fill="url(#shirt)"/>
+        <path d="M156 82 L111 119" stroke="url(#skin)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M180 90 L232 110" stroke="url(#skin)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M173 135 L106 201" stroke="url(#shorts)" stroke-width="20" stroke-linecap="round"/>
+        <path d="M196 132 L284 200" stroke="url(#shorts)" stroke-width="20" stroke-linecap="round"/>
+        <path d="M103 202 L83 212" stroke="#111827" stroke-width="12" stroke-linecap="round"/>
+        <path d="M283 201 L307 211" stroke="#111827" stroke-width="12" stroke-linecap="round"/>
+        <path d="M203 146 L267 194" stroke="#f59e0b" stroke-width="18" stroke-linecap="round" opacity=".75"/>
+      </g>
+      <path d="M226 128 C242 140 255 151 266 170" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
+      <text x="32" y="32" font-size="18" font-weight="800" fill="#475569">Rücken bleibt lang</text>
+    ${commonEnd}`,
+    hip:`${commonStart}
+      <ellipse cx="182" cy="216" rx="122" ry="10" fill="#dbe3ea"/>
+      <g filter="url(#shadow)">
+        <circle cx="177" cy="42" r="19" fill="url(#skin)"/>
+        <path d="M160 62 Q178 56 195 64 L204 126 Q183 139 158 127 Z" fill="url(#shirt)"/>
+        <path d="M166 83 L132 110" stroke="url(#skin)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M194 84 L223 109" stroke="url(#skin)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M166 126 L105 176" stroke="url(#shorts)" stroke-width="20" stroke-linecap="round"/>
+        <path d="M195 128 L252 178" stroke="url(#shorts)" stroke-width="20" stroke-linecap="round"/>
+        <path d="M104 176 L77 205" stroke="url(#skin)" stroke-width="16" stroke-linecap="round"/>
+        <path d="M251 178 L278 205" stroke="url(#skin)" stroke-width="16" stroke-linecap="round"/>
+        <path d="M72 208 L95 214" stroke="#111827" stroke-width="12" stroke-linecap="round"/>
+        <path d="M276 207 L301 213" stroke="#111827" stroke-width="12" stroke-linecap="round"/>
+        <ellipse cx="183" cy="132" rx="22" ry="18" fill="#f59e0b" opacity=".65"/>
+      </g>
+      <path d="M219 145 C205 151 192 154 180 154" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
+      <text x="32" y="32" font-size="18" font-weight="800" fill="#475569">Becken nach vorn</text>
+    ${commonEnd}`,
+    glute:`${commonStart}
+      <rect x="76" y="162" width="215" height="16" rx="8" fill="#cbd5e1"/>
+      <ellipse cx="181" cy="216" rx="115" ry="10" fill="#dbe3ea"/>
+      <g filter="url(#shadow)">
+        <circle cx="171" cy="43" r="19" fill="url(#skin)"/>
+        <path d="M155 63 Q171 56 190 64 L201 129 Q179 142 155 128 Z" fill="url(#shirt)"/>
+        <path d="M161 83 L132 119" stroke="url(#skin)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M193 83 L225 119" stroke="url(#skin)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M163 130 L113 163" stroke="url(#shorts)" stroke-width="20" stroke-linecap="round"/>
+        <path d="M195 130 L254 163" stroke="url(#shorts)" stroke-width="20" stroke-linecap="round"/>
+        <path d="M119 155 L176 164" stroke="url(#skin)" stroke-width="16" stroke-linecap="round"/>
+        <path d="M176 164 L223 145" stroke="url(#skin)" stroke-width="16" stroke-linecap="round"/>
+        <ellipse cx="173" cy="137" rx="24" ry="18" fill="#f59e0b" opacity=".65"/>
+      </g>
+      <text x="32" y="32" font-size="18" font-weight="800" fill="#475569">Knöchel aufs Knie</text>
+    ${commonEnd}`,
+    chest:`${commonStart}
+      <rect x="290" y="24" width="10" height="190" rx="5" fill="#cbd5e1"/>
+      <ellipse cx="180" cy="216" rx="108" ry="10" fill="#dbe3ea"/>
+      <g filter="url(#shadow)">
+        <circle cx="170" cy="42" r="19" fill="url(#skin)"/>
+        <path d="M151 63 Q171 56 194 65 L202 129 Q178 142 151 127 Z" fill="url(#shirt)"/>
+        <path d="M159 81 L112 110" stroke="url(#skin)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M193 81 L246 82" stroke="url(#skin)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M246 82 L286 82" stroke="url(#skin)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M162 128 L136 202" stroke="url(#shorts)" stroke-width="20" stroke-linecap="round"/>
+        <path d="M193 128 L224 202" stroke="url(#shorts)" stroke-width="20" stroke-linecap="round"/>
+        <path d="M133 202 L113 211" stroke="#111827" stroke-width="12" stroke-linecap="round"/>
+        <path d="M223 202 L244 211" stroke="#111827" stroke-width="12" stroke-linecap="round"/>
+        <path d="M188 72 L233 82" stroke="#f59e0b" stroke-width="18" stroke-linecap="round" opacity=".7"/>
+      </g>
+      <text x="32" y="32" font-size="18" font-weight="800" fill="#475569">Oberkörper wegdrehen</text>
+    ${commonEnd}`,
+    plantar:`${commonStart}
+      <rect x="290" y="24" width="10" height="190" rx="5" fill="#cbd5e1"/>
+      <ellipse cx="180" cy="216" rx="112" ry="10" fill="#dbe3ea"/>
+      <g filter="url(#shadow)">
+        <circle cx="166" cy="42" r="19" fill="url(#skin)"/>
+        <path d="M149 62 Q167 56 187 64 L197 128 Q175 141 150 127 Z" fill="url(#shirt)"/>
+        <path d="M157 82 L125 111" stroke="url(#skin)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M190 82 L223 111" stroke="url(#skin)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M160 128 L129 199" stroke="url(#shorts)" stroke-width="20" stroke-linecap="round"/>
+        <path d="M189 128 L252 192" stroke="url(#shorts)" stroke-width="20" stroke-linecap="round"/>
+        <path d="M127 200 L107 211" stroke="#111827" stroke-width="12" stroke-linecap="round"/>
+        <path d="M251 193 L284 169" stroke="#111827" stroke-width="14" stroke-linecap="round"/>
+        <path d="M267 180 L286 169" stroke="#f59e0b" stroke-width="14" stroke-linecap="round" opacity=".75"/>
+      </g>
+      <text x="32" y="32" font-size="18" font-weight="800" fill="#475569">Zehen an die Wand</text>
+    ${commonEnd}`,
+    ankle:`${commonStart}
+      <rect x="290" y="24" width="10" height="190" rx="5" fill="#cbd5e1"/>
+      <ellipse cx="180" cy="216" rx="112" ry="10" fill="#dbe3ea"/>
+      <g filter="url(#shadow)">
+        <circle cx="163" cy="42" r="19" fill="url(#skin)"/>
+        <path d="M147 62 Q165 56 184 64 L197 128 Q175 142 149 127 Z" fill="url(#shirt)"/>
+        <path d="M156 82 L124 110" stroke="url(#skin)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M187 82 L222 108" stroke="url(#skin)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M160 128 L122 199" stroke="url(#shorts)" stroke-width="20" stroke-linecap="round"/>
+        <path d="M190 128 L246 185" stroke="url(#shorts)" stroke-width="20" stroke-linecap="round"/>
+        <path d="M120 200 L100 211" stroke="#111827" stroke-width="12" stroke-linecap="round"/>
+        <path d="M246 185 L275 207" stroke="#111827" stroke-width="12" stroke-linecap="round"/>
+        <ellipse cx="249" cy="182" rx="18" ry="14" fill="#f59e0b" opacity=".7"/>
+      </g>
+      <path d="M252 153 C270 159 281 170 286 184" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
+      <text x="32" y="32" font-size="18" font-weight="800" fill="#475569">Knie Richtung Wand</text>
+    ${commonEnd}`
   };
-  return figures[type]||figures.calf;
+  return scenes[type] || scenes.calf;
 }
 
 function renderStretchPreview(){
