@@ -1,10 +1,12 @@
-# RepPilot v11.1 Test
+# RepPilot v11.2 Test
 
-Enthält den 3-Tage-Trainingsplan und eine frei wählbare Dehnsektion.
+Vollständige App-Version.
 
-Dehnen:
-- Füße
-- Beine
-- Vor dem Laufen
-- Nach dem Krafttraining
-- Favoriten
+Neu:
+- Geführte Dehnroutine mit 8 Übungen
+- Bildanleitungen als integrierte SVG-Grafiken
+- 30 Sekunden je Seite
+- Automatischer Seitenwechsel
+- 30 Sekunden Umpositionierungszeit zwischen Übungen
+- Pause, Überspringen, Jetzt starten und Beenden
+- Ton und Vibration bei Wechseln

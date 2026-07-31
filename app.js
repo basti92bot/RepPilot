@@ -47,32 +47,177 @@ const TIPS={"Schrägbankdrücken leicht":"Kontrolliert absenken und mit 1–2 Wi
 "Schrägbankdrücken":"Schulterblätter hinten lassen und Brust stolz halten.","Brustgestütztes Rudern":"Mit den Ellenbogen ziehen, nicht mit den Händen.","Brustpresse":"Nicht komplett durchdrücken, Spannung halten.","Latzug neutral":"Zur oberen Brust ziehen.","Schulterpresse":"Bauch fest und kein Hohlkreuz.","Seitheben Kabel":"Ellenbogen führen und Schulter unten lassen.","Face Pulls":"Zum Gesicht ziehen und Hände nach außen führen.","Shrugs":"Schultern gerade hochziehen, nicht kreisen.","Trizepsdrücken Seil":"Oberarme ruhig am Körper lassen.","Kabelcurls":"Ellenbogen am Körper lassen.","Hanging Leg Raises":"Langsam absenken und nicht schwingen.","Beinpresse":"Knie folgen den Fußspitzen.","Rumänisches Kreuzheben":"Rücken neutral, Hüfte nach hinten.","Beinstrecker":"Kontrolliert bewegen, oben nicht einrasten.","Wadenheben":"Oben halten, unten vollständig dehnen.","Adduktoren":"Langsam schließen und kontrolliert öffnen.","Abduktoren":"Ohne Schwung nach außen drücken.","Crunch-Maschine":"Aus dem Bauch einrollen.","Kabel-Flys":"Ellenbogen leicht gebeugt, kontrolliert schließen.","Latzug breit":"Zur oberen Brust ziehen.","Kabelrudern":"Brust raus, Schulterblätter zusammen.","Reverse Butterfly am Kabel":"Kabel über Kreuz greifen und aus der hinteren Schulter öffnen.","Seitheben":"Ellenbogen führen, nicht über Schulterhöhe.","Overhead Trizeps Kabel":"Ellenbogen eng neben dem Kopf.","Hammercurls":"Handgelenke gerade, nicht schwingen.","Liegestütze bis Maximum":"Saubere Technik vor Wiederholungszahl."};
 
 const STRETCHES=[
-{id:"plantar-wall",category:"Füße",icon:"🦶",name:"Plantarfaszie an der Wand",duration:"30–45 Sek. je Seite",instruction:"Zehen an die Wand stellen, Ferse am Boden lassen und das Knie langsam nach vorne schieben.",mistake:"Ferse nicht anheben."},
-{id:"toe-stretch",category:"Füße",icon:"🦶",name:"Zehen und Fußrücken",duration:"30 Sek. je Seite",instruction:"Im Kniestand die Zehen aufstellen, das Gewicht langsam nach hinten verlagern. Danach den Fußrücken ablegen.",mistake:"Nur bis zu einem deutlichen, nicht stechenden Zug gehen."},
-{id:"ankle-knee-wall",category:"Füße",icon:"🦶",name:"Sprunggelenk Knie-zur-Wand",duration:"10 langsame Wiederholungen",instruction:"Fuß flach aufstellen und das Knie kontrolliert Richtung Wand schieben.",mistake:"Knie folgt der Richtung der Zehen."},
-{id:"calf-straight",category:"Beine",icon:"🦵",name:"Wade mit gestrecktem Knie",duration:"45 Sek. je Seite",instruction:"Hinteres Bein strecken, Ferse fest in den Boden drücken und Oberkörper leicht nach vorne bringen.",mistake:"Fußspitze gerade nach vorne halten."},
-{id:"calf-bent",category:"Beine",icon:"🦵",name:"Tiefe Wade mit gebeugtem Knie",duration:"45 Sek. je Seite",instruction:"Hinteres Knie leicht beugen und die Ferse weiterhin am Boden lassen.",mistake:"Nicht auf die Fußaußenkante kippen."},
-{id:"hamstring",category:"Beine",icon:"🦵",name:"Oberschenkelrückseite",duration:"45 Sek. je Seite",instruction:"Ein Bein nach vorne stellen, Hüfte nach hinten schieben und den Rücken lang halten.",mistake:"Nicht rund nach unten ziehen."},
-{id:"quad",category:"Beine",icon:"🦵",name:"Oberschenkelvorderseite",duration:"45 Sek. je Seite",instruction:"Fuß zum Gesäß ziehen, Knie nebeneinander halten und das Becken leicht nach vorne kippen.",mistake:"Nicht ins Hohlkreuz gehen."},
-{id:"hip-flexor",category:"Beine",icon:"🦵",name:"Hüftbeuger im Ausfallschritt",duration:"45 Sek. je Seite",instruction:"Hinteres Knie ablegen, Gesäß anspannen und das Becken leicht nach vorne schieben.",mistake:"Der Zug kommt aus der Hüfte, nicht aus dem unteren Rücken."},
-{id:"run-swings",category:"Vor dem Laufen",icon:"🏃",name:"Beinschwünge",duration:"10–15 je Richtung",instruction:"Seitlich festhalten und das Bein locker vor und zurück sowie seitlich schwingen.",mistake:"Kontrolliert starten, nicht sofort maximal schwingen."},
-{id:"run-calf",category:"Vor dem Laufen",icon:"🏃",name:"Dynamische Wadenmobilisation",duration:"12 Wiederholungen je Seite",instruction:"Im Ausfallschritt das vordere Knie mehrfach kontrolliert über den Fuß schieben.",mistake:"Ferse bleibt unten."},
-{id:"post-glute",category:"Nach dem Krafttraining",icon:"🏋️",name:"Gesäß im Sitzen",duration:"45 Sek. je Seite",instruction:"Knöchel auf das andere Knie legen und mit geradem Rücken nach vorne lehnen.",mistake:"Nicht am Knie nach unten drücken."},
-{id:"post-chest",category:"Nach dem Krafttraining",icon:"🏋️",name:"Brust an der Wand",duration:"30–45 Sek. je Seite",instruction:"Arm an die Wand legen und den Oberkörper langsam wegdrehen.",mistake:"Schulter unten lassen."}
+{id:"calf",name:"Wade an der Wand",seconds:60,bilateral:true,sideA:"Linke Wade",sideB:"Rechte Wade",instruction:"Hinteres Bein strecken, Ferse fest am Boden lassen und den Oberkörper langsam nach vorne bewegen.",art:"calf"},
+{id:"quad",name:"Oberschenkel vorne",seconds:60,bilateral:true,sideA:"Linkes Bein",sideB:"Rechtes Bein",instruction:"Fuß zum Gesäß ziehen, Knie nebeneinander halten und das Becken leicht nach vorne kippen.",art:"quad"},
+{id:"hamstring",name:"Oberschenkel hinten",seconds:60,bilateral:true,sideA:"Linkes Bein",sideB:"Rechtes Bein",instruction:"Ein Bein nach vorne stellen, Hüfte nach hinten schieben und den Rücken lang halten.",art:"hamstring"},
+{id:"hip",name:"Hüftbeuger",seconds:60,bilateral:true,sideA:"Linke Hüfte",sideB:"Rechte Hüfte",instruction:"Im Ausfallschritt das hintere Knie ablegen, Gesäß anspannen und das Becken leicht nach vorne schieben.",art:"hip"},
+{id:"glute",name:"Gesäß",seconds:60,bilateral:true,sideA:"Linke Seite",sideB:"Rechte Seite",instruction:"Knöchel auf das andere Knie legen und mit geradem Rücken langsam nach vorne lehnen.",art:"glute"},
+{id:"chest",name:"Brust und Schulter",seconds:60,bilateral:true,sideA:"Linke Seite",sideB:"Rechte Seite",instruction:"Arm an einer Wand ablegen und den Oberkörper langsam von der Wand wegdrehen.",art:"chest"},
+{id:"plantar",name:"Plantarfaszie und Zehen",seconds:60,bilateral:true,sideA:"Linker Fuß",sideB:"Rechter Fuß",instruction:"Zehen an einer Wand aufstellen, Ferse am Boden lassen und das Knie langsam nach vorne schieben.",art:"plantar"},
+{id:"ankle",name:"Sprunggelenk",seconds:60,bilateral:true,sideA:"Linkes Sprunggelenk",sideB:"Rechtes Sprunggelenk",instruction:"Fuß flach aufstellen und das Knie kontrolliert über die Zehen nach vorne führen. Ferse bleibt unten.",art:"ankle"}
 ];
-const STRETCH_FAVORITES_KEY="reppilot-stretch-favorites-v1";
-let activeStretchFilter="Alle";
-function stretchFavorites(){try{return JSON.parse(localStorage.getItem(STRETCH_FAVORITES_KEY)||"[]")}catch{return[]}}
-function saveStretchFavorites(items){localStorage.setItem(STRETCH_FAVORITES_KEY,JSON.stringify(items))}
-function toggleStretchFavorite(id){const items=stretchFavorites();const next=items.includes(id)?items.filter(x=>x!==id):[...items,id];saveStretchFavorites(next);renderStretching()}
-function renderStretching(){
- const categories=["Alle","Favoriten","Füße","Beine","Vor dem Laufen","Nach dem Krafttraining"];
- $("stretchFilters").innerHTML=categories.map(x=>`<button class="stretch-filter ${activeStretchFilter===x?"active":""}" data-stretch-filter="${x}">${x}</button>`).join("");
- document.querySelectorAll("[data-stretch-filter]").forEach(b=>b.onclick=()=>{activeStretchFilter=b.dataset.stretchFilter;renderStretching()});
- const favorites=stretchFavorites();
- const items=STRETCHES.filter(x=>activeStretchFilter==="Alle"||(activeStretchFilter==="Favoriten"?favorites.includes(x.id):x.category===activeStretchFilter));
- $("stretchList").innerHTML=items.length?items.map(x=>`<article class="card stretch-card"><div class="stretch-head"><div class="stretch-icon">${x.icon}</div><div><small>${x.category}</small><h3>${x.name}</h3></div><button class="favorite-button ${favorites.includes(x.id)?"active":""}" data-favorite="${x.id}" aria-label="Favorit umschalten">${favorites.includes(x.id)?"★":"☆"}</button></div><div class="stretch-duration">⏱ ${x.duration}</div><p>${x.instruction}</p><p class="stretch-mistake"><strong>Achte darauf:</strong> ${x.mistake}</p></article>`).join(""):`<div class="card center muted">Noch keine Favoriten gespeichert.</div>`;
- document.querySelectorAll("[data-favorite]").forEach(b=>b.onclick=()=>toggleStretchFavorite(b.dataset.favorite));
+
+const STRETCH_WORK_SECONDS=60;
+const STRETCH_TRANSITION_SECONDS=30;
+let stretchIndex=0;
+let stretchMode="idle";
+let stretchRemaining=0;
+let stretchTimer=null;
+let stretchPaused=false;
+let stretchSideSwitched=false;
+
+function stretchArt(type){
+  const figures={
+    calf:`<svg viewBox="0 0 320 190" role="img" aria-label="Wadendehnung an der Wand"><path class="wall" d="M270 20v150"/><circle cx="155" cy="38" r="15"/><path d="M155 53l8 53M163 72l44 25M160 73l-32 34M163 106l-47 54M163 106l70 54"/><path class="focus-line" d="M225 125l15 35"/></svg>`,
+    quad:`<svg viewBox="0 0 320 190" role="img" aria-label="Dehnung Oberschenkelvorderseite"><circle cx="160" cy="35" r="15"/><path d="M160 50v58M160 70l-35 30M160 70l35 24M160 108l-28 60M160 108l38 35 20-42"/><path class="focus-line" d="M194 117l22-18"/></svg>`,
+    hamstring:`<svg viewBox="0 0 320 190" role="img" aria-label="Dehnung Oberschenkelrückseite"><circle cx="145" cy="40" r="15"/><path d="M145 55l30 48M158 72l46 25M149 75l-37 30M175 103l-65 55M175 103l78 55"/><path class="ground" d="M55 160h220"/><path class="focus-line" d="M118 144l45-36"/></svg>`,
+    hip:`<svg viewBox="0 0 320 190" role="img" aria-label="Hüftbeugerdehnung"><circle cx="160" cy="35" r="15"/><path d="M160 50v57M160 73l-38 28M160 73l38 26M160 107l-55 45M160 107l65 48"/><path class="ground" d="M65 158h205"/><path class="focus-line" d="M153 108l-32 32"/></svg>`,
+    glute:`<svg viewBox="0 0 320 190" role="img" aria-label="Gesäßdehnung im Sitzen"><circle cx="155" cy="35" r="15"/><path d="M155 50l18 58M165 72l40 28M160 73l-35 32M173 108l-65 38M173 108l65 38M125 120l52 25"/><path class="seat" d="M80 148h175"/><path class="focus-line" d="M142 113l35 29"/></svg>`,
+    chest:`<svg viewBox="0 0 320 190" role="img" aria-label="Brust- und Schulterdehnung an der Wand"><path class="wall" d="M255 20v150"/><circle cx="160" cy="38" r="15"/><path d="M160 53v60M160 72l-45 34M160 72l78 8M160 113l-35 52M160 113l40 52"/><path class="focus-line" d="M188 73l45 7"/></svg>`,
+    plantar:`<svg viewBox="0 0 320 190" role="img" aria-label="Plantarfasziendehnung an der Wand"><path class="wall" d="M255 20v150"/><circle cx="145" cy="35" r="15"/><path d="M145 50v60M145 72l-35 32M145 72l36 30M145 110l-45 50M145 110l75 48"/><path class="focus-line" d="M218 156l25-20"/></svg>`,
+    ankle:`<svg viewBox="0 0 320 190" role="img" aria-label="Sprunggelenkmobilisation Knie zur Wand"><path class="wall" d="M255 20v150"/><circle cx="150" cy="36" r="15"/><path d="M150 51l25 57M160 72l52 24M153 74l-35 31M175 108l-58 51M175 108l65 50"/><path class="focus-line" d="M230 142l13 17"/></svg>`
+  };
+  return figures[type]||figures.calf;
+}
+
+function renderStretchPreview(){
+  $("stretchPreview").innerHTML=STRETCHES.map((x,i)=>`<article class="card stretch-preview-card"><div class="stretch-preview-number">${i+1}</div><div class="stretch-preview-art">${stretchArt(x.art)}</div><div><h3>${x.name}</h3><p>${x.instruction}</p><small>30 Sek. je Seite</small></div></article>`).join("");
+}
+
+function showStretchScreen(screen){
+  $("stretchOverview").hidden=screen!=="overview";
+  $("stretchRoutine").hidden=screen!=="routine";
+  $("stretchComplete").hidden=screen!=="complete";
+}
+
+function startStretchRoutine(){
+  stopStretchTimer();
+  stretchIndex=0;
+  stretchPaused=false;
+  showStretchScreen("routine");
+  startStretchExercise();
+}
+
+function startStretchExercise(){
+  stretchMode="work";
+  stretchRemaining=STRETCHES[stretchIndex].seconds;
+  stretchSideSwitched=false;
+  $("stretchNextBox").hidden=true;
+  $("startStretchNowBtn").hidden=true;
+  $("pauseStretchBtn").hidden=false;
+  $("skipStretchBtn").hidden=false;
+  renderStretchSession();
+  runStretchTimer();
+}
+
+function startStretchTransition(){
+  if(stretchIndex>=STRETCHES.length-1){completeStretchRoutine();return}
+  stretchMode="transition";
+  stretchRemaining=STRETCH_TRANSITION_SECONDS;
+  $("stretchNextBox").hidden=false;
+  $("stretchNextName").textContent=STRETCHES[stretchIndex+1].name;
+  $("startStretchNowBtn").hidden=false;
+  $("pauseStretchBtn").hidden=false;
+  $("skipStretchBtn").hidden=true;
+  renderStretchSession();
+  runStretchTimer();
+}
+
+function renderStretchSession(){
+  const item=STRETCHES[stretchIndex];
+  $("stretchProgressLabel").textContent=`Übung ${stretchIndex+1} von ${STRETCHES.length}`;
+  $("stretchProgressBar").style.width=`${((stretchIndex+(stretchMode==="transition"?1:0))/STRETCHES.length)*100}%`;
+  $("stretchArt").innerHTML=stretchArt(item.art);
+  $("stretchName").textContent=stretchMode==="transition"?"Umpositionieren":item.name;
+  $("stretchInstruction").textContent=stretchMode==="transition"?`Bereite dich auf „${STRETCHES[stretchIndex+1]?.name||""}“ vor.`:item.instruction;
+  $("stretchPhaseTitle").textContent=stretchMode==="transition"?"Wechselzeit":"Dehnen";
+  $("stretchPhaseLabel").textContent=stretchMode==="transition"?"NÄCHSTE ÜBUNG VORBEREITEN":"DEHNEN";
+  $("stretchClockLabel").textContent=stretchMode==="transition"?"Wechselzeit":"Sekunden";
+  updateStretchSide();
+  updateStretchClock();
+}
+
+function updateStretchSide(){
+  if(stretchMode==="transition"){$("stretchSide").textContent="";return}
+  const item=STRETCHES[stretchIndex];
+  const secondHalf=stretchRemaining<=item.seconds/2;
+  $("stretchSide").textContent=secondHalf?item.sideB:item.sideA;
+  if(secondHalf&&!stretchSideSwitched){
+    stretchSideSwitched=true;
+    signalStretch();
+  }
+}
+
+function updateStretchClock(){
+  const m=Math.floor(stretchRemaining/60);
+  const s=stretchRemaining%60;
+  $("stretchTime").textContent=`${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+  const total=stretchMode==="work"?STRETCHES[stretchIndex].seconds:STRETCH_TRANSITION_SECONDS;
+  $("stretchClock").style.setProperty("--progress",`${Math.min(1,1-stretchRemaining/total)*360}deg`);
+}
+
+function runStretchTimer(){
+  stopStretchTimer();
+  stretchTimer=setInterval(()=>{
+    if(stretchPaused)return;
+    stretchRemaining--;
+    updateStretchSide();
+    updateStretchClock();
+    if(stretchRemaining<=0){
+      signalStretch();
+      stopStretchTimer();
+      if(stretchMode==="work")startStretchTransition();
+      else{stretchIndex++;startStretchExercise()}
+    }
+  },1000);
+}
+
+function toggleStretchPause(){
+  stretchPaused=!stretchPaused;
+  $("pauseStretchBtn").textContent=stretchPaused?"Fortsetzen":"Pause";
+}
+
+function skipStretchPhase(){
+  stopStretchTimer();
+  if(stretchMode==="work")startStretchTransition();
+  else{stretchIndex++;startStretchExercise()}
+}
+
+function startNextStretchNow(){
+  stopStretchTimer();
+  stretchIndex++;
+  startStretchExercise();
+}
+
+function completeStretchRoutine(){
+  stopStretchTimer();
+  stretchMode="complete";
+  showStretchScreen("complete");
+  signalStretch();
+}
+
+function endStretchRoutine(){
+  stopStretchTimer();
+  stretchMode="idle";
+  stretchPaused=false;
+  $("pauseStretchBtn").textContent="Pause";
+  showStretchScreen("overview");
+}
+
+function stopStretchTimer(){
+  if(stretchTimer!==null)clearInterval(stretchTimer);
+  stretchTimer=null;
+}
+
+function signalStretch(){
+  if("vibrate" in navigator)navigator.vibrate([180,80,180]);
+  try{
+    const C=window.AudioContext||window.webkitAudioContext;
+    if(!C)return;
+    const ctx=new C(),osc=ctx.createOscillator(),gain=ctx.createGain();
+    osc.frequency.value=740;gain.gain.value=.08;osc.connect(gain);gain.connect(ctx.destination);
+    osc.start();osc.stop(ctx.currentTime+.16);
+  }catch{}
 }
 
 const KEY="reppilot-history-v11",REST=120,REPS=10,$=id=>document.getElementById(id);
@@ -108,5 +253,12 @@ function nextExercise(){ei++;si=0;phase="set";renderWorkout();scrollTo({top:0,be
 function finish(){active.finishedAt=new Date().toISOString();const h=history();h.push(active);save(h);active=null;renderHistory();renderHome();show("history")}
 function renderHistory(){const h=history(),items=h.slice().reverse(),bests={};for(const w of h)for(const e of w.exercises||[])for(const s of e.sets||[])if(s.done)bests[e.name]=Math.max(bests[e.name]||0,n(s.weight));const setCount=h.reduce((a,w)=>a+w.exercises.reduce((b,e)=>b+e.sets.filter(s=>s.done).length,0),0),volume=h.reduce((a,w)=>a+total(w),0);$("stats").innerHTML=`<div class="stat"><strong>${h.length}</strong><small>Trainings</small></div><div class="stat"><strong>${setCount}</strong><small>Sätze</small></div><div class="stat"><strong>${kg(volume)}</strong><small>kg bewegt</small></div>`;$("historyList").innerHTML=items.length?items.map((w,i)=>`<details class="history-item" ${i===0?"open":""}><summary><div><h3>${w.title}</h3><p>${d(w.finishedAt||w.startedAt)}</p></div><strong>${kg(total(w))} kg</strong></summary><ul>${w.exercises.map(e=>{const done=e.sets.filter(s=>s.done);if(!done.length)return"";const m=Math.max(...done.map(s=>n(s.weight)));return`<li><span>${emo(e.name)} ${e.name}${m===bests[e.name]&&m>0?' <span class="record">🏆</span>':""}</span><strong>${kg(vol(e))} kg</strong></li>`}).join("")}</ul></details>`).join(""):`<div class="card center muted">Noch keine Trainings gespeichert.</div>`}
 function openRun(id){const p=RUN_PLANS[id];$("runTitle").textContent=p.title;$("runMeta").textContent=p.meta;$("runIntro").textContent=p.intro;$("runSteps").innerHTML=p.steps.map((s,i)=>`<article class="run-step"><span class="step-no">${i+1}</span><div><h3>${s[0]}</h3><p>${s[1]}</p></div><div class="speed">${s[2]}</div></article>`).join("");$("runNote").textContent=p.note;show("run")}
-$("completeSetBtn").onclick=completeSet;$("weightInput").addEventListener("keydown",e=>{if(e.key==="Enter")completeSet()});$("addRestBtn").onclick=addRest;$("skipRestBtn").onclick=finishRest;$("startNextBtn").onclick=nextExercise;$("skipNextBtn").onclick=skipExercise;$("finishWorkoutBtn").onclick=finish;$("closeRunBtn").onclick=()=>{renderHome();show("home")};$("cancelBtn").onclick=()=>{if(confirm("Training wirklich abbrechen?")){cancelRest();active=null;show("home")}};document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{if(active&&b.dataset.view!=="workout"&&!confirm("Das laufende Training wird abgebrochen. Fortfahren?"))return;if(active&&b.dataset.view!=="workout"){cancelRest();active=null}if(b.dataset.view==="home")renderHome();if(b.dataset.view==="history")renderHistory();if(b.dataset.view==="stretching")renderStretching();show(b.dataset.view)});
-if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js"));renderHome();renderHistory();renderStretching();
+$("completeSetBtn").onclick=completeSet;$("weightInput").addEventListener("keydown",e=>{if(e.key==="Enter")completeSet()});$("addRestBtn").onclick=addRest;$("skipRestBtn").onclick=finishRest;$("startNextBtn").onclick=nextExercise;$("skipNextBtn").onclick=skipExercise;$("finishWorkoutBtn").onclick=finish;$("closeRunBtn").onclick=()=>{renderHome();show("home")};$("cancelBtn").onclick=()=>{if(confirm("Training wirklich abbrechen?")){cancelRest();active=null;show("home")}};document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{if(active&&b.dataset.view!=="workout"&&!confirm("Das laufende Training wird abgebrochen. Fortfahren?"))return;if(active&&b.dataset.view!=="workout"){cancelRest();active=null}if(b.dataset.view==="home")renderHome();if(b.dataset.view==="history")renderHistory();if(b.dataset.view==="stretching"){renderStretchPreview();showStretchScreen("overview")}show(b.dataset.view)});
+$("startStretchRoutineBtn").onclick=startStretchRoutine;
+$("pauseStretchBtn").onclick=toggleStretchPause;
+$("skipStretchBtn").onclick=skipStretchPhase;
+$("startStretchNowBtn").onclick=startNextStretchNow;
+$("endStretchBtn").onclick=()=>{if(confirm("Dehnroutine wirklich beenden?"))endStretchRoutine()};
+$("restartStretchBtn").onclick=startStretchRoutine;
+if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js"));
+renderHome();renderHistory();renderStretchPreview();showStretchScreen("overview");

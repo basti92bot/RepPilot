@@ -9,10 +9,10 @@
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
   <link rel="stylesheet" href="styles.css">
-  <title>RepPilot v11.1</title>
+  <title>RepPilot v11.2</title>
 </head>
 <body>
-<header><p>TRAINING</p><h1>RepPilot <span>v11.1 TEST</span></h1></header>
+<header><p>TRAINING</p><h1>RepPilot <span>v11.2 TEST</span></h1></header>
 <main>
   <section id="home" class="view active">
     <article class="card hero">
@@ -71,10 +71,62 @@
 
   <section id="history" class="view"><h2>Verlauf & Rekorde</h2><div id="stats" class="stats"></div><div id="historyList" class="stack"></div></section>
   <section id="stretching" class="view">
-    <div class="top"><div><small>FREI WÄHLBAR</small><h2>Dehnen</h2></div></div>
-    <p class="muted">Wähle eine Kategorie oder zeige nur deine Favoriten.</p>
-    <div id="stretchFilters" class="stretch-filters"></div>
-    <div id="stretchList" class="stack"></div>
+    <div id="stretchOverview">
+      <div class="top"><div><small>GEFÜHRTE ROUTINE</small><h2>Dehnen</h2></div></div>
+      <article class="card stretch-intro">
+        <div class="stretch-intro-icon">🧘</div>
+        <h3>8 Dehnübungen</h3>
+        <p>Einmal starten. Die App führt dich automatisch durch alle Übungen.</p>
+        <div class="routine-facts">
+          <span>⏱ 30–60 Sek. dehnen</span>
+          <span>🔄 30 Sek. Wechselzeit</span>
+        </div>
+        <button id="startStretchRoutineBtn" class="wide">Dehnroutine starten</button>
+      </article>
+      <div id="stretchPreview" class="stack"></div>
+    </div>
+
+    <div id="stretchRoutine" hidden>
+      <div class="top">
+        <div><small id="stretchProgressLabel">Übung 1 von 8</small><h2 id="stretchPhaseTitle">Dehnen</h2></div>
+        <button id="endStretchBtn" class="secondary">Beenden</button>
+      </div>
+      <div class="track"><div id="stretchProgressBar"></div></div>
+
+      <article class="card center stretch-session-card">
+        <div id="stretchArt" class="stretch-art"></div>
+        <small id="stretchPhaseLabel">DEHNEN</small>
+        <h2 id="stretchName"></h2>
+        <p id="stretchInstruction" class="stretch-instruction"></p>
+        <p id="stretchSide" class="stretch-side"></p>
+
+        <div id="stretchClock" class="clock stretch-clock">
+          <strong id="stretchTime">00:30</strong>
+          <span id="stretchClockLabel">Sekunden</span>
+        </div>
+
+        <div id="stretchNextBox" class="next-box" hidden>
+          <small>ALS NÄCHSTES</small>
+          <h3 id="stretchNextName"></h3>
+          <p>Du hast 30 Sekunden zum Umpositionieren.</p>
+        </div>
+
+        <div class="stretch-controls">
+          <button id="pauseStretchBtn" class="secondary">Pause</button>
+          <button id="skipStretchBtn" class="secondary">Überspringen</button>
+          <button id="startStretchNowBtn" hidden>Jetzt starten</button>
+        </div>
+      </article>
+    </div>
+
+    <div id="stretchComplete" hidden>
+      <article class="card center">
+        <div class="check">✓</div>
+        <h2>Dehnroutine abgeschlossen</h2>
+        <p class="muted">Alle 8 Übungen sind erledigt.</p>
+        <button id="restartStretchBtn" class="wide">Noch einmal starten</button>
+      </article>
+    </div>
   </section>
 </main>
 <nav><button data-view="home" class="active">Heute</button><button data-view="stretching">Dehnen</button><button data-view="history">Verlauf</button></nav>
