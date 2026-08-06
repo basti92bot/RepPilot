@@ -22,8 +22,8 @@ nav{position:fixed;left:0;right:0;bottom:0;display:grid;grid-template-columns:1f
 .stretch-clock{width:180px;height:180px}.stretch-controls{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px}.stretch-controls #startStretchNowBtn{grid-column:1/-1}.stretch-session-card .next-box{text-align:center;margin-bottom:4px}
 @media(max-width:560px){.stretch-preview-card{grid-template-columns:32px 86px 1fr}.stretch-preview-art{height:72px}.stretch-art{height:205px}.stretch-controls{grid-template-columns:1fr}}
 
-.stretch-preview-art,.stretch-art{height:auto;aspect-ratio:4/3;background:#f7f7f7}
-.stretch-sprite{display:block;width:100%;height:100%;background-image:url("stretch-anatomy-v11.7.png?v=11.7");background-repeat:no-repeat;background-size:200% auto}
+.stretch-preview-art,.stretch-art{position:relative;height:auto;aspect-ratio:4/3;background:#f7f7f7}
+.stretch-sprite{position:absolute;inset:0;display:block;background-image:url("stretch-anatomy-v11.7.png?v=11.7.1");background-repeat:no-repeat;background-size:200% auto}
 .stretch-sprite-calf{background-position:0 0}
 .stretch-sprite-quad{background-position:100% 0}
 .stretch-sprite-hamstring{background-position:0 33.333%}
