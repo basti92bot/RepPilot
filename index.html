@@ -8,11 +8,11 @@
   <meta name="apple-mobile-web-app-title" content="RepPilot">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
-  <link rel="stylesheet" href="styles.css">
-  <title>RepPilot v11.3</title>
+  <link rel="stylesheet" href="styles.css?v=11.6">
+  <title>RepPilot v11.6</title>
 </head>
 <body>
-<header><p>TRAINING</p><h1>RepPilot <span>v11.3 TEST</span></h1></header>
+<header><p>TRAINING</p><h1>RepPilot <span>v11.6 TEST</span></h1></header>
 <main>
   <section id="home" class="view active">
     <article class="card hero">
@@ -40,6 +40,7 @@
       <label for="weightInput">Gewicht</label>
       <div class="weight"><input id="weightInput" type="number" min="0" step="0.5" inputmode="decimal"><span>kg</span></div>
       <button id="completeSetBtn" class="wide">Satz abschließen</button>
+      <button id="deferExerciseBtn" class="secondary wide defer-button">Gerät besetzt, später machen</button>
     </article>
 
     <article id="restPanel" class="card center" hidden>
@@ -130,5 +131,5 @@
   </section>
 </main>
 <nav><button data-view="home" class="active">Heute</button><button data-view="stretching">Dehnen</button><button data-view="history">Verlauf</button></nav>
-<script src="app.js"></script>
+<script src="app.js?v=11.6"></script>
 </body></html>

@@ -1,50 +1,51 @@
 const WORKOUTS=[
-{id:"push",day:1,dayName:"Montag",title:"Push – Brust Fokus",exercises:[
-["Schrägbankdrücken",4,60],
-["Brustpresse",3,50],
-["Kabel-Flys",3,20],
+{id:"push",day:1,dayName:"Montag",title:"Push + Beine",exercises:[
+["Schrägbankdrücken",3,60],
+["Beinpresse",3,120],
 ["Schulterpresse",3,35],
+["Brustpresse",3,50],
 ["Seitheben Kabel",3,7.5],
-["Trizepsdrücken Seil",3,25],
-["Overhead Trizeps Kabel",3,20],
+["Kabel-Flys",2,20],
+["Overhead Cable Extension",2,20],
+["Seil-Pushdown",2,25],
 ["Crunch-Maschine",3,30]
 ]},
 {id:"pull-legs",day:3,dayName:"Mittwoch",title:"Pull + Beine",exercises:[
-["Beinpresse",4,120],
 ["Rumänisches Kreuzheben",3,60],
-["Brustgestütztes Rudern",4,50],
+["Brustgestütztes Rudern",3,50],
+["Beinstrecker",3,40],
 ["Latzug neutral",3,55],
-["Kabelrudern",3,45],
-["Reverse Butterfly am Kabel",3,10],
-["Shrugs",3,60],
-["Kabelcurls",3,20],
+["Incline Curls",3,12],
 ["Wadenheben",3,60],
-["Hanging Leg Raises",3,0]
+["Reverse Butterfly am Kabel",2,10],
+["Preacher Curls",2,20],
+["Hanging Leg Raises",2,0]
 ]},
-{id:"upper-hypertrophy",day:5,dayName:"Freitag",title:"Oberkörper Hypertrophie",exercises:[
+{id:"upper-hypertrophy",day:5,dayName:"Freitag",title:"Oberkörper + Beine",exercises:[
+["Beinbeuger",3,40],
 ["Schrägbankdrücken leicht",3,50],
-["Kabel-Flys",3,20],
 ["Latzug breit",3,50],
+["Seitheben",2,8],
 ["Brustgestütztes Rudern",3,45],
-["Seitheben",3,8],
-["Hammercurls",3,12],
-["Trizepsdrücken Seil",3,25],
+["Hammercurls",2,12],
+["Cross Body Cable Extension",2,10],
+["Wadenheben",2,60],
 ["Liegestütze bis Maximum",2,0],
-["Crunch-Maschine",3,30]
+["Crunch-Maschine",2,30]
 ]}
 ];
 const WEEK=[
-{day:1,dayName:"Montag",title:"Push – Brust Fokus",type:"strength",workoutId:"push",meta:"Brust, Schulter, Trizeps · ca. 60–70 Min."},
+{day:1,dayName:"Montag",title:"Push + Beine",type:"strength",workoutId:"push",meta:"Brust, Schulter, Trizeps, Quadrizeps · ca. 55–65 Min."},
 {day:2,dayName:"Dienstag",title:"Intervalltraining Laufband",type:"run",runId:"interval",meta:"37 Minuten · 1 % Steigung"},
-{day:3,dayName:"Mittwoch",title:"Pull + Beine",type:"strength",workoutId:"pull-legs",meta:"Rücken, Beine, Bizeps · ca. 65–75 Min."},
+{day:3,dayName:"Mittwoch",title:"Pull + Beine",type:"strength",workoutId:"pull-legs",meta:"Rücken, Beine, Bizeps · ca. 55–65 Min."},
 {day:4,dayName:"Donnerstag",title:"Lockerer Dauerlauf",type:"run",meta:"Ruhiges Gesprächstempo"},
-{day:5,dayName:"Freitag",title:"Oberkörper Hypertrophie",type:"strength",workoutId:"upper-hypertrophy",meta:"Brust, Rücken, Arme · ca. 60–70 Min."},
+{day:5,dayName:"Freitag",title:"Oberkörper + Beine",type:"strength",workoutId:"upper-hypertrophy",meta:"Oberkörper, Beinbeuger, Waden · ca. 55–65 Min."},
 {day:6,dayName:"Samstag",title:"Rest Day",type:"rest",meta:"Spaziergang oder Mobility"},
 {day:0,dayName:"Sonntag",title:"Rest Day",type:"rest",meta:"Erholung und Vorbereitung"}];
 const RUN_PLANS={interval:{title:"Intervalltraining Laufband",meta:"37 Minuten · 1 % Steigung",intro:"Die schnellen Abschnitte liegen knapp über dem Zieltempo für 6 km unter 35 Minuten.",steps:[
 ["Einlaufen","8 Minuten","7,0–7,5 km/h"],["Schnelles Intervall","6 × 2 Minuten","10,5 km/h"],["Lockere Pause","nach jedem Intervall 2 Minuten","7,0–7,5 km/h"],["Auslaufen","5 Minuten","6,0–6,5 km/h"]],note:"Wenn alle sechs Intervalle sauber gehen, beim nächsten Mal auf 10,7 km/h erhöhen."}};
 const TIPS={"Schrägbankdrücken leicht":"Kontrolliert absenken und mit 1–2 Wiederholungen Reserve trainieren.",
-"Schrägbankdrücken":"Schulterblätter hinten lassen und Brust stolz halten.","Brustgestütztes Rudern":"Mit den Ellenbogen ziehen, nicht mit den Händen.","Brustpresse":"Nicht komplett durchdrücken, Spannung halten.","Latzug neutral":"Zur oberen Brust ziehen.","Schulterpresse":"Bauch fest und kein Hohlkreuz.","Seitheben Kabel":"Ellenbogen führen und Schulter unten lassen.","Face Pulls":"Zum Gesicht ziehen und Hände nach außen führen.","Shrugs":"Schultern gerade hochziehen, nicht kreisen.","Trizepsdrücken Seil":"Oberarme ruhig am Körper lassen.","Kabelcurls":"Ellenbogen am Körper lassen.","Hanging Leg Raises":"Langsam absenken und nicht schwingen.","Beinpresse":"Knie folgen den Fußspitzen.","Rumänisches Kreuzheben":"Rücken neutral, Hüfte nach hinten.","Beinstrecker":"Kontrolliert bewegen, oben nicht einrasten.","Wadenheben":"Oben halten, unten vollständig dehnen.","Adduktoren":"Langsam schließen und kontrolliert öffnen.","Abduktoren":"Ohne Schwung nach außen drücken.","Crunch-Maschine":"Aus dem Bauch einrollen.","Kabel-Flys":"Ellenbogen leicht gebeugt, kontrolliert schließen.","Latzug breit":"Zur oberen Brust ziehen.","Kabelrudern":"Brust raus, Schulterblätter zusammen.","Reverse Butterfly am Kabel":"Kabel über Kreuz greifen und aus der hinteren Schulter öffnen.","Seitheben":"Ellenbogen führen, nicht über Schulterhöhe.","Overhead Trizeps Kabel":"Ellenbogen eng neben dem Kopf.","Hammercurls":"Handgelenke gerade, nicht schwingen.","Liegestütze bis Maximum":"Saubere Technik vor Wiederholungszahl."};
+"Schrägbankdrücken":"Schulterblätter hinten lassen und Brust stolz halten.","Brustgestütztes Rudern":"Mit den Ellenbogen ziehen, nicht mit den Händen.","Brustpresse":"Nicht komplett durchdrücken, Spannung halten.","Latzug neutral":"Zur oberen Brust ziehen.","Schulterpresse":"Bauch fest und kein Hohlkreuz.","Seitheben Kabel":"Ellenbogen führen und Schulter unten lassen.","Face Pulls":"Zum Gesicht ziehen und Hände nach außen führen.","Shrugs":"Schultern gerade hochziehen, nicht kreisen.","Seil-Pushdown":"Oberarme ruhig am Körper lassen und das Seil unten auseinanderziehen.","Overhead Cable Extension":"Ellenbogen eng neben dem Kopf halten und vollständig strecken.","Cross Body Cable Extension":"Oberarm fest halten und den Unterarm diagonal am Körper vorbei strecken.","Incline Curls":"Oberarme hinter dem Körper lassen und ohne Schwung curlen.","Preacher Curls":"Oberarme fest auflegen und kontrolliert fast vollständig absenken.","Hanging Leg Raises":"Langsam absenken und nicht schwingen.","Beinpresse":"Knie folgen den Fußspitzen.","Beinbeuger":"Hüfte ruhig halten und die Fersen kontrolliert zum Gesäß ziehen.","Rumänisches Kreuzheben":"Rücken neutral, Hüfte nach hinten.","Beinstrecker":"Kontrolliert bewegen, oben nicht einrasten.","Wadenheben":"Oben halten, unten vollständig dehnen.","Adduktoren":"Langsam schließen und kontrolliert öffnen.","Abduktoren":"Ohne Schwung nach außen drücken.","Crunch-Maschine":"Aus dem Bauch einrollen.","Kabel-Flys":"Ellenbogen leicht gebeugt, kontrolliert schließen.","Latzug breit":"Zur oberen Brust ziehen.","Kabelrudern":"Brust raus, Schulterblätter zusammen.","Reverse Butterfly am Kabel":"Kabel über Kreuz greifen und aus der hinteren Schulter öffnen.","Seitheben":"Ellenbogen führen, nicht über Schulterhöhe.","Hammercurls":"Handgelenke gerade, nicht schwingen.","Liegestütze bis Maximum":"Saubere Technik vor Wiederholungszahl."};
 
 const STRETCHES=[
 {id:"calf",name:"Wade an der Wand",seconds:60,bilateral:true,sideA:"Linke Wade",sideB:"Rechte Wade",instruction:"Hinteres Bein strecken, Ferse fest am Boden lassen und den Oberkörper langsam nach vorne bewegen.",art:"calf"},
@@ -376,24 +377,25 @@ $("plan").innerHTML=WEEK.slice().sort((a,b)=>((a.day+6)%7)-((b.day+6)%7)).map(x=
 document.querySelectorAll("[data-workout]").forEach(b=>b.onclick=()=>start(b.dataset.workout));document.querySelectorAll("[data-run]").forEach(b=>b.onclick=()=>openRun(b.dataset.run))}
 function start(id){const w=WORKOUTS.find(x=>x.id===id);active={id:w.id,title:w.title,startedAt:new Date().toISOString(),exercises:w.exercises.map(([name,c,def])=>{const p=last(name,def);return{name,lastTraining:p.date?p:null,sets:Array.from({length:c},(_,i)=>({index:i+1,weight:p.weight,reps:REPS,done:false}))}})};ei=0;si=0;phase="set";cancelRest();renderWorkout();show("workout")}
 function current(){return active.exercises[ei]}
-function renderWorkout(){$("workoutTitle").textContent=active.title;$("counter").textContent=`Übung ${ei+1} von ${active.exercises.length}`;$("bar").style.width=`${((ei+(phase==="complete"?1:0))/active.exercises.length)*100}%`;$("setPanel").hidden=phase!=="set";$("restPanel").hidden=phase!=="rest";$("completePanel").hidden=phase!=="complete";phase==="set"?renderSet():phase==="rest"?renderRest():renderComplete()}
+function renderWorkout(){$("workoutTitle").textContent=active.title;const remaining=active.exercises.length-ei-1;$("counter").textContent=`Übung ${ei+1} von ${active.exercises.length}${remaining>0?` · Noch ${remaining} ${remaining===1?"Übung":"Übungen"}`:" · Letzte Übung"}`;$("bar").style.width=`${((ei+(phase==="complete"?1:0))/active.exercises.length)*100}%`;$("setPanel").hidden=phase!=="set";$("restPanel").hidden=phase!=="rest";$("completePanel").hidden=phase!=="complete";phase==="set"?renderSet():phase==="rest"?renderRest():renderComplete()}
 function renderSet(){const e=current(),s=e.sets[si];$("exerciseName").textContent=e.name;$("exerciseIcon").textContent=emo(e.name);$("exerciseTip").textContent=TIPS[e.name]||"Ruhig und kontrolliert ausführen.";$("setCounter").textContent=`Satz ${si+1} von ${e.sets.length}`;$("fixedReps").textContent=e.name.includes("Maximum")?"Saubere Wiederholungen":"10 Wiederholungen";$("lastTraining").hidden=!e.lastTraining;if(e.lastTraining){$("lastWeightValue").textContent=`${kg(e.lastTraining.weight)} kg`;$("lastWeightDate").textContent=`vom ${d(e.lastTraining.date)}`}$("weightInput").value=s.weight;$("previousSet").hidden=si===0;if(si>0){const p=e.sets[si-1];$("previousSet").textContent=`Letzter Satz: ${kg(p.weight)} kg × ${p.reps}`}$("completeSetBtn").textContent=si===e.sets.length-1?"Letzten Satz abschließen":"Satz abschließen"}
 function completeSet(){const e=current(),s=e.sets[si];if($("weightInput").value.trim()==="")return $("weightInput").focus();s.weight=n($("weightInput").value);s.done=true;lastSet={name:e.name,no:si+1,weight:s.weight};if(si<e.sets.length-1){e.sets[si+1].weight=s.weight;beginRest({type:"set",index:si+1})}else beginRest({type:"complete"})}
 function beginRest(next){cancelRest();afterRest=next;restTotal=REST;restEnd=Date.now()+REST*1000;phase="rest";renderWorkout();timer=setInterval(updateRest,250)}
 function renderRest(){$("restSetSummary").textContent=`${lastSet.name}: Satz ${lastSet.no} erledigt · ${kg(lastSet.weight)} kg × ${REPS}`;$("restNext").textContent=afterRest.type==="set"?`Danach: Satz ${afterRest.index+1}`:ei<active.exercises.length-1?`Danach: ${active.exercises[ei+1].name}`:"Danach Training speichern.";updateRest()}
-function updateRest(){if(phase!=="rest")return;const r=Math.max(0,Math.ceil((restEnd-Date.now())/1000));$("restTime").textContent=`${String(Math.floor(r/60)).padStart(2,"0")}:${String(r%60).padStart(2,"0")}`;$("restClock").style.setProperty("--progress",`${Math.min(1,1-r/restTotal)*360}deg`);if(r===0)finishRest()}
+function updateRest(){if(phase!=="rest")return;const r=Math.max(0,Math.ceil((restEnd-Date.now())/1000));$("restTime").textContent=`${String(Math.floor(r/60)).padStart(2,"0")}:${String(r%60).padStart(2,"0")}`;$("restClock").style.setProperty("--progress",`${Math.min(1,1-r/restTotal)*360}deg`);$("restClock").classList.toggle("ending",r>0&&r<=30);if(r===0){signalStretch();finishRest()}}
 function addRest(){restEnd+=30000;restTotal+=30;updateRest()}function cancelRest(){if(timer)clearInterval(timer);timer=null}function finishRest(){const x=afterRest;cancelRest();if(x?.type==="set"){si=x.index;phase="set"}else phase="complete";renderWorkout();scrollTo({top:0,behavior:"smooth"})}
 function renderComplete(){const e=current(),before=best(e.name),session=Math.max(...e.sets.filter(x=>x.done).map(x=>n(x.weight)),0),record=session>before;$("completedExerciseIcon").textContent=emo(e.name);$("completedExercise").innerHTML=`${e.name}${record?' <span class="record">🏆 NEUER REKORD</span>':""}`;$("exerciseSummary").textContent=`${e.sets.filter(x=>x.done).length} Sätze · ${kg(vol(e))} kg bewegt${record?` · ${kg(session)} kg Bestleistung`:""}`;const has=ei<active.exercises.length-1;$("nextExerciseBlock").hidden=!has;$("finishWorkoutBlock").hidden=has;if(has){const x=active.exercises[ei+1];$("nextExerciseName").textContent=x.name;$("nextExerciseMeta").textContent=`${x.sets.length} Sätze · jeweils ${REPS} Wiederholungen`;$("nextExerciseTip").textContent=TIPS[x.name]||"Ruhig und kontrolliert.";$("skipNextBtn").disabled=ei+2>=active.exercises.length}else $("workoutVolumePreview").textContent=`${kg(total(active))} kg Gesamtgewicht`}
 function nextExercise(){ei++;si=0;phase="set";renderWorkout();scrollTo({top:0,behavior:"smooth"})}function skipExercise(){const i=ei+1;if(i+1>=active.exercises.length)return;[active.exercises[i],active.exercises[i+1]]=[active.exercises[i+1],active.exercises[i]];renderComplete()}
+function deferCurrentExercise(){if(!active||active.exercises.length-ei<=1)return;const [exercise]=active.exercises.splice(ei,1);active.exercises.push(exercise);si=0;phase="set";renderWorkout();scrollTo({top:0,behavior:"smooth"})}
 function finish(){active.finishedAt=new Date().toISOString();const h=history();h.push(active);save(h);active=null;renderHistory();renderHome();show("history")}
 function renderHistory(){const h=history(),items=h.slice().reverse(),bests={};for(const w of h)for(const e of w.exercises||[])for(const s of e.sets||[])if(s.done)bests[e.name]=Math.max(bests[e.name]||0,n(s.weight));const setCount=h.reduce((a,w)=>a+w.exercises.reduce((b,e)=>b+e.sets.filter(s=>s.done).length,0),0),volume=h.reduce((a,w)=>a+total(w),0);$("stats").innerHTML=`<div class="stat"><strong>${h.length}</strong><small>Trainings</small></div><div class="stat"><strong>${setCount}</strong><small>Sätze</small></div><div class="stat"><strong>${kg(volume)}</strong><small>kg bewegt</small></div>`;$("historyList").innerHTML=items.length?items.map((w,i)=>`<details class="history-item" ${i===0?"open":""}><summary><div><h3>${w.title}</h3><p>${d(w.finishedAt||w.startedAt)}</p></div><strong>${kg(total(w))} kg</strong></summary><ul>${w.exercises.map(e=>{const done=e.sets.filter(s=>s.done);if(!done.length)return"";const m=Math.max(...done.map(s=>n(s.weight)));return`<li><span>${emo(e.name)} ${e.name}${m===bests[e.name]&&m>0?' <span class="record">🏆</span>':""}</span><strong>${kg(vol(e))} kg</strong></li>`}).join("")}</ul></details>`).join(""):`<div class="card center muted">Noch keine Trainings gespeichert.</div>`}
 function openRun(id){const p=RUN_PLANS[id];$("runTitle").textContent=p.title;$("runMeta").textContent=p.meta;$("runIntro").textContent=p.intro;$("runSteps").innerHTML=p.steps.map((s,i)=>`<article class="run-step"><span class="step-no">${i+1}</span><div><h3>${s[0]}</h3><p>${s[1]}</p></div><div class="speed">${s[2]}</div></article>`).join("");$("runNote").textContent=p.note;show("run")}
-$("completeSetBtn").onclick=completeSet;$("weightInput").addEventListener("keydown",e=>{if(e.key==="Enter")completeSet()});$("addRestBtn").onclick=addRest;$("skipRestBtn").onclick=finishRest;$("startNextBtn").onclick=nextExercise;$("skipNextBtn").onclick=skipExercise;$("finishWorkoutBtn").onclick=finish;$("closeRunBtn").onclick=()=>{renderHome();show("home")};$("cancelBtn").onclick=()=>{if(confirm("Training wirklich abbrechen?")){cancelRest();active=null;show("home")}};document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{if(active&&b.dataset.view!=="workout"&&!confirm("Das laufende Training wird abgebrochen. Fortfahren?"))return;if(active&&b.dataset.view!=="workout"){cancelRest();active=null}if(b.dataset.view==="home")renderHome();if(b.dataset.view==="history")renderHistory();if(b.dataset.view==="stretching"){renderStretchPreview();showStretchScreen("overview")}show(b.dataset.view)});
+$("completeSetBtn").onclick=completeSet;$("deferExerciseBtn").onclick=deferCurrentExercise;$("weightInput").addEventListener("keydown",e=>{if(e.key==="Enter")completeSet()});$("addRestBtn").onclick=addRest;$("skipRestBtn").onclick=finishRest;$("startNextBtn").onclick=nextExercise;$("skipNextBtn").onclick=skipExercise;$("finishWorkoutBtn").onclick=finish;$("closeRunBtn").onclick=()=>{renderHome();show("home")};$("cancelBtn").onclick=()=>{if(confirm("Training wirklich abbrechen?")){cancelRest();active=null;show("home")}};document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{if(active&&b.dataset.view!=="workout"&&!confirm("Das laufende Training wird abgebrochen. Fortfahren?"))return;if(active&&b.dataset.view!=="workout"){cancelRest();active=null}if(b.dataset.view==="home")renderHome();if(b.dataset.view==="history")renderHistory();if(b.dataset.view==="stretching"){renderStretchPreview();showStretchScreen("overview")}show(b.dataset.view)});
 $("startStretchRoutineBtn").onclick=startStretchRoutine;
 $("pauseStretchBtn").onclick=toggleStretchPause;
 $("skipStretchBtn").onclick=skipStretchPhase;
 $("startStretchNowBtn").onclick=startNextStretchNow;
 $("endStretchBtn").onclick=()=>{if(confirm("Dehnroutine wirklich beenden?"))endStretchRoutine()};
 $("restartStretchBtn").onclick=startStretchRoutine;
-if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js"));
+if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js?v=11.6"));
 renderHome();renderHistory();renderStretchPreview();showStretchScreen("overview");
