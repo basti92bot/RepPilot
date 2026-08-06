@@ -68,6 +68,8 @@ let stretchPaused=false;
 let stretchSideSwitched=false;
 
 function stretchArt(type){
+  const labels={calf:"Wade an der Wand",quad:"Oberschenkel vorne",hamstring:"Oberschenkel hinten",hip:"Hüftbeuger",glute:"Gesäß",chest:"Brust und Schulter",plantar:"Plantarfaszie und Zehen",ankle:"Sprunggelenk"};
+  return `<span class="stretch-sprite stretch-sprite-${type}" role="img" aria-label="${labels[type]||"Dehnübung"}"></span>`;
   const commonStart = `<svg viewBox="0 0 360 240" role="img" aria-hidden="true">
     <defs>
       <linearGradient id="skin" x1="0" x2="1"><stop offset="0" stop-color="#f2c7a5"/><stop offset="1" stop-color="#d99d78"/></linearGradient>
@@ -397,5 +399,5 @@ $("skipStretchBtn").onclick=skipStretchPhase;
 $("startStretchNowBtn").onclick=startNextStretchNow;
 $("endStretchBtn").onclick=()=>{if(confirm("Dehnroutine wirklich beenden?"))endStretchRoutine()};
 $("restartStretchBtn").onclick=startStretchRoutine;
-if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js?v=11.6"));
+if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js?v=11.7"));
 renderHome();renderHistory();renderStretchPreview();showStretchScreen("overview");
