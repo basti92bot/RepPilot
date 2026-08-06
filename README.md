@@ -1,6 +1,9 @@
-# RepPilot v11.6 Test
+# RepPilot v11.7 Test
 
 Neu:
+- Acht neue anatomische Dehnbilder mit rot markierten Zielmuskeln
+- Einheitliche Bildserie ohne fremde Logos oder Wasserzeichen
+- Eine optimierte Sprite-Datei für schnelle Ladezeiten
 - Trainingsplan vollständig neu ausbalanciert
 - 24 Arbeitssätze pro Krafttraining
 - Brust, Rücken, Schultern, Arme und Beine zweimal pro Woche belastet
