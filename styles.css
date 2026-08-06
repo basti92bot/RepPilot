@@ -23,7 +23,7 @@ nav{position:fixed;left:0;right:0;bottom:0;display:grid;grid-template-columns:1f
 @media(max-width:560px){.stretch-preview-card{grid-template-columns:32px 86px 1fr}.stretch-preview-art{height:72px}.stretch-art{height:205px}.stretch-controls{grid-template-columns:1fr}}
 
 .stretch-preview-art,.stretch-art{position:relative;height:auto;aspect-ratio:4/3;background:#f7f7f7}
-.stretch-sprite{position:absolute;inset:0;display:block;background-image:url("stretch-anatomy-v11.7.png?v=11.7.1");background-repeat:no-repeat;background-size:200% auto}
+.stretch-sprite{position:absolute;inset:0;display:block;background-image:url("stretch-anatomy-v11.7.2.png?v=11.7.2");background-repeat:no-repeat;background-size:200% auto}
 .stretch-sprite-calf{background-position:0 0}
 .stretch-sprite-quad{background-position:100% 0}
 .stretch-sprite-hamstring{background-position:0 33.333%}
