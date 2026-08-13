@@ -23,5 +23,14 @@
     fridayWeek.meta = "Brust, Rücken, Schulter, Arme · ca. 45–55 Min.";
   }
 
+  if (RUN_PLANS?.interval) {
+    RUN_PLANS.interval.steps = [
+      ["Einlaufen", "8 Minuten", "7,0–7,5 km/h · Pace 8:34–8:00 min/km"],
+      ["Schnelles Intervall", "6 × 2 Minuten", "10,5 km/h · Pace 5:43 min/km"],
+      ["Lockere Pause", "nach jedem Intervall 2 Minuten", "7,0–7,5 km/h · Pace 8:34–8:00 min/km"],
+      ["Auslaufen", "5 Minuten", "6,0–6,5 km/h · Pace 10:00–9:14 min/km"]
+    ];
+  }
+
   if (typeof renderHome === "function") renderHome();
 })();
