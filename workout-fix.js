@@ -5,6 +5,26 @@
     monday.exercises = monday.exercises.filter(([name]) => name !== "Beinpresse");
   }
 
+  const wednesday = WORKOUTS.find(w => w.id === "pull-legs");
+  if (wednesday) {
+    wednesday.title = "Pull + Beine";
+    const remove = new Set(["Beinpresse", "Rumänisches Kreuzheben", "Beinstrecker", "Beinbeuger", "Wadenheben"]);
+    const upper = wednesday.exercises.filter(([name]) => !remove.has(name));
+    wednesday.exercises = [
+      ["Beinpresse",3,120],
+      ["Brustgestütztes Rudern",3,50],
+      ["Rumänisches Kreuzheben",3,60],
+      ["Latzug neutral",3,55],
+      ["Beinstrecker",3,40],
+      ["Incline Curls",3,12],
+      ["Beinbeuger",3,40],
+      ["Reverse Butterfly am Kabel",2,10],
+      ["Wadenheben",3,60],
+      ["Preacher Curls",2,20],
+      ["Hanging Leg Raises",2,0]
+    ];
+  }
+
   const friday = WORKOUTS.find(w => w.id === "upper-hypertrophy");
   if (friday) {
     friday.title = "Oberkörper";
@@ -15,6 +35,12 @@
   if (mondayWeek) {
     mondayWeek.title = "Push";
     mondayWeek.meta = "Brust, Schulter, Trizeps · ca. 45–55 Min.";
+  }
+
+  const wednesdayWeek = WEEK.find(w => w.day === 3);
+  if (wednesdayWeek) {
+    wednesdayWeek.title = "Pull + Beine";
+    wednesdayWeek.meta = "Rücken, Beine, Bizeps · ca. 65–75 Min.";
   }
 
   const fridayWeek = WEEK.find(w => w.day === 5);
