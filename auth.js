@@ -1,18 +1,41 @@
 (() => {
-  const cfg = window.REPPILOT_SUPABASE_CONFIG;
-  if (!cfg?.url || !cfg?.publishableKey || !window.supabase?.createClient) {
-    console.warn("RepPilot Cloud ist noch nicht konfiguriert.");
+  const PROJECT_URL = "https://tpuufwcywwhrggfptzpi.supabase.co";
+  const STORAGE_KEY = "reppilot-cloud-publishable-key";
+  const savedKey = localStorage.getItem(STORAGE_KEY) || "";
+
+  const style = document.createElement("style");
+  style.textContent = `.auth-overlay{position:fixed;inset:0;z-index:9999;background:#0b1020;display:flex;align-items:center;justify-content:center;padding:20px;font-family:inherit}.auth-overlay[hidden]{display:none}.auth-card{width:min(100%,420px);background:#fff;border-radius:22px;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.35)}.auth-card h2{margin:4px 0 6px;color:#111827}.auth-card p{margin:0 0 18px;color:#64748b}.auth-card label{display:block;font-size:13px;font-weight:700;margin:12px 0 6px;color:#334155}.auth-card input{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:12px;padding:13px 14px;font:inherit;background:#fff;color:#111827}.auth-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.auth-actions button,.auth-logout{border:0;border-radius:12px;padding:12px 14px;font:inherit;font-weight:700;cursor:pointer}.auth-primary{background:#2563eb;color:#fff}.auth-secondary{background:#e2e8f0;color:#0f172a}.auth-message{min-height:20px;margin-top:12px!important;font-size:13px!important}.auth-message.error{color:#b91c1c}.auth-message.ok{color:#047857}.auth-user{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12px;color:#cbd5e1}.auth-logout{padding:5px 9px;background:#334155;color:#fff;font-size:11px}.auth-setup-actions{display:flex;gap:10px;margin-top:16px}.auth-setup-actions button{width:100%}`;
+  document.head.appendChild(style);
+
+  if (!window.supabase?.createClient) {
+    console.error("Supabase Client konnte nicht geladen werden.");
     return;
   }
 
-  const client = window.supabase.createClient(cfg.url, cfg.publishableKey, {
+  if (!savedKey) {
+    const setup = document.createElement("div");
+    setup.className = "auth-overlay";
+    setup.innerHTML = `<div class="auth-card"><small>REPPILOT CLOUD</small><h2>Cloud verbinden</h2><p>Einmalige Einrichtung auf diesem Gerät.</p><label for="cloudKeyInput">Supabase Publishable Key</label><input id="cloudKeyInput" type="text" autocomplete="off" placeholder="sb_publishable_..."><div class="auth-setup-actions"><button id="saveCloudKey" class="auth-primary">Speichern</button></div><p id="cloudKeyMessage" class="auth-message"></p></div>`;
+    document.body.appendChild(setup);
+    const input = setup.querySelector("#cloudKeyInput");
+    const msg = setup.querySelector("#cloudKeyMessage");
+    setup.querySelector("#saveCloudKey").onclick = () => {
+      const value = input.value.trim();
+      if (!value.startsWith("sb_publishable_")) {
+        msg.textContent = "Bitte den Supabase Publishable Key einfügen.";
+        msg.className = "auth-message error";
+        return;
+      }
+      localStorage.setItem(STORAGE_KEY, value);
+      location.reload();
+    };
+    return;
+  }
+
+  const client = window.supabase.createClient(PROJECT_URL, savedKey, {
     auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
   });
   window.repPilotSupabase = client;
-
-  const style = document.createElement("style");
-  style.textContent = `.auth-overlay{position:fixed;inset:0;z-index:9999;background:#0b1020;display:flex;align-items:center;justify-content:center;padding:20px;font-family:inherit}.auth-overlay[hidden]{display:none}.auth-card{width:min(100%,420px);background:#fff;border-radius:22px;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.35)}.auth-card h2{margin:4px 0 6px;color:#111827}.auth-card p{margin:0 0 18px;color:#64748b}.auth-card label{display:block;font-size:13px;font-weight:700;margin:12px 0 6px;color:#334155}.auth-card input{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:12px;padding:13px 14px;font:inherit;background:#fff;color:#111827}.auth-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.auth-actions button,.auth-logout{border:0;border-radius:12px;padding:12px 14px;font:inherit;font-weight:700;cursor:pointer}.auth-primary{background:#2563eb;color:#fff}.auth-secondary{background:#e2e8f0;color:#0f172a}.auth-message{min-height:20px;margin-top:12px!important;font-size:13px!important}.auth-message.error{color:#b91c1c}.auth-message.ok{color:#047857}.auth-user{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12px;color:#cbd5e1}.auth-logout{padding:5px 9px;background:#334155;color:#fff;font-size:11px}`;
-  document.head.appendChild(style);
 
   const overlay = document.createElement("div");
   overlay.className = "auth-overlay";
@@ -40,7 +63,9 @@
     setMessage(data.session?"Account erstellt.":"Account erstellt. Bitte bestätige die E-Mail und melde dich danach an.","ok");
   }
 
-  loginBtn.onclick=signIn; registerBtn.onclick=signUp; password.addEventListener("keydown",e=>{if(e.key==="Enter")signIn();});
+  loginBtn.onclick=signIn;
+  registerBtn.onclick=signUp;
+  password.addEventListener("keydown",e=>{if(e.key==="Enter")signIn();});
 
   function renderUser(session){
     overlay.hidden=!!session;
