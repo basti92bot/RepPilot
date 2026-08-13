@@ -1,10 +1,11 @@
 (() => {
   const PROJECT_URL = "https://tpuufwcywwhrggfptzpi.supabase.co";
-  const STORAGE_KEY = "reppilot-cloud-publishable-key";
-  const savedKey = localStorage.getItem(STORAGE_KEY) || "";
+  const PUBLISHABLE_KEY = "sb_publishable_79GQl0jJBeQ8FKBj2TfnRw_JDyZf1oS";
+
+  localStorage.removeItem("reppilot-cloud-publishable-key");
 
   const style = document.createElement("style");
-  style.textContent = `.auth-overlay{position:fixed;inset:0;z-index:9999;background:#0b1020;display:flex;align-items:center;justify-content:center;padding:20px;font-family:inherit}.auth-overlay[hidden]{display:none}.auth-card{width:min(100%,420px);background:#fff;border-radius:22px;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.35)}.auth-card h2{margin:4px 0 6px;color:#111827}.auth-card p{margin:0 0 18px;color:#64748b}.auth-card label{display:block;font-size:13px;font-weight:700;margin:12px 0 6px;color:#334155}.auth-card input{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:12px;padding:13px 14px;font:inherit;background:#fff;color:#111827}.auth-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.auth-actions button,.auth-logout{border:0;border-radius:12px;padding:12px 14px;font:inherit;font-weight:700;cursor:pointer}.auth-primary{background:#2563eb;color:#fff}.auth-secondary{background:#e2e8f0;color:#0f172a}.auth-message{min-height:20px;margin-top:12px!important;font-size:13px!important}.auth-message.error{color:#b91c1c}.auth-message.ok{color:#047857}.auth-user{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12px;color:#cbd5e1}.auth-logout{padding:5px 9px;background:#334155;color:#fff;font-size:11px}.auth-setup-actions{display:flex;gap:10px;margin-top:16px}.auth-setup-actions button{width:100%}`;
+  style.textContent = `.auth-overlay{position:fixed;inset:0;z-index:9999;background:#0b1020;display:flex;align-items:center;justify-content:center;padding:20px;font-family:inherit}.auth-overlay[hidden]{display:none}.auth-card{width:min(100%,420px);background:#fff;border-radius:22px;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.35)}.auth-card h2{margin:4px 0 6px;color:#111827}.auth-card p{margin:0 0 18px;color:#64748b}.auth-card label{display:block;font-size:13px;font-weight:700;margin:12px 0 6px;color:#334155}.auth-card input{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:12px;padding:13px 14px;font:inherit;background:#fff;color:#111827}.auth-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.auth-actions button,.auth-logout{border:0;border-radius:12px;padding:12px 14px;font:inherit;font-weight:700;cursor:pointer}.auth-primary{background:#2563eb;color:#fff}.auth-secondary{background:#e2e8f0;color:#0f172a}.auth-message{min-height:20px;margin-top:12px!important;font-size:13px!important}.auth-message.error{color:#b91c1c}.auth-message.ok{color:#047857}.auth-user{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12px;color:#cbd5e1}.auth-logout{padding:5px 9px;background:#334155;color:#fff;font-size:11px}`;
   document.head.appendChild(style);
 
   if (!window.supabase?.createClient) {
@@ -12,27 +13,7 @@
     return;
   }
 
-  if (!savedKey) {
-    const setup = document.createElement("div");
-    setup.className = "auth-overlay";
-    setup.innerHTML = `<div class="auth-card"><small>REPPILOT CLOUD</small><h2>Cloud verbinden</h2><p>Einmalige Einrichtung auf diesem Gerät.</p><label for="cloudKeyInput">Supabase Publishable Key</label><input id="cloudKeyInput" type="text" autocomplete="off" placeholder="sb_publishable_..."><div class="auth-setup-actions"><button id="saveCloudKey" class="auth-primary">Speichern</button></div><p id="cloudKeyMessage" class="auth-message"></p></div>`;
-    document.body.appendChild(setup);
-    const input = setup.querySelector("#cloudKeyInput");
-    const msg = setup.querySelector("#cloudKeyMessage");
-    setup.querySelector("#saveCloudKey").onclick = () => {
-      const value = input.value.trim();
-      if (!value.startsWith("sb_publishable_")) {
-        msg.textContent = "Bitte den Supabase Publishable Key einfügen.";
-        msg.className = "auth-message error";
-        return;
-      }
-      localStorage.setItem(STORAGE_KEY, value);
-      location.reload();
-    };
-    return;
-  }
-
-  const client = window.supabase.createClient(PROJECT_URL, savedKey, {
+  const client = window.supabase.createClient(PROJECT_URL, PUBLISHABLE_KEY, {
     auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
   });
   window.repPilotSupabase = client;
@@ -42,7 +23,11 @@
   overlay.innerHTML = `<div class="auth-card"><small>REPPILOT CLOUD</small><h2>Anmelden</h2><p>Dein Training bleibt deinem Account zugeordnet.</p><label for="authEmail">E-Mail</label><input id="authEmail" type="email" autocomplete="email" placeholder="name@example.de"><label for="authPassword">Passwort</label><input id="authPassword" type="password" autocomplete="current-password" minlength="6" placeholder="Mindestens 6 Zeichen"><div class="auth-actions"><button id="authLogin" class="auth-primary">Anmelden</button><button id="authRegister" class="auth-secondary">Registrieren</button></div><p id="authMessage" class="auth-message"></p></div>`;
   document.body.appendChild(overlay);
 
-  const email = overlay.querySelector("#authEmail"), password = overlay.querySelector("#authPassword"), message = overlay.querySelector("#authMessage"), loginBtn = overlay.querySelector("#authLogin"), registerBtn = overlay.querySelector("#authRegister");
+  const email = overlay.querySelector("#authEmail");
+  const password = overlay.querySelector("#authPassword");
+  const message = overlay.querySelector("#authMessage");
+  const loginBtn = overlay.querySelector("#authLogin");
+  const registerBtn = overlay.querySelector("#authRegister");
   const setMessage = (text,type="") => { message.textContent=text; message.className=`auth-message ${type}`; };
   const busy = value => { loginBtn.disabled=value; registerBtn.disabled=value; };
 
