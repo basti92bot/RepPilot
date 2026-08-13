@@ -1,14 +1,15 @@
-const CACHE="reppilot-v11-7-6";
+const CACHE="reppilot-v11-7-7";
 const ASSETS=[
   "./index.html",
-  "./styles.css?v=11.7.6",
-  "./storage-bridge.js?v=11.7.6",
-  "./app.js?v=11.7.6",
-  "./workout-fix.js?v=11.7.6",
+  "./styles.css?v=11.7.7",
+  "./storage-bridge.js?v=11.7.7",
+  "./app.js?v=11.7.7",
+  "./workout-fix.js?v=11.7.7",
+  "./run-feature.js?v=11.7.7",
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png",
-  "./stretch-anatomy-v11.7.2.png?v=11.7.6"
+  "./stretch-anatomy-v11.7.2.png?v=11.7.7"
 ];
 
 self.addEventListener("install",event=>{
