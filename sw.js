@@ -1,16 +1,16 @@
-const CACHE="reppilot-v11-8-1";
+const CACHE="reppilot-v11-8-2";
 const ASSETS=[
   "./index.html",
-  "./styles.css?v=11.8.1",
-  "./auth.js?v=11.8.1",
-  "./storage-bridge.js?v=11.8.1",
-  "./app.js?v=11.8.1",
-  "./workout-fix.js?v=11.8.1",
-  "./run-feature.js?v=11.8.1",
+  "./styles.css?v=11.8.2",
+  "./auth.js?v=11.8.2",
+  "./storage-bridge.js?v=11.8.2",
+  "./app.js?v=11.8.2",
+  "./workout-fix.js?v=11.8.2",
+  "./run-feature.js?v=11.8.2",
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png",
-  "./stretch-anatomy-v11.7.2.png?v=11.8.1"
+  "./stretch-anatomy-v11.7.2.png?v=11.8.2"
 ];
 self.addEventListener("install",event=>{self.skipWaiting();event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));});
 self.addEventListener("activate",event=>{event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)));await self.clients.claim();})());});
