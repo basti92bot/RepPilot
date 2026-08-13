@@ -63,4 +63,47 @@
 
   client.auth.getSession().then(({data})=>renderUser(data.session));
   client.auth.onAuthStateChange((_event,session)=>renderUser(session));
+
+  async function saveWorkoutToCloud(workout){
+    if(!workout)return false;
+    const {data:sessionData}=await client.auth.getSession();
+    const user=sessionData?.session?.user;
+    if(!user)return false;
+
+    const volume=(workout.exercises||[]).reduce((sum,e)=>sum+(e.sets||[]).reduce((s,x)=>x.done?s+(Number(x.weight)||0)*(Number(x.reps)||0):s,0),0);
+    const {data:w,error:wErr}=await client.from("workouts").insert({user_id:user.id,title:workout.title||"Training",started_at:workout.startedAt,finished_at:workout.finishedAt,total_volume:volume}).select("id").single();
+    if(wErr){console.error("Cloud Workout Fehler",wErr);return false;}
+
+    for(let position=0;position<(workout.exercises||[]).length;position++){
+      const e=workout.exercises[position];
+      const done=(e.sets||[]).filter(s=>s.done);
+      if(!done.length)continue;
+      const {data:er,error:eErr}=await client.from("workout_exercises").insert({workout_id:w.id,exercise_name:e.name,position:position+1}).select("id").single();
+      if(eErr){console.error("Cloud Übung Fehler",eErr);return false;}
+      const rows=done.map((s,i)=>({workout_exercise_id:er.id,set_number:s.index||i+1,weight:Number(s.weight)||0,reps:Number(s.reps)||0}));
+      const {error:sErr}=await client.from("workout_sets").insert(rows);
+      if(sErr){console.error("Cloud Satz Fehler",sErr);return false;}
+    }
+    return true;
+  }
+
+  window.addEventListener("DOMContentLoaded",()=>{
+    if(typeof finish!=="function")return;
+    const localFinish=finish;
+    finish=function(){
+      if(!active)return localFinish();
+      active.finishedAt=new Date().toISOString();
+      const snapshot=JSON.parse(JSON.stringify(active));
+      localFinish();
+      saveWorkoutToCloud(snapshot).then(ok=>{
+        localStorage.setItem("reppilot-last-cloud-sync",JSON.stringify({ok,at:new Date().toISOString()}));
+        if(ok)console.info("RepPilot Cloud: Training gespeichert");
+      }).catch(err=>{
+        console.error("RepPilot Cloud Fehler",err);
+        localStorage.setItem("reppilot-last-cloud-sync",JSON.stringify({ok:false,at:new Date().toISOString(),message:err?.message||String(err)}));
+      });
+    };
+    const btn=document.getElementById("finishWorkoutBtn");
+    if(btn)btn.onclick=finish;
+  });
 })();
