@@ -1,0 +1,22 @@
+name: Package RepPilot images
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/package-images.yml'
+  workflow_dispatch:
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Collect images
+        run: |
+          mkdir -p repilot-images
+          cp -v *.png repilot-images/ || true
+      - name: Upload image ZIP artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RepPilot-Bilder
+          path: repilot-images
