@@ -1,15 +1,16 @@
-const CACHE="reppilot-v11-7-7";
+const CACHE="reppilot-v11-8-0";
 const ASSETS=[
   "./index.html",
-  "./styles.css?v=11.7.7",
-  "./storage-bridge.js?v=11.7.7",
-  "./app.js?v=11.7.7",
-  "./workout-fix.js?v=11.7.7",
-  "./run-feature.js?v=11.7.7",
+  "./styles.css?v=11.8.0",
+  "./auth.js?v=11.8.0",
+  "./storage-bridge.js?v=11.8.0",
+  "./app.js?v=11.8.0",
+  "./workout-fix.js?v=11.8.0",
+  "./run-feature.js?v=11.8.0",
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png",
-  "./stretch-anatomy-v11.7.2.png?v=11.7.7"
+  "./stretch-anatomy-v11.7.2.png?v=11.8.0"
 ];
 
 self.addEventListener("install",event=>{
@@ -27,33 +28,21 @@ self.addEventListener("activate",event=>{
 
 self.addEventListener("fetch",event=>{
   if(event.request.method!=="GET") return;
-
   if(event.request.mode==="navigate"){
     event.respondWith((async()=>{
       try{
         const fresh=await fetch(event.request,{cache:"no-store"});
-        if(fresh.ok){
-          const cache=await caches.open(CACHE);
-          await cache.put("./index.html",fresh.clone());
-        }
+        if(fresh.ok){const cache=await caches.open(CACHE);await cache.put("./index.html",fresh.clone());}
         return fresh;
-      }catch{
-        return (await caches.match("./index.html")) || Response.error();
-      }
+      }catch{return (await caches.match("./index.html")) || Response.error();}
     })());
     return;
   }
-
   event.respondWith((async()=>{
     try{
       const fresh=await fetch(event.request,{cache:"no-store"});
-      if(fresh.ok){
-        const cache=await caches.open(CACHE);
-        await cache.put(event.request,fresh.clone());
-      }
+      if(fresh.ok){const cache=await caches.open(CACHE);await cache.put(event.request,fresh.clone());}
       return fresh;
-    }catch{
-      return (await caches.match(event.request)) || Response.error();
-    }
+    }catch{return (await caches.match(event.request)) || Response.error();}
   })());
 });
