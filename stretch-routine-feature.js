@@ -25,30 +25,60 @@
 
   const setData = () => {
     if (typeof STRETCHES === "undefined") return;
-    STRETCHES.forEach(x => {
-      x.seconds = SIDE;
-      x.bilateral = true;
-    });
-    const lower = STRETCHES.find(x => x.id === "glute");
-    if (lower) Object.assign(lower, {
-      name: "Unterer Rücken",
+
+    const glute = STRETCHES.find(x => x.id === "glute");
+    if (glute) Object.assign(glute, {
+      name: "Gesäß",
       sideA: "Linke Seite",
       sideB: "Rechte Seite",
-      instruction: "In Rückenlage beide Knie anziehen und kontrolliert zur Seite sinken lassen. Schultern bleiben am Boden.",
-      art: "lower-back"
+      instruction: "In Rückenlage einen Knöchel auf das andere Knie legen. Das Bein sanft zur Brust ziehen und das Gesäß entspannen.",
+      art: "glute"
     });
-    const upper = STRETCHES.find(x => x.id === "chest");
-    if (upper) Object.assign(upper, {
-      name: "Oberer Rücken",
+
+    const chest = STRETCHES.find(x => x.id === "chest");
+    if (chest) Object.assign(chest, {
+      name: "Brust und Schulter",
       sideA: "Linke Seite",
       sideB: "Rechte Seite",
-      instruction: "Im Vierfüßlerstand einen Arm unter dem Körper durchführen, Schulter und Kopf ablegen und den oberen Rücken öffnen.",
-      art: "upper-back"
+      instruction: "Arm an einer Wand ablegen und den Oberkörper langsam von der Wand wegdrehen.",
+      art: "chest"
     });
+
     const ham = STRETCHES.find(x => x.id === "hamstring");
     if (ham) ham.name = "Beinrückseite";
     const plant = STRETCHES.find(x => x.id === "plantar");
     if (plant) plant.name = "Fußsohle & Zehen";
+
+    if (!STRETCHES.some(x => x.id === "upper-back")) {
+      STRETCHES.push({
+        id: "upper-back",
+        name: "Oberer Rücken",
+        seconds: SIDE,
+        bilateral: true,
+        sideA: "Linke Seite",
+        sideB: "Rechte Seite",
+        instruction: "Im Vierfüßlerstand einen Arm unter dem Körper durchführen, Schulter und Kopf ablegen und den oberen Rücken öffnen.",
+        art: "upper-back"
+      });
+    }
+
+    if (!STRETCHES.some(x => x.id === "lower-back")) {
+      STRETCHES.push({
+        id: "lower-back",
+        name: "Unterer Rücken",
+        seconds: SIDE,
+        bilateral: true,
+        sideA: "Linke Seite",
+        sideB: "Rechte Seite",
+        instruction: "In Rückenlage beide Knie anziehen und kontrolliert zur Seite sinken lassen. Schultern bleiben am Boden.",
+        art: "lower-back"
+      });
+    }
+
+    STRETCHES.forEach(x => {
+      x.seconds = SIDE;
+      x.bilateral = true;
+    });
   };
 
   const setClock = () => {
@@ -174,7 +204,15 @@
   runStretchTimer = run;
   skipStretchPhase = () => { stopStretchTimer(); nextPhase(); };
   startNextStretchNow = () => { stopStretchTimer(); nextPhase(); };
-  completeStretchRoutine = () => { stopStretchTimer(); stretchMode = "complete"; phase = "done"; showStretchScreen("complete"); signalStretch(); };
+  completeStretchRoutine = () => {
+    stopStretchTimer();
+    stretchMode = "complete";
+    phase = "done";
+    const text = document.querySelector("#stretchComplete .muted");
+    if (text) text.textContent = `Alle ${STRETCHES.length} Übungen sind erledigt.`;
+    showStretchScreen("complete");
+    signalStretch();
+  };
   endStretchRoutine = () => { stopStretchTimer(); stretchMode = "idle"; phase = "idle"; stretchPaused = false; $("pauseStretchBtn").textContent = "Pause"; showStretchScreen("overview"); };
 
   const bind = () => {
@@ -190,9 +228,11 @@
     setData();
     renderPreview();
     bind();
+    const completeText = document.querySelector("#stretchComplete .muted");
+    if (completeText) completeText.textContent = `Alle ${STRETCHES.length} Übungen sind erledigt.`;
     const v = document.querySelector("header h1 span");
-    if (v) v.textContent = "v11.8.26";
-    document.title = "RepPilot v11.8.26";
+    if (v) v.textContent = "v11.8.28";
+    document.title = "RepPilot v11.8.28";
   };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
