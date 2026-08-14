@@ -46,6 +46,6 @@ const baseRenderHome=typeof renderHome==="function"?renderHome:null;
 function activePlanCard(){const root=document.getElementById("home");if(!root)return;let c=document.getElementById("selectedTrainingPlanHome");if(!c){c=document.createElement("article");c.id="selectedTrainingPlanHome";c.className="card selected-plan-home";const d=root.querySelector('.home-dashboard');d?d.insertAdjacentElement('afterend',c):root.prepend(c)}const p=current();c.innerHTML='<div class="selected-plan-icon">'+p.icon+'</div><div class="grow"><small>AKTIVER TRAININGSPLAN</small><h2>'+p.title+'</h2><p>'+p.subtitle+'</p></div>'}
 function renderSelectedHome(){if(baseRenderHome)baseRenderHome();activePlanCard();renderCustomWeek(selectedWeek())}
 if(baseRenderHome){renderHome=function(){renderSelectedHome()}}
-function init(){styles();ensureCustomWorkouts();renderSelectedHome();profile();const v=document.querySelector('header h1 span');if(v)v.textContent='v11.8.19 CLOUD TEST';document.title='RepPilot v11.8.19';let n=0;const timer=setInterval(()=>{n++;if(profile()||n>20)clearInterval(timer)},250)}
+function init(){styles();ensureCustomWorkouts();renderSelectedHome();profile();const v=document.querySelector('header h1 span');if(v)v.textContent='v11.8.21 CLOUD TEST';document.title='RepPilot v11.8.21';let n=0;const timer=setInterval(()=>{n++;if(profile()||n>20)clearInterval(timer)},250)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
