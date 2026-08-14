@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="RepPilot Muskelmann Logo">
+  <defs>
+    <linearGradient id="shieldGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#05132d"/>
+      <stop offset="55%" stop-color="#08285f"/>
+      <stop offset="100%" stop-color="#041127"/>
+    </linearGradient>
+    <linearGradient id="edgeGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#69b0ff"/>
+      <stop offset="50%" stop-color="#2f80ff"/>
+      <stop offset="100%" stop-color="#7ac0ff"/>
+    </linearGradient>
+    <linearGradient id="muscleGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#254f9d"/>
+      <stop offset="55%" stop-color="#0e2f71"/>
+      <stop offset="100%" stop-color="#06183d"/>
+    </linearGradient>
+    <linearGradient id="highlightGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6fa6ff" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#2e61c9" stop-opacity="0.95"/>
+    </linearGradient>
+    <clipPath id="shieldClip">
+      <path d="M256 18 441 112v214L256 494 71 326V112Z"/>
+    </clipPath>
+    <style>
+      .outline{stroke:#eef6ff;stroke-width:7;stroke-linejoin:round;stroke-linecap:round}
+      .thin-outline{stroke:#eaf3ff;stroke-width:5;stroke-linejoin:round;stroke-linecap:round}
+    </style>
+  </defs>
+
+  <path d="M256 18 441 112v214L256 494 71 326V112Z" fill="#03102a"/>
+  <path d="M256 28 432 117v203L256 481 80 320V117Z" fill="url(#shieldGrad)" stroke="url(#edgeGrad)" stroke-width="18" stroke-linejoin="round"/>
+
+  <g clip-path="url(#shieldClip)" opacity="0.75">
+    <path d="M84 317 209 194l18 16-125 124z" fill="#2c63c9" opacity="0.65"/>
+    <path d="M129 371 272 230l16 15-143 141z" fill="#1f58b9" opacity="0.85"/>
+    <path d="M286 235 414 108l18 15-128 128z" fill="#2c63c9" opacity="0.7"/>
+    <path d="M336 281 447 170v28L363 310z" fill="#1f58b9" opacity="0.85"/>
+    <path d="M304 420 427 299l14 13-123 122z" fill="#194896" opacity="0.85"/>
+  </g>
+
+  <g id="armLeft">
+    <path class="outline" fill="url(#muscleGrad)" d="M181 222c-17-18-34-31-56-36-28-6-53 4-69 29-13 21-23 43-31 67-10 29-17 44-18 59-2 13 8 26 20 33 20 12 53 20 89 20 23 0 43-5 58-13 13-7 20-18 18-30-4-20-18-39-22-59-4-18 4-40 19-55 8-8 11-18 10-27-1-6-6-11-18-18z"/>
+    <path class="thin-outline" fill="none" d="M53 220c14-18 33-21 49-17 18 4 36 16 53 33"/>
+    <path fill="url(#highlightGrad)" opacity="0.9" d="M63 287c12-36 26-61 43-75 15-12 37-15 58-2-14 2-25 10-34 20-17 19-24 39-22 60-14 15-31 25-50 28-17 3-32-3-44-15 20-2 38-8 49-16z"/>
+    <path fill="url(#highlightGrad)" opacity="0.85" d="M67 345c24 7 53 10 79 6-12 10-27 16-43 17-21 2-44-4-67-13 10-2 21-5 31-10z"/>
+    <path class="outline" fill="url(#muscleGrad)" d="M68 126c17-8 40-6 59 5 15 8 30 23 33 40 2 13-6 25-21 30-19 7-51 7-72 2-15-4-24-15-24-27 0-22 12-40 25-50z"/>
+    <path fill="url(#highlightGrad)" opacity="0.95" d="M90 136c18-4 34 0 48 9 8 5 14 12 16 20-10-2-20 0-28 5-16 8-33 10-51 7-9-1-17-5-21-10 8-14 21-26 36-31z"/>
+  </g>
+
+  <use href="#armLeft" transform="translate(512 0) scale(-1 1)"/>
+
+  <path class="outline" fill="url(#muscleGrad)" d="M256 118c-24 0-45 12-58 31-14 20-20 44-24 65-28 9-47 28-57 49-12 24-14 49-8 74 7 25 25 46 47 58 12 7 19 19 23 35 4 18 10 34 23 45 13 10 33 14 54 14s41-4 54-14c13-11 19-27 23-45 4-16 11-28 23-35 22-12 40-33 47-58 6-25 4-50-8-74-10-21-29-40-57-49-4-21-10-45-24-65-13-19-34-31-58-31z"/>
+
+  <path class="outline" fill="#071a42" d="M228 82c-10 10-18 27-14 42 3 12 11 21 24 27 11 4 24 4 36 0 18-7 29-19 32-35 3-19-7-38-22-49-17-13-40-17-56-11z"/>
+  <path fill="#f4fbff" d="M214 74c10 7 22 9 36 8-9-8-13-16-14-23 13 10 29 16 48 18-5-8-7-16-6-22 13 12 26 26 27 44-7-6-14-10-20-12 8 8 12 15 14 24-12-9-25-14-40-16-18-3-33 0-46 7-8 4-15 8-21 14-2-16 6-31 22-42z"/>
+  <path fill="#0a1430" d="M251 107c-9 3-17 9-22 17-8 12-7 29-1 42 6 13 18 21 31 24-20 2-37-6-47-19-14-18-14-46 1-66 11-16 34-25 55-19-7 4-12 10-17 21z"/>
+  <path class="thin-outline" fill="none" d="M288 101c7 7 11 15 12 26"/>
+
+  <path class="outline" fill="#102d69" d="M178 222c18-17 44-27 78-27s60 10 78 27c8 8 14 18 16 30 2 15-4 32-17 43-15 12-40 19-77 19s-62-7-77-19c-13-11-19-28-17-43 2-12 8-22 16-30z"/>
+  <path fill="url(#highlightGrad)" d="M180 259c11-18 27-31 49-36 18-5 35-3 49 6-8 12-11 27-7 43-14 11-34 17-60 17-20 0-39-5-54-13-1-7 0-13 2-17 5 3 11 4 21 0z" opacity="0.95"/>
+  <path fill="url(#highlightGrad)" d="M332 259c-11-18-27-31-49-36-18-5-35-3-49 6 8 12 11 27 7 43 14 11 34 17 60 17 20 0 39-5 54-13 1-7 0-13-2-17-5 3-11 4-21 0z" opacity="0.95"/>
+  <path fill="#07122c" opacity="0.9" d="M247 221c-7 3-13 8-19 16-9 14-12 28-8 42-15-7-25-19-27-34-1-10 2-19 8-27 11-13 28-21 46-22z"/>
+
+  <path class="outline" fill="#0b2455" d="M205 301c15 13 31 19 51 19s36-6 51-19c5 27 2 54-10 88-4 12-10 25-18 37-7 11-15 21-23 31-8-10-16-20-23-31-8-12-14-25-18-37-12-34-15-61-10-88z"/>
+  <path fill="#102d69" opacity="0.95" d="M256 328c16 0 32 4 42 10-2 9-5 18-10 29-10 4-21 6-32 6s-22-2-32-6c-5-11-8-20-10-29 10-6 26-10 42-10z"/>
+  <path fill="url(#highlightGrad)" d="M256 330c10 0 20 2 27 6-1 6-4 13-7 21-7 3-13 4-20 4s-13-1-20-4c-3-8-6-15-7-21 7-4 17-6 27-6z"/>
+  <path fill="url(#highlightGrad)" d="M217 378c10 4 20 6 39 6-2 10-5 21-11 31-10 0-20-2-30-7-5-8-8-18-10-27 4-2 8-3 12-3z" opacity="0.85"/>
+  <path fill="url(#highlightGrad)" d="M295 378c-10 4-20 6-39 6 2 10 5 21 11 31 10 0 20-2 30-7 5-8 8-18 10-27-4-2-8-3-12-3z" opacity="0.85"/>
+  <path fill="#07122c" d="M232 413c8 4 16 6 24 6s16-2 24-6c-7 13-15 25-24 35-9-10-17-22-24-35z" opacity="0.9"/>
+
+  <path class="outline" fill="#14397f" d="M125 243c15-20 37-33 65-35 15-1 31 1 46 6-18 3-35 12-49 28-10 11-17 24-21 38-18 2-34 0-49-5-18-6-26-17-24-30 1-2 2-3 3-2 12 6 19 5 29 0z"/>
+  <path class="outline" fill="#14397f" d="M387 243c-15-20-37-33-65-35-15-1-31 1-46 6 18 3 35 12 49 28 10 11 17 24 21 38 18 2 34 0 49-5 18-6 26-17 24-30-1-2-2-3-3-2-12 6-19 5-29 0z"/>
+
+  <path fill="#eaf3ff" opacity="0.95" d="M206 200c13-12 29-18 50-18s37 6 50 18c-16-5-33-8-50-8s-34 3-50 8z"/>
+  <path fill="#eaf3ff" opacity="0.8" d="M241 191c-7 7-12 16-15 26-6 2-13 5-18 8 4-14 12-26 24-34 3-1 6-1 9 0z"/>
+  <path fill="#eaf3ff" opacity="0.8" d="M271 191c7 7 12 16 15 26 6 2 13 5 18 8-4-14-12-26-24-34-3-1-6-1-9 0z"/>
+</svg>
