@@ -1,5 +1,5 @@
-const CACHE="reppilot-v11-8-26";
-const LOGO="./reppilot-muscleman-logo-v11.8.26.png?v=11.8.26";
+const CACHE="reppilot-v11-8-27";
+const LOGO="./icon-192.png?v=11.8.27";
 const ASSETS=["./index.html","./styles.css?v=11.8.10","./auth.js?v=11.8.8","./storage-bridge.js?v=11.8.8","./app.js?v=11.8.8","./workout-fix.js?v=11.8.8","./run-feature.js?v=11.8.8","./profile-feature.js?v=11.8.8","./bodyweight-auto.js?v=11.8.8","./training-plan-feature.js?v=11.8.23","./home-workout-feature.js?v=11.8.24","./reset-feature.js?v=11.8.25","./manifest.json","./icon-192.png","./icon-512.png",LOGO,"./stretch-anatomy-v11.7.2.png?v=11.8.8"];
 self.addEventListener("install",event=>{self.skipWaiting();event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));});
 self.addEventListener("activate",event=>{event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)));await self.clients.claim();})());});
