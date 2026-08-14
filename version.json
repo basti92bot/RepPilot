@@ -1,5 +1,5 @@
 {
-  "version": "11.8.34",
+  "version": "11.8.35",
   "releasedAt": "2026-08-14",
-  "notes": "Automatische Progression und Lauf-Dashboard"
+  "notes": "Apple Health API, Cloud-Import und Lauf-Synchronisierung"
 }
