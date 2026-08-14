@@ -150,3 +150,21 @@
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",loadStretchImages,{once:true});
   else loadStretchImages();
 })();
+
+(() => {
+  const VERSION="11.8.31";
+  const applyVersion=()=>{
+    const v=document.querySelector("header h1 span");
+    if(v)v.textContent=`v${VERSION}`;
+    document.title=`RepPilot v${VERSION}`;
+  };
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",applyVersion,{once:true});
+  else applyVersion();
+  window.addEventListener("load",()=>{
+    applyVersion();
+    setTimeout(applyVersion,100);
+    if("serviceWorker" in navigator){
+      navigator.serviceWorker.register(`./sw.js?v=${VERSION}`,{updateViaCache:"none"}).then(reg=>reg.update()).catch(()=>{});
+    }
+  },{once:true});
+})();
