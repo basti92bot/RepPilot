@@ -1,5 +1,5 @@
 {
-  "version": "11.8.33",
+  "version": "11.8.34",
   "releasedAt": "2026-08-14",
-  "notes": "Automatische Progression mit Gewichtsempfehlungen"
+  "notes": "Automatische Progression und Lauf-Dashboard"
 }
