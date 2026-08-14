@@ -137,3 +137,16 @@
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", refreshStretchImages, {once:true});
   else refreshStretchImages();
 })();
+
+(() => {
+  const loadStretchImages = () => {
+    if(document.getElementById("stretchImagesV11830")) return;
+    const s=document.createElement("script");
+    s.id="stretchImagesV11830";
+    s.src="./stretch-images-v11.8.30.js?v=11.8.30";
+    s.async=false;
+    document.body.appendChild(s);
+  };
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",loadStretchImages,{once:true});
+  else loadStretchImages();
+})();
