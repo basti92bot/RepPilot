@@ -1,5 +1,5 @@
 {
-  "version": "11.8.32",
+  "version": "11.8.33",
   "releasedAt": "2026-08-14",
-  "notes": "Automatisches Update-System mit Cache-Refresh"
+  "notes": "Automatische Progression mit Gewichtsempfehlungen"
 }
