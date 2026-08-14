@@ -4,6 +4,30 @@
   const WEIGHT_HISTORY_KEY = "reppilot-weight-history";
   const PLAN_KEY = "reppilot-selected-training-plan";
 
+  async function applyUploadedLogo(){
+    const img=document.querySelector('.brand-logo');
+    if(!img) return;
+    try{
+      const response=await fetch('./reppilot-muscleman-v11.8.20.svg?v=11.8.22',{cache:'no-store'});
+      if(!response.ok) throw new Error(`Logo HTTP ${response.status}`);
+      const svgText=await response.text();
+      const doc=new DOMParser().parseFromString(svgText,'image/svg+xml');
+      const source=doc.querySelector('image');
+      const href=source?.getAttribute('href')||source?.getAttributeNS('http://www.w3.org/1999/xlink','href');
+      if(!href||!href.startsWith('data:image/')) throw new Error('Eingebettetes Logo-Bild fehlt');
+      img.src=href;
+      img.style.visibility='visible';
+    }catch(error){
+      console.error('RepPilot Logo konnte nicht geladen werden',error);
+    }
+  }
+
+  function setVersion(){
+    const version=document.querySelector('header h1 span');
+    if(version) version.textContent='v11.8.22 CLOUD TEST';
+    document.title='RepPilot v11.8.22';
+  }
+
   function injectStyles(){
     if(document.getElementById("resetFeatureStyles")) return;
     const style=document.createElement("style");
@@ -111,6 +135,8 @@
   }
 
   function init(){
+    setVersion();
+    applyUploadedLogo();
     if(ensureUI()) return;
     let tries=0;
     const timer=setInterval(()=>{tries++;if(ensureUI()||tries>=20)clearInterval(timer)},250);
