@@ -1,5 +1,5 @@
 {
-  "version": "11.8.35",
+  "version": "11.8.36",
   "releasedAt": "2026-08-14",
-  "notes": "Apple Health API, Cloud-Import und Lauf-Synchronisierung"
+  "notes": "Apple Health Import via iPhone Kurzbefehle ohne Mac"
 }
