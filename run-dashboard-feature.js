@@ -11,9 +11,10 @@
 
   const formatDurationShort = seconds => {
     if (!Number.isFinite(seconds) || seconds <= 0) return "–";
-    const h = Math.floor(seconds / 3600);
-    const m = Math.floor((seconds % 3600) / 60);
-    const s = Math.round(seconds % 60);
+    const total = Math.round(seconds);
+    const h = Math.floor(total / 3600);
+    const m = Math.floor((total % 3600) / 60);
+    const s = total % 60;
     return h > 0 ? `${h}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}` : `${m}:${String(s).padStart(2,"0")}`;
   };
 
@@ -82,14 +83,14 @@
     return dashboard;
   };
 
-  const weekKm = (runs, daysAgoStart, daysAgoEnd) => {
+  const weekKm = (runs, olderDaysAgo, newerDaysAgo) => {
     const now = Date.now();
     const day = 86400000;
-    const from = now - daysAgoStart * day;
-    const to = now - daysAgoEnd * day;
+    const from = now - olderDaysAgo * day;
+    const to = now - newerDaysAgo * day;
     return runs.reduce((sum, run) => {
       const t = run.date.getTime();
-      return t <= from && t > to ? sum + Number(run.distanceKm || 0) : sum;
+      return t >= from && t < to ? sum + Number(run.distanceKm || 0) : sum;
     }, 0);
   };
 
