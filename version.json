@@ -1,5 +1,5 @@
 {
-  "version": "11.8.41",
+  "version": "11.8.42",
   "releasedAt": "2026-08-15",
-  "notes": "Wochenplan: Kraft- und Home-Workout-Tage haben jetzt ein Dropdown mit allen Übungen und Satzanzahlen"
+  "notes": "Liegestütze: 65 % Körpergewicht automatisch und echte Wiederholungen bei Sätzen bis Maximum erfassen"
 }
