@@ -4,6 +4,7 @@
   let observer = null;
 
   const visible = el => !!el && !el.hidden && getComputedStyle(el).display !== "none";
+  const available = el => !!el && !el.hidden && el.style.display !== "none" && !el.closest("[hidden]");
 
   function styles(){
     if(document.getElementById("rpStickyWorkoutStyles")) return;
@@ -51,7 +52,7 @@
   }
 
   function proxy(original, label, secondary=false){
-    if(!visible(original)) return null;
+    if(!available(original)) return null;
     const btn = document.createElement("button");
     btn.type = "button";
     btn.textContent = label || original.textContent.trim();
@@ -120,7 +121,6 @@
     }
     if(main){
       const viewObserver = new MutationObserver(() => queueMicrotask(update));
-      viewObserver.observe(main,{subtree:false,childList:false,attributes:false});
       document.querySelectorAll(".view").forEach(v=>viewObserver.observe(v,{attributes:true,attributeFilter:["class"]}));
     }
     window.addEventListener("resize",positionBar,{passive:true});
