@@ -1,5 +1,5 @@
 {
-  "version": "11.8.40",
+  "version": "11.8.41",
   "releasedAt": "2026-08-15",
-  "notes": "Feste Trainings-Aktionsleiste: Satz abschließen, Pause überspringen und nächste Übung bleiben immer über der Navigation erreichbar"
+  "notes": "Wochenplan: Kraft- und Home-Workout-Tage haben jetzt ein Dropdown mit allen Übungen und Satzanzahlen"
 }
