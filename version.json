@@ -1,5 +1,5 @@
 {
-  "version": "11.8.38",
+  "version": "11.8.39",
   "releasedAt": "2026-08-15",
-  "notes": "Timer-Töne im Profil mit Ein/Aus-Schalter, Testton und iPhone-Audio-Freischaltung"
+  "notes": "Navigation-Fix: Heute öffnet bei laufendem Training wieder das aktive Training statt einen Abbruch zu verlangen"
 }
