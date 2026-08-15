@@ -1,5 +1,5 @@
 {
-  "version": "11.8.39",
+  "version": "11.8.40",
   "releasedAt": "2026-08-15",
-  "notes": "Navigation-Fix: Heute öffnet bei laufendem Training wieder das aktive Training statt einen Abbruch zu verlangen"
+  "notes": "Feste Trainings-Aktionsleiste: Satz abschließen, Pause überspringen und nächste Übung bleiben immer über der Navigation erreichbar"
 }
