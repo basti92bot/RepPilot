@@ -1,5 +1,5 @@
 {
-  "version": "11.8.37",
+  "version": "11.8.38",
   "releasedAt": "2026-08-15",
-  "notes": "Timer-Sounds: 3-2-1 Beeps und deutlicher Signalton mit Vibration bei Pausenende"
+  "notes": "Timer-Töne im Profil mit Ein/Aus-Schalter, Testton und iPhone-Audio-Freischaltung"
 }
