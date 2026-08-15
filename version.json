@@ -1,5 +1,5 @@
 {
-  "version": "11.8.42",
+  "version": "11.8.43",
   "releasedAt": "2026-08-15",
-  "notes": "Liegestütze: 65 % Körpergewicht automatisch und echte Wiederholungen bei Sätzen bis Maximum erfassen"
+  "notes": "Trainingsplan-Konsistenz: Montag heißt Push, Freitag Oberkörper; Titel und Metadaten entsprechen wieder den tatsächlichen Übungen"
 }
