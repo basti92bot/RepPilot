@@ -1,6 +1,6 @@
 (() => {
-  const VERSION = "11.8.33";
-  const BODYWEIGHT = /liegestütz|hanging leg raise|plank|dead bug|mountain climber/i;
+  const VERSION = "11.8.54";
+  const BODYWEIGHT = /liegestütz|liegestuetz|hanging leg raise|hängend.*bein|plank|unterarmstütz|seitstütz|beinheben|bergsteiger|hüftheben|ausfallschritt|kniebeugen|rückenstrecker|schneeengel|arm-bein-strecken|y-t-heben/i;
 
   const roundHalf = value => Math.round(value * 2) / 2;
   const fmt = value => new Intl.NumberFormat("de-DE", { maximumFractionDigits: 1 }).format(value);
@@ -8,7 +8,7 @@
   const incrementFor = name => {
     const n = String(name || "").toLowerCase();
     if (/beinpresse|rumänisches kreuzheben|wadenheben/.test(n)) return 5;
-    if (/seitheben|curl|fly|extension|pushdown|reverse butterfly/.test(n)) return 1;
+    if (/seitheben|curl|fly|fliegende|extension|pushdown|trizeps|reverse butterfly|kabelzug/.test(n)) return 1;
     return 2.5;
   };
 
