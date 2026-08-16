@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.53";
+  const VERSION = "11.8.54";
   const HOME_REST_SECONDS = 30;
   const isHomeWorkout = () => !!active?.id?.startsWith("home-");
   const isTimedCore = name => /plank|unterarmstütz|seitstütz/i.test(name || "");
@@ -97,7 +97,7 @@
       document.getElementById("nextExerciseMeta").textContent=isTimedCore(x.name)?`${x.sets.length} Sätze · jeweils 30 Sekunden`:`${x.sets.length} Sätze · jeweils ${REPS} Wiederholungen`;
       document.getElementById("nextExerciseTip").textContent=TIPS[x.name]||"Ruhig und kontrolliert.";
     }else{
-      document.getElementById("workoutVolumePreview").textContent="Training zu Hause abgeschlossen";
+      document.getElementById("workoutVolumePreview").textContent="Home Workout abgeschlossen";
     }
   };
 
