@@ -1,5 +1,5 @@
 {
-  "version": "11.8.49",
+  "version": "11.8.50",
   "releasedAt": "2026-08-16",
-  "notes": "Onboarding und Profil fragen Männlich oder Weiblich ab; Startgewicht-Formel berücksichtigt Körpergewicht, Trainingslevel und einen bewegungsabhängigen Geschlechtsfaktor"
+  "notes": "Komplett-Reset startet das Onboarding erneut und loescht Profil-, Krafttest- und Plan-Daten sauber"
 }
