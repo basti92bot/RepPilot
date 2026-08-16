@@ -1,0 +1,28 @@
+{
+  "unit": "per_100g",
+  "source": "user_screenshot_2026-08-16",
+  "source_note": "Werte aus Nutzer-Screenshot übernommen. Im Screenshot steht zwischen Mandeln und Quinoa zusätzlich eine nicht sinnvoll zuordenbare '5'; für die folgenden vier Lebensmittel wurden die eindeutig plausiblen Zeilenwerte 120/193/364/370 verwendet.",
+  "foods": [
+    {"name":"Skyr","protein_g":11,"kcal":60},
+    {"name":"Hähnchenbrust","protein_g":31,"kcal":165},
+    {"name":"Putenbrust","protein_g":29,"kcal":135},
+    {"name":"Mageres Rindfleisch","protein_g":26,"kcal":137},
+    {"name":"Schweinefilet","protein_g":26,"kcal":143},
+    {"name":"Thunfisch","protein_g":18,"kcal":116},
+    {"name":"Shrimps","protein_g":24,"kcal":99},
+    {"name":"Lachs","protein_g":20,"kcal":200},
+    {"name":"Eiweiß","protein_g":11,"kcal":52},
+    {"name":"Vollei","protein_g":13,"kcal":155},
+    {"name":"Griechischer Joghurt","protein_g":10,"kcal":59},
+    {"name":"Hüttenkäse","protein_g":12,"kcal":98},
+    {"name":"Feta","protein_g":17,"kcal":264},
+    {"name":"Tofu","protein_g":15,"kcal":144},
+    {"name":"Linsen","protein_g":9,"kcal":116},
+    {"name":"Edamame","protein_g":11,"kcal":121},
+    {"name":"Mandeln","protein_g":21,"kcal":567},
+    {"name":"Quinoa","protein_g":4,"kcal":120},
+    {"name":"Tempeh","protein_g":19,"kcal":193},
+    {"name":"Kichererbsen","protein_g":19,"kcal":364},
+    {"name":"Proteinpulver","protein_g":80,"kcal":370}
+  ]
+}
