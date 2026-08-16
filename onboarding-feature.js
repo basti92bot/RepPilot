@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.51";
+  const VERSION="11.8.52";
   const STRENGTH_KEY="reppilot-strength-tests-v1";
   const LEVELS={
     beginner:{label:"Einsteiger",factor:.60,copy:"Neu im Krafttraining oder noch unsicher bei Technik und Belastung."},
