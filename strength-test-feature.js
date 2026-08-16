@@ -1,12 +1,17 @@
 (() => {
-  const VERSION="11.8.52";
+  const VERSION="11.8.53";
   const KEY="reppilot-strength-tests-v1";
   const INTERVAL_DAYS=28;
   const DAY=86400000;
-  const BODYWEIGHT=/liegestütz|liegestuetz|hanging leg raise|hängend.*bein/i;
+  const BODYWEIGHT=/liegestütz|liegestuetz|hanging leg raise|hängend.*bein|unterarmstütz|seitstütz|beinheben|bergsteiger|hüftheben|ausfallschritt|kniebeugen|rückenstrecker|schneeengel|arm-bein-strecken|y-t-heben/i;
 
   const fmt=v=>Number(v||0).toLocaleString("de-DE",{maximumFractionDigits:1});
   const roundHalf=v=>Math.round(Number(v||0)*2)/2;
+  const currentWorkoutId=()=>{try{return typeof active!=="undefined"?active?.id||"":""}catch{return""}};
+  const isHomeWorkoutId=id=>String(id||"").startsWith("home-");
+  const recordKey=(name,workoutId=currentWorkoutId())=>isHomeWorkoutId(workoutId)?`home::${name}`:String(name||"");
+  const isBodyweight=(name,workoutId=currentWorkoutId())=>isHomeWorkoutId(workoutId)||BODYWEIGHT.test(String(name||""));
+
   const estimate1RM=(weight,reps)=>{
     const w=Number(weight||0),r=Math.floor(Number(reps||0));
     if(!w||r<1||r>5)return 0;
@@ -24,7 +29,6 @@
     const step=stepFor(name);
     return Math.max(step,Math.floor((raw+1e-9)/step)*step);
   };
-  const isBodyweight=name=>BODYWEIGHT.test(String(name||""));
 
   function trackedNames(){
     try{
@@ -48,14 +52,23 @@
     }
     return out.sort((a,b)=>new Date(a.date)-new Date(b.date));
   }
-  function latestFor(name){return normalizedRecords().filter(x=>x.exercise===name).slice(-1)[0]||null;}
-  function due(name){
+  function latestFor(name,workoutId=currentWorkoutId()){
+    const rows=normalizedRecords(),key=recordKey(name,workoutId);
+    const scoped=rows.filter(x=>x.exercise===key).slice(-1)[0];
+    if(scoped)return scoped;
+    if(isHomeWorkoutId(workoutId))return rows.filter(x=>x.exercise===name&&x.mode==="reps").slice(-1)[0]||null;
+    return null;
+  }
+  function due(name,workoutId=currentWorkoutId()){
     if(!tracked(name))return false;
-    const last=latestFor(name);
+    const last=latestFor(name,workoutId);
     if(!last)return true;
     return Date.now()-new Date(last.date).getTime()>=INTERVAL_DAYS*DAY;
   }
-  function nextDue(name){const last=latestFor(name);return last?new Date(new Date(last.date).getTime()+INTERVAL_DAYS*DAY):null;}
+  function nextDue(name,workoutId=currentWorkoutId()){
+    const last=latestFor(name,workoutId);
+    return last?new Date(new Date(last.date).getTime()+INTERVAL_DAYS*DAY):null;
+  }
 
   function ensureStyles(){
     if(document.getElementById("rpInlineStrengthStyles"))return;
@@ -102,11 +115,11 @@
   function currentExercise(){try{return typeof current==="function"?current():null}catch{return null}}
   function currentTargetReps(){const e=currentExercise();return Number(e?.sets?.[0]?.reps||10)||10;}
   function currentPreview(){
-    const name=currentExercise()?.name||"",body=isBodyweight(name);
+    const name=currentExercise()?.name||"",workoutId=currentWorkoutId(),body=isBodyweight(name,workoutId);
     const weight=Number(document.getElementById("strengthInlineWeight")?.value||0),reps=Math.floor(Number(document.getElementById("strengthInlineReps")?.value||0));
-    if(body)return {name,body,reps,weight:0,one:0,work:Number(currentExercise()?.sets?.[0]?.weight||0),targetReps:currentTargetReps()};
+    if(body)return {name,workoutId,body,reps,weight:0,one:0,work:Number(currentExercise()?.sets?.[0]?.weight||0),targetReps:currentTargetReps()};
     const one=estimate1RM(weight,reps),work=one?trainingWeight(one,currentTargetReps(),name):0;
-    return {name,body,reps,weight,one,work,targetReps:currentTargetReps()};
+    return {name,workoutId,body,reps,weight,one,work,targetReps:currentTargetReps()};
   }
   function previewInline(){
     const x=currentPreview(),one=document.getElementById("strengthInline1RM"),work=document.getElementById("strengthInlineTraining");
@@ -119,16 +132,18 @@
     const w=document.getElementById("strengthInlineWeight"),r=document.getElementById("strengthInlineReps");if(w)w.value="";if(r)r.value="";
   }
   function showInline(e){
-    const panel=ensureInlinePanel();if(!panel)return;const body=isBodyweight(e.name),setPanel=document.getElementById("setPanel");
+    const panel=ensureInlinePanel();if(!panel)return;
+    const workoutId=currentWorkoutId(),body=isBodyweight(e.name,workoutId),setPanel=document.getElementById("setPanel"),defer=document.getElementById("strengthInlineDefer");
     panel.hidden=false;if(setPanel)setPanel.hidden=true;document.getElementById("strengthInlineName").textContent=e.name;
     document.getElementById("strengthInlineSubtitle").textContent=body?"Maximale saubere Wiederholungen als 4-Wochen-Benchmark.":"Vor den normalen Arbeitssätzen einmal neu kalibrieren.";
     document.getElementById("strengthInlineNote").innerHTML=body?"Nach dem Aufwärmen einen technisch sauberen Satz bis kurz vor Technikverlust. RepPilot speichert die <strong>maximalen sauberen Wiederholungen</strong>. Das Körpergewichts-/Effektivgewicht bleibt unverändert.":"Nach deinen Aufwärmsätzen einen schweren, technisch sauberen Satz mit <strong>1–5 Wiederholungen</strong>. Keine erzwungene Wiederholung. RepPilot berechnet daraus das geschätzte 1RM und dein neues Arbeitsgewicht.";
     document.getElementById("strengthWeightField").hidden=body;document.getElementById("strengthInlineInputs").classList.toggle("rp-reps-only",body);document.getElementById("strengthOneRmBox").querySelector("small").textContent=body?"MAX. WIEDERHOLUNGEN":"GESCHÄTZTES 1RM";document.getElementById("strengthTrainingLabel").textContent=body?"BELASTUNG":"NEUES ARBEITSGEWICHT";
     const repsInput=document.getElementById("strengthInlineReps");repsInput.max=body?"200":"5";document.getElementById("strengthRepsLabel").textContent=body?"Maximale saubere Wiederholungen":"Saubere Wiederholungen";
-    const prev=latestFor(e.name),p=document.getElementById("strengthInlinePrevious");
+    if(defer)defer.hidden=isHomeWorkoutId(workoutId);
+    const prev=latestFor(e.name,workoutId),p=document.getElementById("strengthInlinePrevious");
     if(p)p.textContent=prev?(prev.mode==="reps"?`Letzte Messung: ${new Date(prev.date).toLocaleDateString("de-DE")} · ${prev.reps} Wdh.`:`Letzte Messung: ${new Date(prev.date).toLocaleDateString("de-DE")} · e1RM ${fmt(prev.estimated1RM)} kg · Arbeitsgewicht ${fmt(prev.trainingWeight||0)} kg`):"Erste Messung: Dieser Wert wird deine Baseline.";
     const testInput=document.getElementById("strengthInlineWeight");
-    if(panel.dataset.exercise!==e.name){panel.dataset.exercise=e.name;if(testInput)testInput.value="";if(repsInput)repsInput.value="";}
+    if(panel.dataset.exercise!==recordKey(e.name,workoutId)){panel.dataset.exercise=recordKey(e.name,workoutId);if(testInput)testInput.value="";if(repsInput)repsInput.value="";}
     if(!body&&testInput&&!testInput.value){const cw=Number(e?.sets?.[0]?.weight||0);if(cw)testInput.value=roundHalf(cw*1.15);}
     if(!repsInput.value)repsInput.value=body?"":"5";
     previewInline();const progression=document.getElementById("progressionHint");if(progression)progression.hidden=true;window.RepPilotStickyActions?.refresh?.();
@@ -143,14 +158,14 @@
 
   function saveInline(){
     const e=currentExercise(),x=currentPreview();if(!e||!tracked(e.name))return;
-    const records=read();
+    const records=read(),exerciseKey=recordKey(e.name,x.workoutId);
     if(x.body){
       if(x.reps<1){document.getElementById("strengthInlineReps")?.focus();return;}
-      records.push({date:new Date().toISOString(),exercise:e.name,mode:"reps",reps:x.reps,formula:"Maximale saubere Wiederholungen"});
+      records.push({date:new Date().toISOString(),exercise:exerciseKey,mode:"reps",reps:x.reps,formula:"Maximale saubere Wiederholungen"});
       e.strengthTestApplied={mode:"reps",reps:x.reps};
     }else{
       if(!x.weight){document.getElementById("strengthInlineWeight")?.focus();return;}if(x.reps<1||x.reps>5){document.getElementById("strengthInlineReps")?.focus();return;}if(!x.one||!x.work)return;
-      records.push({date:new Date().toISOString(),exercise:e.name,mode:"weight",testWeight:x.weight,reps:x.reps,estimated1RM:x.one,trainingWeight:x.work,targetReps:x.targetReps,formula:"Epley + Zielwiederholungen mit 2 RIR"});
+      records.push({date:new Date().toISOString(),exercise:exerciseKey,mode:"weight",testWeight:x.weight,reps:x.reps,estimated1RM:x.one,trainingWeight:x.work,targetReps:x.targetReps,formula:"Epley + Zielwiederholungen mit 2 RIR"});
       e.strengthTestApplied={mode:"weight",estimated1RM:x.one,trainingWeight:x.work,targetReps:x.targetReps};e.sets.forEach(set=>{if(!set.done)set.weight=x.work;});
     }
     write(records);resetPanelState();hideInline();markPlanDue();if(typeof renderSet==="function")renderSet();window.RepPilotStickyActions?.refresh?.();
@@ -165,17 +180,21 @@
   }
 
   function applyInline(){
-    ensureStyles();ensureInlinePanel();ensureAppliedHint();const e=currentExercise(),inSet=typeof phase!=="undefined"&&phase==="set",firstSet=typeof si!=="undefined"&&si===0;
+    ensureStyles();ensureInlinePanel();ensureAppliedHint();const e=currentExercise(),workoutId=currentWorkoutId(),inSet=typeof phase!=="undefined"&&phase==="set",firstSet=typeof si!=="undefined"&&si===0;
     if(!e||!inSet){hideInline();return;}
-    if(firstSet&&due(e.name)&&!e.strengthTestApplied&&!e.strengthTestSkipped){showInline(e);return;}
+    if(firstSet&&due(e.name,workoutId)&&!e.strengthTestApplied&&!e.strengthTestSkipped){showInline(e);return;}
     hideInline();const setPanel=document.getElementById("setPanel");if(setPanel)setPanel.hidden=false;showApplied(e);
   }
 
+  function workoutIdForListItem(li){
+    const card=li?.closest?.(".plan-item"),button=card?.querySelector?.("[data-selected-workout],[data-workout]");
+    return button?.dataset?.selectedWorkout||button?.dataset?.workout||"";
+  }
   function markPlanDue(){
     document.querySelectorAll(".rp-day-exercise-list li").forEach(li=>{
       const strong=li.querySelector("strong"),name=(li.dataset.strengthName||strong?.childNodes?.[0]?.nodeValue||strong?.textContent||"").trim();if(!name)return;li.dataset.strengthName=name;
-      const existing=li.querySelector(".rp-strength-due"),shouldShow=tracked(name)&&due(name);
-      if(shouldShow&&!existing){const badge=document.createElement("small");badge.className="rp-strength-due";badge.textContent=isBodyweight(name)?"Benchmark fällig":"Krafttest fällig";strong?.appendChild(badge);}else if(!shouldShow&&existing)existing.remove();
+      const workoutId=workoutIdForListItem(li),existing=li.querySelector(".rp-strength-due"),shouldShow=tracked(name)&&due(name,workoutId);
+      if(shouldShow&&!existing){const badge=document.createElement("small");badge.className="rp-strength-due";badge.textContent=isBodyweight(name,workoutId)?"Benchmark fällig":"Krafttest fällig";strong?.appendChild(badge);}else if(!shouldShow&&existing)existing.remove();
     });
   }
   function removeStandalone(){document.getElementById("strengthTestHomeCard")?.remove();document.getElementById("strengthTest")?.remove();}
@@ -185,6 +204,6 @@
     const plan=document.getElementById("plan");if(plan)new MutationObserver(()=>queueMicrotask(markPlanDue)).observe(plan,{childList:true,subtree:true});markPlanDue();try{if(typeof active!=="undefined"&&active&&typeof phase!=="undefined"&&phase==="set")applyInline();}catch{}
   }
 
-  window.RepPilotStrengthTest={version:VERSION,intervalDays:INTERVAL_DAYS,estimate1RM,trainingWeight,due,nextDue,trackedNames,refresh:()=>{applyInline();markPlanDue();}};
+  window.RepPilotStrengthTest={version:VERSION,intervalDays:INTERVAL_DAYS,estimate1RM,trainingWeight,due,nextDue,trackedNames,recordKey,refresh:()=>{applyInline();markPlanDue();}};
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",install,{once:true});else install();
 })();
