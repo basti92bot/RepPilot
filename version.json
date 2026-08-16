@@ -1,5 +1,5 @@
 {
-  "version": "11.8.46",
+  "version": "11.8.47",
   "releasedAt": "2026-08-16",
-  "notes": "Kraftmessung direkt im Trainingsplan: alle 28 Tage vor Hauptübungen, e1RM-Berechnung und automatische Anpassung des Arbeitsgewichts"
+  "notes": "Kraftmessung fuer alle Uebungen: alle 28 Tage direkt vor der Uebung; Gewichtsubungen mit e1RM und automatischem Arbeitsgewicht, Koerpergewichtsuebungen als Max-Wiederholungs-Benchmark"
 }
