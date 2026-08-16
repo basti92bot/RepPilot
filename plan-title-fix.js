@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.43";
+  const VERSION="11.8.52";
   const RULES={
     push:{title:"Push",meta:"Brust, Schulter, Trizeps · ca. 45–55 Min."},
     "pull-legs":{title:"Pull + Beine",meta:"Rücken, Beine, Bizeps · ca. 65–75 Min."},
