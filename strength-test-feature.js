@@ -14,8 +14,8 @@
   const fmt=v=>Number(v||0).toLocaleString("de-DE",{maximumFractionDigits:1});
   const roundHalf=v=>Math.round(Number(v||0)*2)/2;
   const estimate1RM=(weight,reps)=>{
-    const w=Number(weight||0),r=Math.max(1,Math.min(5,Math.floor(Number(reps||0))));
-    if(!w||!r)return 0;
+    const w=Number(weight||0),r=Math.floor(Number(reps||0));
+    if(!w||r<1||r>5)return 0;
     return roundHalf(r===1?w:w*(1+r/30));
   };
   const stepFor=name=>/beinpresse|rumänisches kreuzheben/i.test(name||"")?5:2.5;
@@ -145,6 +145,11 @@
     if(p)p.textContent=prev?`Letzte Messung: ${new Date(prev.date).toLocaleDateString("de-DE")} · e1RM ${fmt(prev.estimated1RM)} kg · Arbeitsgewicht ${fmt(prev.trainingWeight||0)} kg`:"Erste Messung: Dieser Wert wird deine Baseline.";
     const testInput=document.getElementById("strengthInlineWeight");
     const repsInput=document.getElementById("strengthInlineReps");
+    if(panel.dataset.exercise!==e.name){
+      panel.dataset.exercise=e.name;
+      if(testInput)testInput.value="";
+      if(repsInput)repsInput.value="";
+    }
     if(testInput&&!testInput.value){
       const currentWeight=Number(e?.sets?.[0]?.weight||0);
       if(currentWeight)testInput.value=roundHalf(currentWeight*1.15);
@@ -181,8 +186,8 @@
     write(records);
     e.strengthTestApplied={estimated1RM:x.one,trainingWeight:x.work,targetReps:x.targetReps};
     e.sets.forEach(set=>{if(!set.done)set.weight=x.work;});
-    const testInput=document.getElementById("strengthInlineWeight"),repsInput=document.getElementById("strengthInlineReps");
-    if(testInput)testInput.value="";if(repsInput)repsInput.value="";
+    const testInput=document.getElementById("strengthInlineWeight"),repsInput=document.getElementById("strengthInlineReps"),panel=document.getElementById("strengthInlineTest");
+    if(testInput)testInput.value="";if(repsInput)repsInput.value="";if(panel)delete panel.dataset.exercise;
     hideInline();
     markPlanDue();
     if(typeof renderSet==="function")renderSet();
