@@ -1,5 +1,5 @@
 {
-  "version": "11.8.54",
+  "version": "11.8.55",
   "releasedAt": "2026-08-16",
-  "notes": "Alle sichtbaren Übungsnamen in Studio-, Abnehm- und Home-Workout-Plänen vereinheitlicht und deutsch benannt; Home Workout als Planname wiederhergestellt; Verlauf, Kraftmessung, Progression und Körpergewichtslogik migrieren alte Namen automatisch."
+  "notes": "Kabel-Flys und Crunch-Maschine als bevorzugte Studio-Bezeichnungen wiederhergestellt; bereits umbenannte Verlaufs- und Kraftmessungsdaten werden automatisch zurückgeführt."
 }
