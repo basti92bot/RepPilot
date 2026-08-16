@@ -1,160 +1,239 @@
 (() => {
-  const VERSION="11.8.45";
+  const VERSION="11.8.46";
   const KEY="reppilot-strength-tests-v1";
   const INTERVAL_DAYS=28;
   const DAY=86400000;
-  const EXERCISES=[
+  const TEST_EXERCISES=new Set([
     "Schrägbankdrücken",
     "Beinpresse",
     "Schulterpresse",
     "Brustgestütztes Rudern",
     "Rumänisches Kreuzheben"
-  ];
+  ]);
 
-  const roundHalf=v=>Math.round(Number(v||0)*2)/2;
-  const esc=s=>String(s??"").replace(/[&<>\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   const fmt=v=>Number(v||0).toLocaleString("de-DE",{maximumFractionDigits:1});
-  const estimate=(weight,reps)=>{
+  const roundHalf=v=>Math.round(Number(v||0)*2)/2;
+  const estimate1RM=(weight,reps)=>{
     const w=Number(weight||0),r=Math.max(1,Math.min(5,Math.floor(Number(reps||0))));
     if(!w||!r)return 0;
     return roundHalf(r===1?w:w*(1+r/30));
   };
+  const stepFor=name=>/beinpresse|rumänisches kreuzheben/i.test(name||"")?5:2.5;
+  const trainingWeight=(oneRM,targetReps,name)=>{
+    const reps=Math.max(1,Math.floor(Number(targetReps||10)));
+    const raw=Number(oneRM||0)/(1+(reps+2)/30); // Ziel: ca. 2 Wiederholungen Reserve
+    const step=stepFor(name);
+    return Math.max(step,Math.floor((raw+1e-9)/step)*step);
+  };
 
   function read(){
-    try{const x=JSON.parse(localStorage.getItem(KEY)||"[]");return Array.isArray(x)?x:[]}catch{return []}
+    try{const data=JSON.parse(localStorage.getItem(KEY)||"[]");return Array.isArray(data)?data:[]}catch{return []}
   }
-  function write(tests){localStorage.setItem(KEY,JSON.stringify(tests));}
-  function latest(){return read().slice().sort((a,b)=>new Date(b.date)-new Date(a.date))[0]||null;}
-  function previousFor(name){const t=latest();return Number(t?.results?.[name]?.estimated1RM||0);}
-  function dueInfo(){
-    const last=latest();
-    if(!last)return {due:true,days:0,date:new Date()};
-    const next=new Date(new Date(last.date).getTime()+INTERVAL_DAYS*DAY);
-    const diff=Math.ceil((next-Date.now())/DAY);
-    return {due:diff<=0,days:Math.max(0,diff),date:next};
+  function write(data){localStorage.setItem(KEY,JSON.stringify(data));}
+  function normalizedRecords(){
+    const out=[];
+    for(const item of read()){
+      if(item?.exercise){out.push(item);continue;}
+      if(item?.results&&item?.date){
+        for(const [exercise,result] of Object.entries(item.results)){
+          if(result?.estimated1RM)out.push({date:item.date,exercise,testWeight:result.weight,reps:result.reps,estimated1RM:result.estimated1RM,trainingWeight:result.trainingWeight||0,targetReps:result.targetReps||10});
+        }
+      }
+    }
+    return out.sort((a,b)=>new Date(a.date)-new Date(b.date));
+  }
+  function latestFor(name){return normalizedRecords().filter(x=>x.exercise===name).slice(-1)[0]||null;}
+  function due(name){
+    if(!TEST_EXERCISES.has(name))return false;
+    const last=latestFor(name);
+    if(!last)return true;
+    return Date.now()-new Date(last.date).getTime()>=INTERVAL_DAYS*DAY;
+  }
+  function nextDue(name){
+    const last=latestFor(name);
+    if(!last)return null;
+    return new Date(new Date(last.date).getTime()+INTERVAL_DAYS*DAY);
   }
 
   function ensureStyles(){
-    if(document.getElementById("rpStrengthTestStyles"))return;
+    if(document.getElementById("rpInlineStrengthStyles"))return;
     const s=document.createElement("style");
-    s.id="rpStrengthTestStyles";
+    s.id="rpInlineStrengthStyles";
     s.textContent=`
-      .rp-strength-card{margin:16px 0}.rp-strength-card.due{border:2px solid var(--accent)}
-      .rp-strength-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-      .rp-strength-head h2{margin:4px 0 6px}.rp-strength-head p{margin:0;color:var(--muted);font-size:14px;line-height:1.35}
-      .rp-strength-badge{flex:0 0 auto;border-radius:999px;background:#eef2f7;padding:7px 10px;font-size:12px;font-weight:900;color:var(--text)}
-      .rp-strength-card.due .rp-strength-badge{background:#111827;color:#fff}
-      .rp-strength-actions{display:flex;gap:10px;margin-top:14px}.rp-strength-actions button{flex:1}
-      #strengthTest .rp-strength-intro p{margin:8px 0 0;color:var(--muted);line-height:1.45}
-      .rp-strength-list{display:grid;gap:12px;margin-top:14px}
-      .rp-strength-exercise h3{margin:0 0 4px}.rp-strength-exercise .muted{font-size:12px}
-      .rp-strength-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-      .rp-strength-field label{display:block;font-size:12px;font-weight:900;color:var(--muted);margin-bottom:5px}
-      .rp-strength-field input{width:100%;box-sizing:border-box;border:2px solid var(--line);border-radius:14px;padding:13px 12px;font-size:20px;font-weight:900;background:#fff;color:var(--text)}
-      .rp-strength-result{display:flex;justify-content:space-between;gap:12px;align-items:end;margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
-      .rp-strength-result small{display:block;color:var(--muted);font-weight:800}.rp-strength-result strong{font-size:22px}
-      .rp-strength-delta{font-size:13px;font-weight:900;text-align:right}.rp-strength-delta.up{color:#15803d}.rp-strength-delta.down{color:#b91c1c}
-      .rp-strength-history{margin-top:16px}.rp-strength-history-row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
-      .rp-strength-history-row:last-child{border-bottom:0}
+      #strengthInlineTest[hidden]{display:none!important}
+      #strengthInlineTest{border:2px solid var(--accent);margin-bottom:14px}
+      .rp-test-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+      .rp-test-head h2{margin:4px 0 5px}.rp-test-head p{margin:0;color:var(--muted);font-size:13px;line-height:1.4}
+      .rp-test-badge{flex:0 0 auto;border-radius:999px;background:#111827;color:#fff;padding:7px 10px;font-size:11px;font-weight:900}
+      .rp-test-note{margin:14px 0;padding:11px 12px;border-radius:13px;background:#f8fafc;border:1px solid var(--line);font-size:13px;line-height:1.4}
+      .rp-test-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+      .rp-test-field label{display:block;margin:0 0 5px;color:var(--muted);font-size:12px;font-weight:900}
+      .rp-test-field input{width:100%;box-sizing:border-box;border:2px solid var(--line);border-radius:14px;background:#fff;padding:13px 12px;font-size:22px;font-weight:900;color:var(--text)}
+      .rp-test-result{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:13px 0}
+      .rp-test-value{padding:11px;border:1px solid var(--line);border-radius:13px;background:#f9fafb}
+      .rp-test-value small{display:block;color:var(--muted);font-size:10px;font-weight:900;letter-spacing:.05em}.rp-test-value strong{display:block;margin-top:4px;font-size:20px}
+      #strengthAppliedHint{margin:12px 0;padding:12px 13px;border:1px solid #dbe3ea;border-radius:14px;background:#f8fafc}
+      #strengthAppliedHint[hidden]{display:none!important}#strengthAppliedHint small{display:block;color:var(--muted);font-size:10px;font-weight:900;letter-spacing:.07em}#strengthAppliedHint strong{display:block;margin-top:4px;font-size:16px}#strengthAppliedHint span{display:block;margin-top:3px;color:var(--muted);font-size:12px}
+      .rp-strength-due{display:inline-flex;margin-left:6px;padding:3px 6px;border-radius:999px;background:#111827;color:#fff;font-size:9px!important;font-weight:900;vertical-align:middle}
     `;
     document.head.appendChild(s);
   }
 
-  function ensureView(){
-    if(document.getElementById("strengthTest"))return;
-    const section=document.createElement("section");
-    section.id="strengthTest";
-    section.className="view";
-    section.innerHTML=`
-      <div class="top"><div><small>KRAFTMESSUNG</small><h2>4-Wochen-Krafttest</h2></div><button id="strengthBackBtn" class="secondary">Zurück</button></div>
-      <article class="card rp-strength-intro"><strong>Geschätztes 1RM statt riskantem Maximalversuch</strong><p>Je Übung nach dem Aufwärmen einen technisch sauberen schweren Satz mit 1–5 Wiederholungen machen. RepPilot berechnet daraus dein geschätztes 1RM. Für vergleichbare Werte möglichst dieselbe Maschine, Einstellung und Technik verwenden.</p></article>
-      <div id="strengthTestList" class="rp-strength-list"></div>
-      <button id="saveStrengthTestBtn" class="wide" style="margin-top:14px">Krafttest speichern</button>
-      <article id="strengthHistoryCard" class="card rp-strength-history"></article>`;
-    document.querySelector("main")?.appendChild(section);
-    document.getElementById("strengthBackBtn").onclick=()=>showView("home");
-    document.getElementById("saveStrengthTestBtn").onclick=saveCurrent;
+  function ensureInlinePanel(){
+    let panel=document.getElementById("strengthInlineTest");
+    if(panel)return panel;
+    const setPanel=document.getElementById("setPanel");
+    if(!setPanel)return null;
+    panel=document.createElement("article");
+    panel.id="strengthInlineTest";
+    panel.className="card";
+    panel.hidden=true;
+    panel.innerHTML=`
+      <div class="rp-test-head"><div><small>4-WOCHEN-KRAFTMESSUNG</small><h2 id="strengthInlineName"></h2><p>Vor den normalen Arbeitssätzen einmal neu kalibrieren.</p></div><span class="rp-test-badge">MAXKRAFT</span></div>
+      <div class="rp-test-note">Nach deinen Aufwärmsätzen einen schweren, technisch sauberen Satz mit <strong>1–5 Wiederholungen</strong>. Keine erzwungene Wiederholung. RepPilot berechnet daraus das geschätzte 1RM und dein neues Arbeitsgewicht.</div>
+      <p id="strengthInlinePrevious" class="muted"></p>
+      <div class="rp-test-inputs"><div class="rp-test-field"><label for="strengthInlineWeight">Testgewicht (kg)</label><input id="strengthInlineWeight" type="number" min="0" step="0.5" inputmode="decimal"></div><div class="rp-test-field"><label for="strengthInlineReps">Saubere Wiederholungen</label><input id="strengthInlineReps" type="number" min="1" max="5" step="1" inputmode="numeric"></div></div>
+      <div class="rp-test-result"><div class="rp-test-value"><small>GESCHÄTZTES 1RM</small><strong id="strengthInline1RM">–</strong></div><div class="rp-test-value"><small>NEUES ARBEITSGEWICHT</small><strong id="strengthInlineTraining">–</strong></div></div>
+      <button id="strengthInlineSave" type="button" class="wide">Messung übernehmen & Training starten</button>`;
+    setPanel.insertAdjacentElement("beforebegin",panel);
+    panel.querySelectorAll("input").forEach(x=>x.addEventListener("input",previewInline));
+    document.getElementById("strengthInlineSave").onclick=saveInline;
+    return panel;
   }
 
-  function showView(id){
-    document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===id));
-    document.querySelectorAll("nav button[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===id));
-    if(id==="strengthTest")renderTest();
-    window.scrollTo({top:0,behavior:"smooth"});
+  function ensureAppliedHint(){
+    let box=document.getElementById("strengthAppliedHint");
+    if(box)return box;
+    const anchor=document.getElementById("lastTraining");
+    if(!anchor)return null;
+    box=document.createElement("div");
+    box.id="strengthAppliedHint";
+    box.hidden=true;
+    anchor.insertAdjacentElement("afterend",box);
+    return box;
   }
 
-  function renderHomeCard(){
-    ensureStyles();ensureView();
-    const home=document.getElementById("home");if(!home)return;
-    let card=document.getElementById("strengthTestHomeCard");
-    if(!card){
-      card=document.createElement("article");card.id="strengthTestHomeCard";card.className="card rp-strength-card";
-      const anchor=document.getElementById("selectedTrainingPlanHome")||home.querySelector(".hero");
-      anchor?.insertAdjacentElement("afterend",card);
+  function currentExercise(){try{return typeof current==="function"?current():null}catch{return null}}
+  function currentTargetReps(){
+    const e=currentExercise();
+    return Number(e?.sets?.[0]?.reps||10)||10;
+  }
+  function currentPreview(){
+    const name=currentExercise()?.name||"";
+    const weight=Number(document.getElementById("strengthInlineWeight")?.value||0);
+    const reps=Math.floor(Number(document.getElementById("strengthInlineReps")?.value||0));
+    const one=estimate1RM(weight,reps);
+    const work=one?trainingWeight(one,currentTargetReps(),name):0;
+    return {name,weight,reps,one,work,targetReps:currentTargetReps()};
+  }
+  function previewInline(){
+    const x=currentPreview();
+    const one=document.getElementById("strengthInline1RM"),work=document.getElementById("strengthInlineTraining");
+    if(one)one.textContent=x.one?`${fmt(x.one)} kg`:"–";
+    if(work)work.textContent=x.work?`${fmt(x.work)} kg`:"–";
+  }
+
+  function showInline(e){
+    const panel=ensureInlinePanel();if(!panel)return;
+    const setPanel=document.getElementById("setPanel");
+    panel.hidden=false;if(setPanel)setPanel.hidden=true;
+    document.getElementById("strengthInlineName").textContent=e.name;
+    const prev=latestFor(e.name);
+    const p=document.getElementById("strengthInlinePrevious");
+    if(p)p.textContent=prev?`Letzte Messung: ${new Date(prev.date).toLocaleDateString("de-DE")} · e1RM ${fmt(prev.estimated1RM)} kg · Arbeitsgewicht ${fmt(prev.trainingWeight||0)} kg`:"Erste Messung: Dieser Wert wird deine Baseline.";
+    const testInput=document.getElementById("strengthInlineWeight");
+    const repsInput=document.getElementById("strengthInlineReps");
+    if(testInput&&!testInput.value){
+      const currentWeight=Number(e?.sets?.[0]?.weight||0);
+      if(currentWeight)testInput.value=roundHalf(currentWeight*1.15);
     }
-    const info=dueInfo(),last=latest();
-    card.classList.toggle("due",info.due);
-    const status=info.due?(last?"Jetzt fällig":"Baseline fällig"):`in ${info.days} ${info.days===1?"Tag":"Tagen"}`;
-    card.innerHTML=`<div class="rp-strength-head"><div><small>KRAFTMESSUNG · ALLE 4 WOCHEN</small><h2>${info.due?"Krafttest fällig":"Nächster Krafttest"}</h2><p>${last?`Letzter Test: ${new Date(last.date).toLocaleDateString("de-DE")}`:"Noch kein Ausgangswert gespeichert."}</p></div><span class="rp-strength-badge">${status}</span></div><div class="rp-strength-actions"><button type="button" id="openStrengthTestBtn">${info.due?"Krafttest starten":"Krafttest öffnen"}</button></div>`;
-    document.getElementById("openStrengthTestBtn").onclick=()=>showView("strengthTest");
+    if(repsInput&&!repsInput.value)repsInput.value=5;
+    previewInline();
+    const progression=document.getElementById("progressionHint");if(progression)progression.hidden=true;
+    window.RepPilotStickyActions?.refresh?.();
   }
 
-  function renderTest(){
-    ensureStyles();ensureView();
-    const list=document.getElementById("strengthTestList");if(!list)return;
-    list.innerHTML=EXERCISES.map((name,i)=>{
-      const prev=previousFor(name);
-      return `<article class="card rp-strength-exercise" data-strength-row="${i}" data-name="${esc(name)}"><h3>${esc(name)}</h3><p class="muted">Schwerer Satz mit 1–5 sauberen Wiederholungen</p><div class="rp-strength-inputs"><div class="rp-strength-field"><label>Gewicht (kg)</label><input type="number" min="0" step="0.5" inputmode="decimal" data-strength-weight></div><div class="rp-strength-field"><label>Wiederholungen</label><input type="number" min="1" max="5" step="1" inputmode="numeric" data-strength-reps></div></div><div class="rp-strength-result"><div><small>Geschätztes 1RM</small><strong data-strength-estimate>–</strong></div><div class="rp-strength-delta" data-strength-delta>${prev?`Letzter Wert: ${fmt(prev)} kg`:"Baseline"}</div></div></article>`;
-    }).join("");
-    list.querySelectorAll("input").forEach(input=>input.addEventListener("input",updateRows));
-    renderHistory();
+  function showApplied(e){
+    const box=ensureAppliedHint();if(!box)return;
+    const data=e?.strengthTestApplied;
+    box.hidden=!data;
+    if(data){
+      box.innerHTML=`<small>KRAFTMESSUNG ÜBERNOMMEN</small><strong>e1RM ${fmt(data.estimated1RM)} kg → ${fmt(data.trainingWeight)} kg Arbeitsgewicht</strong><span>${data.targetReps} Ziel-Wdh. + ca. 2 Wiederholungen Reserve · automatisch auf Geräte-Schritt gerundet</span>`;
+      const progression=document.getElementById("progressionHint");if(progression)progression.hidden=true;
+    }
   }
 
-  function updateRows(){
-    document.querySelectorAll("[data-strength-row]").forEach(row=>{
-      const w=row.querySelector("[data-strength-weight]")?.value;
-      const r=row.querySelector("[data-strength-reps]")?.value;
-      const e=estimate(w,r);
-      const out=row.querySelector("[data-strength-estimate]");
-      const delta=row.querySelector("[data-strength-delta]");
-      if(out)out.textContent=e?`${fmt(e)} kg`:"–";
-      const prev=previousFor(row.dataset.name);
-      if(delta){
-        delta.classList.remove("up","down");
-        if(e&&prev){const pct=((e-prev)/prev)*100;delta.textContent=`${pct>=0?"+":""}${pct.toFixed(1).replace(".",",")} % · ${pct>=0?"+":""}${fmt(e-prev)} kg`;delta.classList.add(pct>=0?"up":"down");}
-        else delta.textContent=prev?`Letzter Wert: ${fmt(prev)} kg`:"Baseline";
+  function hideInline(){
+    const panel=document.getElementById("strengthInlineTest");if(panel)panel.hidden=true;
+  }
+
+  function saveInline(){
+    const e=currentExercise(),x=currentPreview();
+    if(!e||!TEST_EXERCISES.has(e.name))return;
+    if(!x.weight){document.getElementById("strengthInlineWeight")?.focus();return;}
+    if(x.reps<1||x.reps>5){document.getElementById("strengthInlineReps")?.focus();return;}
+    if(!x.one||!x.work)return;
+
+    const records=read();
+    records.push({date:new Date().toISOString(),exercise:e.name,testWeight:x.weight,reps:x.reps,estimated1RM:x.one,trainingWeight:x.work,targetReps:x.targetReps,formula:"Epley + Zielwiederholungen mit 2 RIR"});
+    write(records);
+    e.strengthTestApplied={estimated1RM:x.one,trainingWeight:x.work,targetReps:x.targetReps};
+    e.sets.forEach(set=>{if(!set.done)set.weight=x.work;});
+    const testInput=document.getElementById("strengthInlineWeight"),repsInput=document.getElementById("strengthInlineReps");
+    if(testInput)testInput.value="";if(repsInput)repsInput.value="";
+    hideInline();
+    markPlanDue();
+    if(typeof renderSet==="function")renderSet();
+    window.RepPilotStickyActions?.refresh?.();
+  }
+
+  function applyInline(){
+    ensureStyles();ensureInlinePanel();ensureAppliedHint();
+    const e=currentExercise();
+    const inSet=typeof phase!=="undefined"&&phase==="set";
+    const firstSet=typeof si!=="undefined"&&si===0;
+    if(!e||!inSet){hideInline();return;}
+    if(firstSet&&due(e.name)&&!e.strengthTestApplied){
+      showInline(e);
+      return;
+    }
+    hideInline();
+    const setPanel=document.getElementById("setPanel");if(setPanel)setPanel.hidden=false;
+    showApplied(e);
+  }
+
+  function markPlanDue(){
+    document.querySelectorAll(".rp-day-exercise-list li").forEach(li=>{
+      li.querySelector(".rp-strength-due")?.remove();
+      const strong=li.querySelector("strong");
+      const name=(li.dataset.strengthName||strong?.childNodes?.[0]?.nodeValue||strong?.textContent||"").trim();
+      if(!name)return;
+      li.dataset.strengthName=name;
+      if(TEST_EXERCISES.has(name)&&due(name)){
+        const badge=document.createElement("small");badge.className="rp-strength-due";badge.textContent="Krafttest fällig";
+        strong?.appendChild(badge);
       }
     });
   }
 
-  function saveCurrent(){
-    const results={};let complete=true;
-    document.querySelectorAll("[data-strength-row]").forEach(row=>{
-      const weight=Number(row.querySelector("[data-strength-weight]")?.value||0);
-      const reps=Math.floor(Number(row.querySelector("[data-strength-reps]")?.value||0));
-      const e=estimate(weight,reps);
-      if(!weight||reps<1||reps>5||!e)complete=false;
-      results[row.dataset.name]={weight,reps,estimated1RM:e};
-    });
-    if(!complete){alert("Bitte bei allen Übungen Gewicht und 1–5 Wiederholungen eintragen.");return;}
-    const tests=read();tests.push({date:new Date().toISOString(),results});write(tests);
-    renderTest();renderHomeCard();
-    alert("Krafttest gespeichert. Der nächste Test ist in 4 Wochen fällig.");
+  function removeStandalone(){
+    document.getElementById("strengthTestHomeCard")?.remove();
+    document.getElementById("strengthTest")?.remove();
   }
 
-  function renderHistory(){
-    const card=document.getElementById("strengthHistoryCard");if(!card)return;
-    const tests=read().slice().sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,3);
-    if(!tests.length){card.innerHTML="<small>VERLAUF</small><h3>Noch keine Kraftmessung gespeichert</h3>";return;}
-    card.innerHTML=`<small>LETZTE KRAFTMESSUNGEN</small>${tests.map(t=>`<div class="rp-strength-history-row"><strong>${new Date(t.date).toLocaleDateString("de-DE")}</strong><span>${EXERCISES.map(n=>t.results?.[n]?.estimated1RM).filter(Boolean).length}/${EXERCISES.length} Werte</span></div>`).join("")}`;
+  function install(){
+    ensureStyles();removeStandalone();ensureInlinePanel();ensureAppliedHint();
+    if(typeof renderSet==="function"&&!window.__repPilotInlineStrengthInstalled){
+      window.__repPilotInlineStrengthInstalled=true;
+      const baseRenderSet=renderSet;
+      renderSet=function(){const result=baseRenderSet.apply(this,arguments);try{applyInline();}catch(error){console.warn("Kraftmessung konnte nicht gerendert werden",error)}return result;};
+    }
+    const plan=document.getElementById("plan");
+    if(plan)new MutationObserver(()=>queueMicrotask(markPlanDue)).observe(plan,{childList:true,subtree:true});
+    markPlanDue();
+    try{if(typeof active!=="undefined"&&active&&typeof phase!=="undefined"&&phase==="set")applyInline();}catch{}
   }
 
-  function init(){
-    ensureStyles();ensureView();renderHomeCard();
-    const home=document.getElementById("home");
-    if(home)new MutationObserver(()=>queueMicrotask(renderHomeCard)).observe(home,{childList:true,subtree:false});
-  }
-
-  window.RepPilotStrengthTest={version:VERSION,intervalDays:INTERVAL_DAYS,estimate,refresh:renderHomeCard};
-  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
+  window.RepPilotStrengthTest={version:VERSION,intervalDays:INTERVAL_DAYS,estimate1RM,trainingWeight,due,nextDue,refresh:()=>{applyInline();markPlanDue();}};
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",install,{once:true});else install();
 })();
