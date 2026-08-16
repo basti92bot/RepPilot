@@ -1,15 +1,15 @@
-const CACHE="reppilot-v11-8-51";
-const VERSION="11.8.51";
+const CACHE="reppilot-v11-8-52";
+const VERSION="11.8.52";
 const LOGO="./reppilot-logo-old-stable.png?v=11.8.27";
-const APP_ICON="./reppilot-muscleman-logo-v11.8.26.png?v=11.8.51";
-const APP_ICON_SVG="./reppilot-muscleman-v11.8.20.svg?v=11.8.51";
+const APP_ICON="./reppilot-muscleman-logo-v11.8.26.png?v=11.8.52";
+const APP_ICON_SVG="./reppilot-muscleman-v11.8.20.svg?v=11.8.52";
 const ASSETS=[
   "./index.html","./styles.css?v=11.8.10","./header-fix.css?v=11.8.27",
   "./auth.js?v=11.8.8","./storage-bridge.js?v=11.8.8","./app.js?v=11.8.8","./workout-fix.js?v=11.8.8",
-  "./run-feature.js?v=11.8.8","./run-dashboard-feature.js?v=11.8.34","./profile-feature.js?v=11.8.51","./apple-health-feature.js?v=11.8.35","./shortcut-health-feature.js?v=11.8.37",
-  "./bodyweight-auto.js?v=11.8.8","./training-plan-feature.js?v=11.8.23","./home-workout-feature.js?v=11.8.24","./onboarding-feature.js?v=11.8.51","./progression-feature.js?v=11.8.33","./stretch-routine-feature.js?v=11.8.28",
-  "./timer-sound-feature.js?v=11.8.51","./navigation-fix.js?v=11.8.51","./workout-sticky-actions.js?v=11.8.51","./day-exercise-overview.js?v=11.8.51","./pushup-feature.js?v=11.8.51","./plan-title-fix.js?v=11.8.51","./strength-test-feature.js?v=11.8.51",
-  "./reset-feature.js?v=11.8.51","./update-feature.js?v=11.8.32","./version.json","./manifest.json?v=11.8.51",
+  "./run-feature.js?v=11.8.8","./run-dashboard-feature.js?v=11.8.34","./profile-feature.js?v=11.8.52","./apple-health-feature.js?v=11.8.35","./shortcut-health-feature.js?v=11.8.37",
+  "./bodyweight-auto.js?v=11.8.8","./training-plan-feature.js?v=11.8.23","./home-workout-feature.js?v=11.8.24","./onboarding-feature.js?v=11.8.52","./progression-feature.js?v=11.8.33","./stretch-routine-feature.js?v=11.8.28",
+  "./timer-sound-feature.js?v=11.8.52","./navigation-fix.js?v=11.8.52","./workout-sticky-actions.js?v=11.8.52","./day-exercise-overview.js?v=11.8.52","./pushup-feature.js?v=11.8.52","./plan-title-fix.js?v=11.8.52","./strength-test-feature.js?v=11.8.52",
+  "./reset-feature.js?v=11.8.52","./update-feature.js?v=11.8.32","./version.json","./manifest.json?v=11.8.52",
   "./stretch-images-v11.8.30.js?v=11.8.30","./stretch-lower-back-v11.8.29.svg?v=11.8.30","./stretch-upper-back-v11.8.29.svg?v=11.8.30",
   LOGO,APP_ICON,APP_ICON_SVG,"./stretch-anatomy-v11.7.2.png?v=11.8.30"
 ];
