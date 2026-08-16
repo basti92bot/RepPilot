@@ -1,15 +1,15 @@
-const CACHE="reppilot-v11-8-53";
-const VERSION="11.8.53";
+const CACHE="reppilot-v11-8-54";
+const VERSION="11.8.54";
 const LOGO="./reppilot-logo-old-stable.png?v=11.8.27";
-const APP_ICON="./reppilot-muscleman-logo-v11.8.26.png?v=11.8.53";
-const APP_ICON_SVG="./reppilot-muscleman-v11.8.20.svg?v=11.8.53";
+const APP_ICON="./reppilot-muscleman-logo-v11.8.26.png?v=11.8.54";
+const APP_ICON_SVG="./reppilot-muscleman-v11.8.20.svg?v=11.8.54";
 const ASSETS=[
   "./index.html","./styles.css?v=11.8.10","./header-fix.css?v=11.8.27",
-  "./auth.js?v=11.8.8","./storage-bridge.js?v=11.8.8","./app.js?v=11.8.8","./workout-fix.js?v=11.8.8",
-  "./run-feature.js?v=11.8.8","./run-dashboard-feature.js?v=11.8.34","./profile-feature.js?v=11.8.53","./apple-health-feature.js?v=11.8.35","./shortcut-health-feature.js?v=11.8.37",
-  "./bodyweight-auto.js?v=11.8.8","./training-plan-feature.js?v=11.8.53","./home-workout-feature.js?v=11.8.53","./onboarding-feature.js?v=11.8.53","./progression-feature.js?v=11.8.33","./stretch-routine-feature.js?v=11.8.28",
-  "./timer-sound-feature.js?v=11.8.53","./navigation-fix.js?v=11.8.53","./workout-sticky-actions.js?v=11.8.53","./day-exercise-overview.js?v=11.8.53","./pushup-feature.js?v=11.8.53","./plan-title-fix.js?v=11.8.53","./strength-test-feature.js?v=11.8.53",
-  "./reset-feature.js?v=11.8.53","./update-feature.js?v=11.8.32","./version.json","./manifest.json?v=11.8.53",
+  "./auth.js?v=11.8.8","./storage-bridge.js?v=11.8.8","./app.js?v=11.8.8","./workout-fix.js?v=11.8.54",
+  "./run-feature.js?v=11.8.8","./run-dashboard-feature.js?v=11.8.34","./profile-feature.js?v=11.8.54","./apple-health-feature.js?v=11.8.35","./shortcut-health-feature.js?v=11.8.37",
+  "./bodyweight-auto.js?v=11.8.54","./training-plan-feature.js?v=11.8.54","./home-workout-feature.js?v=11.8.54","./onboarding-feature.js?v=11.8.54","./progression-feature.js?v=11.8.54","./stretch-routine-feature.js?v=11.8.28",
+  "./timer-sound-feature.js?v=11.8.54","./navigation-fix.js?v=11.8.54","./workout-sticky-actions.js?v=11.8.54","./day-exercise-overview.js?v=11.8.54","./pushup-feature.js?v=11.8.54","./plan-title-fix.js?v=11.8.54","./strength-test-feature.js?v=11.8.54",
+  "./reset-feature.js?v=11.8.54","./update-feature.js?v=11.8.32","./version.json","./manifest.json?v=11.8.54",
   "./stretch-images-v11.8.30.js?v=11.8.30","./stretch-lower-back-v11.8.29.svg?v=11.8.30","./stretch-upper-back-v11.8.29.svg?v=11.8.30",
   LOGO,APP_ICON,APP_ICON_SVG,"./stretch-anatomy-v11.7.2.png?v=11.8.30"
 ];
@@ -20,7 +20,7 @@ function upgradeHtml(text){
     .replace(/RepPilot v\d+\.\d+\.\d+/g,`RepPilot v${VERSION}`)
     .replace(/<h1>RepPilot <span>v\d+\.\d+\.\d+<\/span><\/h1>/,`<h1>RepPilot <span>v${VERSION}</span></h1>`)
     .replace(/manifest\.json(?:\?v=[^"']+)?/g,`manifest.json?v=${VERSION}`);
-  ["profile-feature","training-plan-feature","home-workout-feature","onboarding-feature","timer-sound-feature","navigation-fix","workout-sticky-actions","day-exercise-overview","pushup-feature","plan-title-fix","strength-test-feature","reset-feature"].forEach(name=>{
+  ["workout-fix","profile-feature","bodyweight-auto","training-plan-feature","home-workout-feature","onboarding-feature","progression-feature","timer-sound-feature","navigation-fix","workout-sticky-actions","day-exercise-overview","pushup-feature","plan-title-fix","strength-test-feature","reset-feature"].forEach(name=>{
     html=html.replace(new RegExp(`${name}\\.js\\?v=[^\"']+`,`g`),`${name}.js?v=${VERSION}`);
   });
   const required=["shortcut-health-feature","training-plan-feature","home-workout-feature","onboarding-feature","timer-sound-feature","navigation-fix","workout-sticky-actions","day-exercise-overview","pushup-feature","plan-title-fix","strength-test-feature","reset-feature"];
