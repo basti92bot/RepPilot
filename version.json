@@ -1,5 +1,5 @@
 {
-  "version": "11.8.43",
-  "releasedAt": "2026-08-15",
-  "notes": "Trainingsplan-Konsistenz: Montag heißt Push, Freitag Oberkörper; Titel und Metadaten entsprechen wieder den tatsächlichen Übungen"
+  "version": "11.8.44",
+  "releasedAt": "2026-08-16",
+  "notes": "Fresh-Install-Fix: aktueller Funktionsstand lädt sofort; Übungs-Dropdowns funktionieren; PWA-Icon nutzt das RepPilot-Muskelmann-Logo"
 }
