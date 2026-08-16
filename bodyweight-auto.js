@@ -1,4 +1,5 @@
 (() => {
+  const VERSION="11.8.54";
   function getWeight() {
     try {
       const p = JSON.parse(localStorage.getItem("reppilot-user-profile") || "{}");
@@ -10,7 +11,7 @@
     const input = document.getElementById("weightInput");
     const label = document.querySelector('label[for="weightInput"]');
     if (!input) return;
-    if (name === "Hanging Leg Raises") {
+    if (name === "Hängendes Beinheben" || name === "Hanging Leg Raises") {
       const bw = getWeight();
       if (!bw) return;
       input.value = Math.round(bw * 0.5 * 2) / 2;
@@ -29,6 +30,7 @@
     new MutationObserver(apply).observe(node,{childList:true,subtree:true,characterData:true});
     apply();
   }
+  window.RepPilotBodyweightAuto={version:VERSION};
   document.addEventListener("DOMContentLoaded",start);
   if (document.readyState !== "loading") start();
 })();
