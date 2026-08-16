@@ -1,17 +1,16 @@
 (() => {
-const VERSION="11.8.53";
+const VERSION="11.8.54";
 const KEY="reppilot-selected-training-plan";
-const HISTORY_KEY="reppilot-history";
 const STRENGTH_KEY="reppilot-strength-tests-v1";
 
 const PLANS=[
-{id:"home",title:"Training zu Hause",subtitle:"Nur Körpergewicht und Bodenmatte",icon:"🏠"},
+{id:"home",title:"Home Workout",subtitle:"Nur Körpergewicht und Bodenmatte",icon:"🏠"},
 {id:"muscle",title:"Muskelaufbau Trainingsplan",subtitle:"Krafttraining im Studio mit Fokus auf Muskelaufbau",icon:"🏋️"},
 {id:"weightloss",title:"Abnehmtrainingsplan",subtitle:"Kraft und Cardio mit Fokus auf höheren Kalorienverbrauch",icon:"🔥"}
 ];
 
 const LEGACY={push:"muscle","pull-legs":"muscle","upper-hypertrophy":"muscle"};
-const HOME_NAME_MAP={
+const EXERCISE_NAME_MAP={
   "Reverse Lunges":"Rückwärts-Ausfallschritte",
   "Superman":"Rückenstrecker in Bauchlage",
   "Glute Bridge":"Hüftheben",
@@ -27,8 +26,21 @@ const HOME_NAME_MAP={
   "Leg Raises":"Beinheben",
   "Prone Y-T Raises":"Y-T-Heben in Bauchlage",
   "Glute Bridge March":"Hüftheben mit Beinwechsel",
-  "Mountain Climbers":"Bergsteiger"
+  "Mountain Climbers":"Bergsteiger",
+  "Overhead Cable Extension":"Überkopf-Trizepsstrecken am Kabelzug",
+  "Seil-Pushdown":"Trizepsdrücken am Seilzug",
+  "Incline Curls":"Schrägbank-Curls",
+  "Reverse Butterfly am Kabel":"Reverse Butterfly am Kabelzug",
+  "Preacher Curls":"Scott-Curls",
+  "Hanging Leg Raises":"Hängendes Beinheben",
+  "Cross Body Cable Extension":"Einarmiger Trizeps am Kabelzug",
+  "Kabel-Flys":"Fliegende am Kabelzug",
+  "Seitheben Kabel":"Seitheben am Kabelzug",
+  "Crunch-Maschine":"Bauchpresse an der Maschine"
 };
+const HOME_OLD_NAMES=new Set([
+  "Reverse Lunges","Superman","Glute Bridge","Pike Push-ups","Dead Bug","Crunches","Plank","Split Squats","Einbeinige Glute Bridge","Reverse Snow Angels","Bird Dog","Side Plank","Leg Raises","Prone Y-T Raises","Glute Bridge March","Mountain Climbers"
+]);
 
 function read(){const raw=localStorage.getItem(KEY);const id=LEGACY[raw]||raw||"muscle";return PLANS.some(p=>p.id===id)?id:"muscle"}
 function save(id){if(PLANS.some(p=>p.id===id))localStorage.setItem(KEY,id)}
@@ -45,11 +57,11 @@ const MUSCLE_WEEK=[
 ];
 
 const HOME_WEEK=[
-{day:1,dayName:"Montag",title:"Zuhause-Training A",type:"strength",workoutId:"home-a",meta:"Ganzkörper · nur Bodenmatte · ca. 35–45 Min."},
+{day:1,dayName:"Montag",title:"Home Workout A",type:"strength",workoutId:"home-a",meta:"Ganzkörper · nur Bodenmatte · ca. 35–45 Min."},
 {day:2,dayName:"Dienstag",title:"Dehnen: Rücken, Beine & Füße",type:"stretch",meta:"Geführte Mobilität · ca. 10–12 Min."},
-{day:3,dayName:"Mittwoch",title:"Zuhause-Training B",type:"strength",workoutId:"home-b",meta:"Ganzkörper · nur Bodenmatte · ca. 35–45 Min."},
+{day:3,dayName:"Mittwoch",title:"Home Workout B",type:"strength",workoutId:"home-b",meta:"Ganzkörper · nur Bodenmatte · ca. 35–45 Min."},
 {day:4,dayName:"Donnerstag",title:"Lockerer Dauerlauf",type:"run",runId:"easy",meta:"Ruhiges Gesprächstempo"},
-{day:5,dayName:"Freitag",title:"Zuhause-Training C",type:"strength",workoutId:"home-c",meta:"Ganzkörper · nur Bodenmatte · ca. 35–45 Min."},
+{day:5,dayName:"Freitag",title:"Home Workout C",type:"strength",workoutId:"home-c",meta:"Ganzkörper · nur Bodenmatte · ca. 35–45 Min."},
 {day:6,dayName:"Samstag",title:"Dehnen: Rücken, Beine & Füße",type:"stretch",meta:"Geführte Mobilität · ca. 10–12 Min."},
 {day:0,dayName:"Sonntag",title:"Erholung",type:"rest",meta:"Regeneration"}
 ];
@@ -64,39 +76,54 @@ const WEIGHTLOSS_WEEK=[
 {day:0,dayName:"Sonntag",title:"Erholung",type:"rest",meta:"Regeneration"}
 ];
 
-function migrateHomeNames(){
+function translatedName(name){return EXERCISE_NAME_MAP[name]||name}
+
+function migrateExerciseNames(){
   try{
-    const raw=localStorage.getItem(HISTORY_KEY);
-    if(raw){
-      const rows=JSON.parse(raw);
-      let changed=false;
-      if(Array.isArray(rows))rows.forEach(workout=>{
-        if(!workout?.id?.startsWith("home-")||!Array.isArray(workout.exercises))return;
-        workout.exercises.forEach(exercise=>{
-          const next=HOME_NAME_MAP[exercise?.name];
-          if(next){exercise.name=next;changed=true;}
-        });
-        if(/^Home Workout/.test(workout.title||"")){workout.title=(workout.title||"").replace("Home Workout","Zuhause-Training");changed=true;}
-      });
-      if(changed)localStorage.setItem(HISTORY_KEY,JSON.stringify(rows));
+    const keys=[];
+    for(let i=0;i<localStorage.length;i++){
+      const key=localStorage.key(i);
+      if(key&&key.startsWith("reppilot-history"))keys.push(key);
     }
-  }catch(e){console.warn("Alte Home-Workout-Namen konnten nicht migriert werden",e)}
+    keys.forEach(key=>{
+      const raw=localStorage.getItem(key);if(!raw)return;
+      const rows=JSON.parse(raw);let changed=false;
+      if(Array.isArray(rows))rows.forEach(workout=>{
+        if(Array.isArray(workout?.exercises))workout.exercises.forEach(exercise=>{
+          const next=translatedName(exercise?.name);
+          if(next&&next!==exercise?.name){exercise.name=next;changed=true;}
+        });
+        if(typeof workout?.title==="string"&&/^Zuhause-Training/.test(workout.title)){
+          workout.title=workout.title.replace(/^Zuhause-Training/,"Home Workout");changed=true;
+        }
+      });
+      if(changed)localStorage.setItem(key,JSON.stringify(rows));
+    });
+  }catch(e){console.warn("Alte Übungsnamen im Verlauf konnten nicht migriert werden",e)}
 
   try{
-    const raw=localStorage.getItem(STRENGTH_KEY);
-    if(!raw)return;
+    const raw=localStorage.getItem(STRENGTH_KEY);if(!raw)return;
     const rows=JSON.parse(raw);let changed=false;
     if(Array.isArray(rows))rows.forEach(item=>{
       if(typeof item?.exercise!=="string")return;
-      if(item.exercise.includes("::")){
-        const i=item.exercise.indexOf("::"),prefix=item.exercise.slice(0,i+2),name=item.exercise.slice(i+2),next=HOME_NAME_MAP[name];
-        if(next){item.exercise=prefix+next;changed=true;}
-      }else if(HOME_NAME_MAP[item.exercise]){
-        item.exercise=HOME_NAME_MAP[item.exercise];changed=true;
+      if(item.exercise.startsWith("home::")){
+        const name=item.exercise.slice(6),next=translatedName(name);
+        if(next!==name){item.exercise=`home::${next}`;changed=true;}
+      }else{
+        const next=translatedName(item.exercise);
+        if(next!==item.exercise){item.exercise=next;changed=true;}
       }
     });
     if(changed)localStorage.setItem(STRENGTH_KEY,JSON.stringify(rows));
   }catch(e){console.warn("Alte Krafttest-Namen konnten nicht migriert werden",e)}
+}
+
+function translateCurrentWorkouts(){
+  try{
+    (Array.isArray(WORKOUTS)?WORKOUTS:[]).forEach(workout=>{
+      workout.exercises=(workout.exercises||[]).map(([name,sets,weight])=>[translatedName(name),sets,weight]);
+    });
+  }catch(e){console.warn("Übungsnamen konnten nicht normalisiert werden",e)}
 }
 
 function ensureCustomWorkouts(){
@@ -105,7 +132,7 @@ function ensureCustomWorkouts(){
       const existing=WORKOUTS.find(x=>x.id===w.id);
       if(existing)Object.assign(existing,w);else WORKOUTS.push(w);
     };
-    put({id:"home-a",day:1,dayName:"Montag",title:"Zuhause-Training A",exercises:[
+    put({id:"home-a",day:1,dayName:"Montag",title:"Home Workout A",exercises:[
       ["Kniebeugen",3,0],
       ["Liegestütze bis Maximum",3,0],
       ["Rückwärts-Ausfallschritte",3,0],
@@ -115,7 +142,7 @@ function ensureCustomWorkouts(){
       ["Diagonales Arm-Bein-Strecken",3,0],
       ["Unterarmstütz",3,0]
     ]});
-    put({id:"home-b",day:3,dayName:"Mittwoch",title:"Zuhause-Training B",exercises:[
+    put({id:"home-b",day:3,dayName:"Mittwoch",title:"Home Workout B",exercises:[
       ["Stationäre Ausfallschritte",3,0],
       ["Enge Liegestütze",3,0],
       ["Einbeiniges Hüftheben",3,0],
@@ -125,7 +152,7 @@ function ensureCustomWorkouts(){
       ["Seitstütz",2,0],
       ["Beinheben",3,0]
     ]});
-    put({id:"home-c",day:5,dayName:"Freitag",title:"Zuhause-Training C",exercises:[
+    put({id:"home-c",day:5,dayName:"Freitag",title:"Home Workout C",exercises:[
       ["Tempo-Kniebeugen",3,0],
       ["Liegestütze bis Maximum",3,0],
       ["Rückwärts-Ausfallschritte",3,0],
@@ -135,12 +162,12 @@ function ensureCustomWorkouts(){
       ["Bergsteiger",3,0],
       ["Unterarmstütz",3,0]
     ]});
-    put({id:"loss-a",day:1,dayName:"Montag",title:"Ganzkörper Kraft A",exercises:[["Beinpresse",3,80],["Brustpresse",3,40],["Latzug neutral",3,45],["Schulterpresse",2,25],["Rumänisches Kreuzheben",3,50],["Seil-Pushdown",2,20],["Incline Curls",2,10],["Crunch-Maschine",3,25]]});
-    put({id:"loss-b",day:5,dayName:"Freitag",title:"Ganzkörper Kraft B",exercises:[["Beinbeuger",3,35],["Schrägbankdrücken leicht",3,40],["Brustgestütztes Rudern",3,40],["Beinstrecker",3,35],["Seitheben",2,6],["Hammercurls",2,10],["Cross Body Cable Extension",2,8],["Wadenheben",3,50],["Crunch-Maschine",3,25]]});
+    put({id:"loss-a",day:1,dayName:"Montag",title:"Ganzkörper Kraft A",exercises:[["Beinpresse",3,80],["Brustpresse",3,40],["Latzug neutral",3,45],["Schulterpresse",2,25],["Rumänisches Kreuzheben",3,50],["Trizepsdrücken am Seilzug",2,20],["Schrägbank-Curls",2,10],["Bauchpresse an der Maschine",3,25]]});
+    put({id:"loss-b",day:5,dayName:"Freitag",title:"Ganzkörper Kraft B",exercises:[["Beinbeuger",3,35],["Schrägbankdrücken leicht",3,40],["Brustgestütztes Rudern",3,40],["Beinstrecker",3,35],["Seitheben",2,6],["Hammercurls",2,10],["Einarmiger Trizeps am Kabelzug",2,8],["Wadenheben",3,50],["Bauchpresse an der Maschine",3,25]]});
   }catch(e){console.error("Trainingsplan-Erweiterung fehlgeschlagen",e)}
 }
 
-function ensureHomeTips(){
+function ensureExerciseTips(){
   try{
     if(typeof TIPS==="undefined")return;
     Object.assign(TIPS,{
@@ -161,10 +188,23 @@ function ensureHomeTips(){
       "Tempo-Kniebeugen":"Drei Sekunden absenken, kurz unten halten und kontrolliert hochkommen.",
       "Y-T-Heben in Bauchlage":"Arme zuerst als Y, dann als T anheben. Schulterblätter nach hinten unten ziehen.",
       "Hüftheben mit Beinwechsel":"Becken oben halten und abwechselnd einen Fuß leicht anheben, ohne zur Seite zu kippen.",
-      "Bergsteiger":"Rumpf fest halten und die Knie kontrolliert nach vorne führen."
+      "Bergsteiger":"Rumpf fest halten und die Knie kontrolliert nach vorne führen.",
+      "Überkopf-Trizepsstrecken am Kabelzug":"Ellenbogen eng neben dem Kopf halten und den Arm kontrolliert vollständig strecken.",
+      "Trizepsdrücken am Seilzug":"Oberarme ruhig am Körper lassen und das Seil unten auseinanderziehen.",
+      "Schrägbank-Curls":"Oberarme hinter dem Körper lassen und ohne Schwung beugen.",
+      "Reverse Butterfly am Kabelzug":"Kabel über Kreuz greifen und kontrolliert aus der hinteren Schulter öffnen.",
+      "Scott-Curls":"Oberarme fest auflegen und kontrolliert fast vollständig absenken.",
+      "Hängendes Beinheben":"Langsam absenken und nicht schwingen.",
+      "Einarmiger Trizeps am Kabelzug":"Oberarm ruhig halten und den Unterarm kontrolliert strecken.",
+      "Fliegende am Kabelzug":"Ellenbogen leicht gebeugt halten und die Arme kontrolliert vor der Brust schließen.",
+      "Seitheben am Kabelzug":"Ellenbogen führen und die Schulter unten lassen.",
+      "Bauchpresse an der Maschine":"Aus dem Bauch einrollen und ohne Schwung zurückführen."
     });
-    Object.entries(HOME_NAME_MAP).forEach(([oldName,newName])=>{if(TIPS[newName])TIPS[oldName]=TIPS[newName];});
-  }catch(e){console.error("Tipps für Training zu Hause fehlgeschlagen",e)}
+    Object.entries(EXERCISE_NAME_MAP).forEach(([oldName,newName])=>{
+      if(TIPS[newName])TIPS[oldName]=TIPS[newName];
+      else if(TIPS[oldName]&&!TIPS[newName])TIPS[newName]=TIPS[oldName];
+    });
+  }catch(e){console.error("Übungstipps konnten nicht aktualisiert werden",e)}
 }
 
 function tuneStretchRoutine(){
@@ -227,14 +267,15 @@ if(baseRenderHome){renderHome=function(){renderSelectedHome()}}
 
 function init(){
   styles();
-  migrateHomeNames();
+  migrateExerciseNames();
+  translateCurrentWorkouts();
   ensureCustomWorkouts();
-  ensureHomeTips();
+  ensureExerciseTips();
   tuneStretchRoutine();
   renderSelectedHome();
   profile();
   let n=0;const timer=setInterval(()=>{n++;if(profile()||n>20)clearInterval(timer)},250);
-  window.RepPilotTrainingPlan={version:VERSION,current,selectedWeek,homeNameMap:HOME_NAME_MAP};
+  window.RepPilotTrainingPlan={version:VERSION,current,selectedWeek,exerciseNameMap:EXERCISE_NAME_MAP};
 }
 
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
