@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.49";
+  const VERSION="11.8.51";
   const STRENGTH_KEY="reppilot-strength-tests-v1";
   const LEVELS={
     beginner:{label:"Einsteiger",factor:.60,copy:"Neu im Krafttraining oder noch unsicher bei Technik und Belastung."},
@@ -41,14 +41,15 @@
     if(document.getElementById("rpOnboardingStyles"))return;
     const s=document.createElement("style");s.id="rpOnboardingStyles";
     s.textContent=`
-      #rpOnboarding{position:fixed;inset:0;z-index:9998;background:#0b1020;display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto}
-      #rpOnboarding[hidden]{display:none!important}.rp-onboarding-card{width:min(100%,470px);background:#fff;border-radius:24px;padding:22px;box-shadow:0 24px 70px rgba(0,0,0,.38);color:#111827}
+      #rpOnboarding{position:fixed;inset:0;z-index:9998;background:#0b1020;display:flex;align-items:flex-start;justify-content:center;box-sizing:border-box;min-height:100dvh;padding:calc(env(safe-area-inset-top,0px) + 28px) 18px calc(env(safe-area-inset-bottom,0px) + 28px);overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+      #rpOnboarding[hidden]{display:none!important}.rp-onboarding-card{width:min(100%,470px);flex:0 0 auto;background:#fff;border-radius:24px;padding:22px;box-sizing:border-box;box-shadow:0 24px 70px rgba(0,0,0,.38);color:#111827;margin:0 auto 8px}
       .rp-onboarding-card h2{margin:5px 0 7px;font-size:26px}.rp-onboarding-card>p{margin:0 0 17px;color:#64748b;line-height:1.45}
       .rp-onboarding-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.rp-onboarding-field label{display:block;margin:0 0 5px;font-size:12px;font-weight:900;color:#475569}
       .rp-onboarding-input{display:grid;grid-template-columns:1fr auto;align-items:center;border:2px solid #d1d5db;border-radius:14px;overflow:hidden}.rp-onboarding-input input{width:100%;box-sizing:border-box;border:0;outline:0;padding:14px;font:inherit;font-size:20px;font-weight:900}.rp-onboarding-input span{padding-right:13px;color:#64748b;font-weight:800}
       .rp-option-title{display:block;margin:18px 0 8px;font-size:12px;font-weight:900;color:#475569}.rp-options{display:grid;gap:8px}.rp-options.two{grid-template-columns:1fr 1fr}.rp-option{width:100%;text-align:left;background:#fff;color:#111827;border:2px solid #e2e8f0;border-radius:14px;padding:12px 13px}.rp-option strong,.rp-option small{display:block}.rp-option small{margin-top:3px;color:#64748b;line-height:1.3}.rp-option.selected{border-color:#111827;background:#f8fafc}.rp-option.selected strong:after{content:" ✓"}
       #rpOnboardingSave{width:100%;margin-top:16px;border:0;border-radius:14px;padding:14px;background:#111827;color:#fff;font:inherit;font-weight:900}.rp-onboarding-note{margin-top:10px!important;font-size:12px;color:#64748b!important}
       #rpStartWeightHint{margin:12px 0;padding:12px 13px;border:1px solid #dbe3ea;border-radius:14px;background:#f8fafc}#rpStartWeightHint[hidden]{display:none!important}#rpStartWeightHint small{display:block;color:#64748b;font-size:10px;font-weight:900;letter-spacing:.07em}#rpStartWeightHint strong{display:block;margin-top:4px;font-size:16px}#rpStartWeightHint span{display:block;margin-top:3px;color:#64748b;font-size:12px;line-height:1.35}
+      @media(max-width:390px){#rpOnboarding{padding-left:12px;padding-right:12px}.rp-onboarding-card{padding:18px}.rp-onboarding-card h2{font-size:24px}.rp-onboarding-grid{gap:8px}}
     `;
     document.head.appendChild(s);
   }
@@ -113,6 +114,7 @@
     const existing=!!p?.onboardingCompletedAt;
     document.getElementById("rpOnboardingTitle").textContent=existing?"Eine Angabe fehlt":"Damit dein erstes Training passt 🏋️";
     document.getElementById("rpOnboardingIntro").textContent=existing?"Deine bisherigen Daten sind schon eingetragen. Bitte ergänze noch Männlich oder Weiblich, damit RepPilot den ersten Gewichtsvorschlag passend berechnen kann.":"Gib kurz deine Körperdaten und Erfahrung an. RepPilot schlägt dir danach für jede neue Geräteübung ein vorsichtiges Startgewicht vor.";
+    o.scrollTop=0;
     o.hidden=false;
   }
 
