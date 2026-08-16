@@ -24,7 +24,7 @@
 
   function sexFactorFor(name,sex){
     if(sex==="male")return 1;
-    if(sex==="female")return isLowerBody(name)?.90:.78;
+    if(sex==="female")return isLowerBody(name) ? .90 : .78;
     return 0;
   }
 
