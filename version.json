@@ -1,5 +1,5 @@
 {
-  "version": "11.8.48",
+  "version": "11.8.49",
   "releasedAt": "2026-08-16",
-  "notes": "Erstlogin-Onboarding mit Groesse, Gewicht und Trainingslevel; automatische Startgewicht-Vorschlaege fuer neue Uebungen und korrekter Cloud-Profil-Sync"
+  "notes": "Onboarding und Profil fragen Männlich oder Weiblich ab; Startgewicht-Formel berücksichtigt Körpergewicht, Trainingslevel und einen bewegungsabhängigen Geschlechtsfaktor"
 }
