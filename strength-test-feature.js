@@ -34,7 +34,6 @@
     }catch{return new Set()}
   }
   function tracked(name){return trackedNames().has(name);}
-
   function read(){try{const data=JSON.parse(localStorage.getItem(KEY)||"[]");return Array.isArray(data)?data:[]}catch{return []}}
   function write(data){localStorage.setItem(KEY,JSON.stringify(data));}
   function normalizedRecords(){
@@ -86,10 +85,11 @@
       <div id="strengthInlineNote" class="rp-test-note"></div><p id="strengthInlinePrevious" class="muted"></p>
       <div id="strengthInlineInputs" class="rp-test-inputs"><div id="strengthWeightField" class="rp-test-field"><label for="strengthInlineWeight">Testgewicht (kg)</label><input id="strengthInlineWeight" type="number" min="0" step="0.5" inputmode="decimal"></div><div class="rp-test-field"><label id="strengthRepsLabel" for="strengthInlineReps">Saubere Wiederholungen</label><input id="strengthInlineReps" type="number" min="1" max="5" step="1" inputmode="numeric"></div></div>
       <div id="strengthInlineResult" class="rp-test-result"><div id="strengthOneRmBox" class="rp-test-value"><small>GESCHÄTZTES 1RM</small><strong id="strengthInline1RM">–</strong></div><div class="rp-test-value"><small id="strengthTrainingLabel">NEUES ARBEITSGEWICHT</small><strong id="strengthInlineTraining">–</strong></div></div>
-      <div class="rp-test-actions"><button id="strengthInlineSave" type="button" class="wide">Messung übernehmen & Training starten</button><button id="strengthInlineDefer" type="button" class="secondary wide">Gerät besetzt – später machen</button></div>`;
+      <div class="rp-test-actions"><button id="strengthInlineSave" type="button" class="wide">Messung übernehmen & Training starten</button><button id="strengthInlineSkip" type="button" class="secondary wide">Heute überspringen</button><button id="strengthInlineDefer" type="button" class="secondary wide">Gerät besetzt – später machen</button></div>`;
     setPanel.insertAdjacentElement("beforebegin",panel);
     panel.querySelectorAll("input").forEach(x=>x.addEventListener("input",previewInline));
     document.getElementById("strengthInlineSave").onclick=saveInline;
+    document.getElementById("strengthInlineSkip").onclick=skipInline;
     document.getElementById("strengthInlineDefer").onclick=()=>{resetPanelState();if(typeof deferCurrentExercise==="function")deferCurrentExercise();};
     return panel;
   }
@@ -156,9 +156,19 @@
     write(records);resetPanelState();hideInline();markPlanDue();if(typeof renderSet==="function")renderSet();window.RepPilotStickyActions?.refresh?.();
   }
 
+  function skipInline(){
+    const e=currentExercise();if(!e)return;
+    e.strengthTestSkipped=true;
+    resetPanelState();hideInline();
+    if(typeof renderSet==="function")renderSet();
+    window.RepPilotStickyActions?.refresh?.();
+  }
+
   function applyInline(){
     ensureStyles();ensureInlinePanel();ensureAppliedHint();const e=currentExercise(),inSet=typeof phase!=="undefined"&&phase==="set",firstSet=typeof si!=="undefined"&&si===0;
-    if(!e||!inSet){hideInline();return;}if(firstSet&&due(e.name)&&!e.strengthTestApplied){showInline(e);return;}hideInline();const setPanel=document.getElementById("setPanel");if(setPanel)setPanel.hidden=false;showApplied(e);
+    if(!e||!inSet){hideInline();return;}
+    if(firstSet&&due(e.name)&&!e.strengthTestApplied&&!e.strengthTestSkipped){showInline(e);return;}
+    hideInline();const setPanel=document.getElementById("setPanel");if(setPanel)setPanel.hidden=false;showApplied(e);
   }
 
   function markPlanDue(){
