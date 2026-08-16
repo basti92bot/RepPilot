@@ -1,5 +1,5 @@
 {
-  "version": "11.8.51",
+  "version": "11.8.52",
   "releasedAt": "2026-08-16",
-  "notes": "iPhone-Onboarding respektiert Safe Area, startet unterhalb der Statusleiste und scrollt sauber bis zum unteren Ende"
+  "notes": "Fortgeschrittene und Profis erhalten die Kraftmessung direkt im ersten Training; Einsteiger erst nach 28 Tagen. Interne Modulversionen und Release-Dateien vereinheitlicht."
 }
