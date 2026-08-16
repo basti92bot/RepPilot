@@ -1,14 +1,17 @@
 (() => {
+  const VERSION = "11.8.53";
   const HOME_REST_SECONDS = 30;
   const isHomeWorkout = () => !!active?.id?.startsWith("home-");
-  const isTimedCore = name => /plank/i.test(name || "");
+  const isTimedCore = name => /plank|unterarmstütz|seitstütz/i.test(name || "");
 
   function tuneHomeExercises(){
     const homeA=WORKOUTS.find(w=>w.id==="home-a");
     if(homeA){
-      const crunchIndex=homeA.exercises.findIndex(x=>x[0]==="Crunches");
-      if(crunchIndex>=0)homeA.exercises[crunchIndex]=["Plank",3,0];
-      else if(!homeA.exercises.some(x=>x[0]==="Plank"))homeA.exercises.push(["Plank",3,0]);
+      homeA.exercises=homeA.exercises.map(x=>{
+        if(["Crunches","Plank"].includes(x[0]))return ["Unterarmstütz",3,0];
+        return x;
+      });
+      if(!homeA.exercises.some(x=>x[0]==="Unterarmstütz"))homeA.exercises.push(["Unterarmstütz",3,0]);
     }
   }
 
@@ -94,7 +97,7 @@
       document.getElementById("nextExerciseMeta").textContent=isTimedCore(x.name)?`${x.sets.length} Sätze · jeweils 30 Sekunden`:`${x.sets.length} Sätze · jeweils ${REPS} Wiederholungen`;
       document.getElementById("nextExerciseTip").textContent=TIPS[x.name]||"Ruhig und kontrolliert.";
     }else{
-      document.getElementById("workoutVolumePreview").textContent="Home Workout abgeschlossen";
+      document.getElementById("workoutVolumePreview").textContent="Training zu Hause abgeschlossen";
     }
   };
 
@@ -120,9 +123,7 @@
     tuneHomeExercises();
     const complete=document.getElementById("completeSetBtn");
     if(complete)complete.onclick=completeSet;
-    const v=document.querySelector("header h1 span");
-    if(v)v.textContent="v11.8.24";
-    document.title="RepPilot v11.8.24";
+    window.RepPilotHomeWorkout={version:VERSION};
   }
 
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});
