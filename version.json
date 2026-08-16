@@ -1,5 +1,5 @@
 {
-  "version": "11.8.44",
+  "version": "11.8.45",
   "releasedAt": "2026-08-16",
-  "notes": "Fresh-Install-Fix: aktueller Funktionsstand lädt sofort; Übungs-Dropdowns funktionieren; PWA-Icon nutzt das RepPilot-Muskelmann-Logo"
+  "notes": "4-Wochen-Krafttest: geschätztes 1RM aus 1–5 Wiederholungen, Vergleich zum letzten Test und automatische Fälligkeit nach 28 Tagen"
 }
