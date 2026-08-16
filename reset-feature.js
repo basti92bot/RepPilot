@@ -1,8 +1,10 @@
 (() => {
+  const VERSION = "11.8.50";
   const HISTORY_KEY = "reppilot-history";
   const PROFILE_KEY = "reppilot-user-profile";
   const WEIGHT_HISTORY_KEY = "reppilot-weight-history";
   const PLAN_KEY = "reppilot-selected-training-plan";
+  const STRENGTH_TEST_KEY = "reppilot-strength-tests-v1";
 
   function injectStyles(){
     if(document.getElementById("resetFeatureStyles")) return;
@@ -54,8 +56,15 @@
       const client=window.repPilotSupabase;
       const user=await currentUser();
       if(!client||!user) return;
-      await client.from("user_profiles").delete().eq("user_id",user.id);
-    }catch(error){console.warn("Cloud-Profil konnte nicht gelöscht werden",error)}
+      const {error}=await client.from("profiles").update({
+        height_cm:null,
+        weight_kg:null,
+        training_level:null,
+        sex:null,
+        onboarding_completed_at:null
+      }).eq("id",user.id);
+      if(error) throw error;
+    }catch(error){console.warn("Cloud-Profil konnte nicht zurückgesetzt werden",error)}
   }
 
   function refreshScreens(){
@@ -74,14 +83,15 @@
   }
 
   async function resetAll(){
-    const ok=confirm("Alle App-Daten wirklich zurücksetzen? Verlauf, Körperdaten, Gewichtsverlauf und Trainingsplan-Auswahl werden gelöscht. Dein Konto bleibt bestehen.");
+    const ok=confirm("Alle App-Daten wirklich zurücksetzen? Verlauf, Körperdaten, Kraftmessungen, Gewichtsverlauf und Trainingsplan-Auswahl werden gelöscht. Dein Konto bleibt bestehen und die Einrichtung startet danach neu.");
     if(!ok) return;
+
     removeHistoryLocal();
-    localStorage.removeItem(PROFILE_KEY);
-    localStorage.removeItem(WEIGHT_HISTORY_KEY);
-    localStorage.removeItem(PLAN_KEY);
+    [PROFILE_KEY,WEIGHT_HISTORY_KEY,PLAN_KEY,STRENGTH_TEST_KEY].forEach(key=>localStorage.removeItem(key));
+
     await Promise.all([clearCloudRuns(),clearCloudProfile()]);
-    alert("App-Daten wurden zurückgesetzt. Die App wird neu geladen.");
+
+    alert("App-Daten wurden zurückgesetzt. Nach dem Neuladen startet die Einrichtung erneut.");
     location.reload();
   }
 
@@ -100,7 +110,7 @@
           <span class="reset-arrow">›</span>
         </button>
         <button type="button" class="reset-row" id="resetAllDataBtn">
-          <span><strong>Alle App-Daten zurücksetzen</strong><small>Verlauf, Körperdaten, Gewicht und Trainingsplan-Auswahl löschen. Dein Konto bleibt bestehen.</small></span>
+          <span><strong>Alle App-Daten zurücksetzen</strong><small>Verlauf, Körperdaten, Kraftmessungen und Trainingsplan-Auswahl löschen. Danach startet die Einrichtung erneut.</small></span>
           <span class="reset-arrow">›</span>
         </button>
       </article>`;
@@ -116,6 +126,7 @@
     const timer=setInterval(()=>{tries++;if(ensureUI()||tries>=20)clearInterval(timer)},250);
   }
 
+  window.RepPilotReset={version:VERSION};
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",init,{once:true}); else init();
 })();
 
