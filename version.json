@@ -1,5 +1,5 @@
 {
-  "version": "11.8.50",
+  "version": "11.8.51",
   "releasedAt": "2026-08-16",
-  "notes": "Komplett-Reset startet das Onboarding erneut und loescht Profil-, Krafttest- und Plan-Daten sauber"
+  "notes": "iPhone-Onboarding respektiert Safe Area, startet unterhalb der Statusleiste und scrollt sauber bis zum unteren Ende"
 }
