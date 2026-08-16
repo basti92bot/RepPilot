@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.52";
+  const VERSION="11.8.53";
   const STRENGTH_KEY="reppilot-strength-tests-v1";
   const LEVELS={
     beginner:{label:"Einsteiger",factor:.60,copy:"Neu im Krafttraining oder noch unsicher bei Technik und Belastung."},
@@ -7,8 +7,8 @@
     pro:{label:"Profi",factor:1.05,copy:"Mehrjährige Trainingserfahrung und sehr sichere Technik."}
   };
   const SEXES={male:{label:"Männlich"},female:{label:"Weiblich"}};
-  const BODYWEIGHT=/liegestütz|liegestuetz|hanging leg raise|hängend.*bein|plank|dead bug|mountain climber|superman|bird dog|glute bridge|kniebeugen|lunges|split squat|pike push|crunches|leg raises|snow angels|y-t raises/i;
-  const LOWER_BODY=/beinpresse|rumänisches kreuzheben|beinbeuger|beinstrecker|wadenheben|kniebeugen|lunges|split squat|glute bridge/i;
+  const BODYWEIGHT=/liegestütz|liegestuetz|hanging leg raise|hängend.*bein|plank|dead bug|mountain climber|superman|bird dog|glute bridge|kniebeugen|lunges|split squat|pike push|crunches|leg raises|snow angels|y-t raises|unterarmstütz|seitstütz|beinheben|bergsteiger|hüftheben|ausfallschritt|rückenstrecker|schneeengel|arm-bein-strecken|y-t-heben/i;
+  const LOWER_BODY=/beinpresse|rumänisches kreuzheben|beinbeuger|beinstrecker|wadenheben|kniebeugen|lunges|split squat|glute bridge|ausfallschritt|hüftheben/i;
 
   const clamp=(v,min,max)=>Math.min(max,Math.max(min,v));
   const fmt=v=>Number(v||0).toLocaleString("de-DE",{maximumFractionDigits:1});
@@ -78,8 +78,10 @@
       if(profile?.trainingLevel!=="beginner")return;
       const rows=strengthRecords(),existing=new Set(rows.filter(x=>x?.exercise).map(x=>x.exercise)),seen=new Set();
       (Array.isArray(WORKOUTS)?WORKOUTS:[]).forEach(w=>(w.exercises||[]).forEach(([name,,base])=>{
-        if(!name||seen.has(name)||existing.has(name))return;seen.add(name);
-        rows.push({date:at,exercise:name,mode:"onboarding",trainingWeight:suggestWeight(name,base,profile),formula:"Einsteiger-Onboarding-Startwert; erste Kraftmessung nach 28 Tagen"});
+        if(!name)return;
+        const key=String(w?.id||"").startsWith("home-")?`home::${name}`:name;
+        if(seen.has(key)||existing.has(key))return;seen.add(key);
+        rows.push({date:at,exercise:key,mode:"onboarding",trainingWeight:suggestWeight(name,base,profile),formula:"Einsteiger-Onboarding-Startwert; erste Kraftmessung nach 28 Tagen"});
       }));
       localStorage.setItem(STRENGTH_KEY,JSON.stringify(rows));
     }catch(e){console.warn("Krafttest-Zyklus konnte nicht vorbereitet werden",e)}
