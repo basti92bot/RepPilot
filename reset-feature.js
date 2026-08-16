@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.50";
+  const VERSION = "11.8.52";
   const HISTORY_KEY = "reppilot-history";
   const PROFILE_KEY = "reppilot-user-profile";
   const WEIGHT_HISTORY_KEY = "reppilot-weight-history";
