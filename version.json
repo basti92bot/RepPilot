@@ -1,5 +1,5 @@
 {
-  "version": "11.8.53",
+  "version": "11.8.54",
   "releasedAt": "2026-08-16",
-  "notes": "Training zu Hause vollständig auf deutsche Übungsnamen umgestellt; alte Home-Workout-Historie wird migriert und alle Zuhause-Übungen nutzen bei der 4-Wochen-Messung Körpergewichts-Benchmarks statt kg-1RM."
+  "notes": "Alle sichtbaren Übungsnamen in Studio-, Abnehm- und Home-Workout-Plänen vereinheitlicht und deutsch benannt; Home Workout als Planname wiederhergestellt; Verlauf, Kraftmessung, Progression und Körpergewichtslogik migrieren alte Namen automatisch."
 }
