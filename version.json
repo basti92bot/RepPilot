@@ -1,5 +1,5 @@
 {
-  "version": "11.8.45",
+  "version": "11.8.46",
   "releasedAt": "2026-08-16",
-  "notes": "4-Wochen-Krafttest: geschätztes 1RM aus 1–5 Wiederholungen, Vergleich zum letzten Test und automatische Fälligkeit nach 28 Tagen"
+  "notes": "Kraftmessung direkt im Trainingsplan: alle 28 Tage vor Hauptübungen, e1RM-Berechnung und automatische Anpassung des Arbeitsgewichts"
 }
