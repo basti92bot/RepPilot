@@ -1,9 +1,9 @@
-const CACHE="reppilot-v11-8-44";
-const VERSION="11.8.44";
+const CACHE="reppilot-v11-8-45";
+const VERSION="11.8.45";
 const LOGO="./reppilot-logo-old-stable.png?v=11.8.27";
-const APP_ICON="./reppilot-muscleman-logo-v11.8.26.png?v=11.8.44";
-const APP_ICON_SVG="./reppilot-muscleman-v11.8.20.svg?v=11.8.44";
-const ASSETS=["./index.html","./styles.css?v=11.8.10","./header-fix.css?v=11.8.27","./auth.js?v=11.8.8","./storage-bridge.js?v=11.8.8","./app.js?v=11.8.8","./workout-fix.js?v=11.8.8","./run-feature.js?v=11.8.8","./run-dashboard-feature.js?v=11.8.34","./profile-feature.js?v=11.8.8","./apple-health-feature.js?v=11.8.35","./shortcut-health-feature.js?v=11.8.37","./bodyweight-auto.js?v=11.8.8","./training-plan-feature.js?v=11.8.23","./home-workout-feature.js?v=11.8.24","./progression-feature.js?v=11.8.33","./stretch-routine-feature.js?v=11.8.28","./timer-sound-feature.js?v=11.8.44","./navigation-fix.js?v=11.8.44","./workout-sticky-actions.js?v=11.8.44","./day-exercise-overview.js?v=11.8.44","./pushup-feature.js?v=11.8.44","./plan-title-fix.js?v=11.8.44","./reset-feature.js?v=11.8.32","./update-feature.js?v=11.8.32","./version.json","./manifest.json?v=11.8.44","./stretch-images-v11.8.30.js?v=11.8.30","./stretch-lower-back-v11.8.29.svg?v=11.8.30","./stretch-upper-back-v11.8.29.svg?v=11.8.30",LOGO,APP_ICON,APP_ICON_SVG,"./stretch-anatomy-v11.7.2.png?v=11.8.30"];
+const APP_ICON="./reppilot-muscleman-logo-v11.8.26.png?v=11.8.45";
+const APP_ICON_SVG="./reppilot-muscleman-v11.8.20.svg?v=11.8.45";
+const ASSETS=["./index.html","./styles.css?v=11.8.10","./header-fix.css?v=11.8.27","./auth.js?v=11.8.8","./storage-bridge.js?v=11.8.8","./app.js?v=11.8.8","./workout-fix.js?v=11.8.8","./run-feature.js?v=11.8.8","./run-dashboard-feature.js?v=11.8.34","./profile-feature.js?v=11.8.8","./apple-health-feature.js?v=11.8.35","./shortcut-health-feature.js?v=11.8.37","./bodyweight-auto.js?v=11.8.8","./training-plan-feature.js?v=11.8.23","./home-workout-feature.js?v=11.8.24","./progression-feature.js?v=11.8.33","./stretch-routine-feature.js?v=11.8.28","./timer-sound-feature.js?v=11.8.45","./navigation-fix.js?v=11.8.45","./workout-sticky-actions.js?v=11.8.45","./day-exercise-overview.js?v=11.8.45","./pushup-feature.js?v=11.8.45","./plan-title-fix.js?v=11.8.45","./strength-test-feature.js?v=11.8.45","./reset-feature.js?v=11.8.32","./update-feature.js?v=11.8.32","./version.json","./manifest.json?v=11.8.45","./stretch-images-v11.8.30.js?v=11.8.30","./stretch-lower-back-v11.8.29.svg?v=11.8.30","./stretch-upper-back-v11.8.29.svg?v=11.8.30",LOGO,APP_ICON,APP_ICON_SVG,"./stretch-anatomy-v11.7.2.png?v=11.8.30"];
 
 function upgradeHtml(text){
   let html=text.replace(/data-app-version="[^"]+"/,`data-app-version="${VERSION}"`).replace(/RepPilot v\d+\.\d+\.\d+/g,`RepPilot v${VERSION}`).replace(/<h1>RepPilot <span>v\d+\.\d+\.\d+<\/span><\/h1>/,`<h1>RepPilot <span>v${VERSION}</span></h1>`);
@@ -14,6 +14,7 @@ function upgradeHtml(text){
   html=html.replace(/day-exercise-overview\.js\?v=[^"']+/g,`day-exercise-overview.js?v=${VERSION}`);
   html=html.replace(/pushup-feature\.js\?v=[^"']+/g,`pushup-feature.js?v=${VERSION}`);
   html=html.replace(/plan-title-fix\.js\?v=[^"']+/g,`plan-title-fix.js?v=${VERSION}`);
+  html=html.replace(/strength-test-feature\.js\?v=[^"']+/g,`strength-test-feature.js?v=${VERSION}`);
   let inject="";
   if(!html.includes("shortcut-health-feature.js"))inject+=`<script src="shortcut-health-feature.js?v=${VERSION}"></script>`;
   if(!html.includes("timer-sound-feature.js"))inject+=`<script src="timer-sound-feature.js?v=${VERSION}"></script>`;
@@ -22,6 +23,7 @@ function upgradeHtml(text){
   if(!html.includes("day-exercise-overview.js"))inject+=`<script src="day-exercise-overview.js?v=${VERSION}"></script>`;
   if(!html.includes("pushup-feature.js"))inject+=`<script src="pushup-feature.js?v=${VERSION}"></script>`;
   if(!html.includes("plan-title-fix.js"))inject+=`<script src="plan-title-fix.js?v=${VERSION}"></script>`;
+  if(!html.includes("strength-test-feature.js"))inject+=`<script src="strength-test-feature.js?v=${VERSION}"></script>`;
   if(inject)html=html.replace("</body>",`${inject}<script>(()=>{document.documentElement.dataset.appVersion='${VERSION}';const v=document.querySelector('header h1 span');if(v)v.textContent='v${VERSION}';document.title='RepPilot v${VERSION}'})()</script></body>`);
   return html;
 }
