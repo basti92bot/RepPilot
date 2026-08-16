@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.41";
+  const VERSION = "11.8.44";
 
   function ensureStyles(){
     if(document.getElementById("rpDayExerciseStyles")) return;
@@ -26,11 +26,17 @@
     try{return Array.isArray(WORKOUTS)?WORKOUTS.find(w=>w.id===id):null}catch{return null}
   }
 
+  function getWorkoutId(card){
+    const start=card?.querySelector("[data-selected-workout],[data-workout]");
+    if(!start) return "";
+    return start.dataset.selectedWorkout || start.dataset.workout || "";
+  }
+
   function decorateCard(card){
     if(!card || card.querySelector(".rp-day-exercises")) return;
-    const start=card.querySelector("button[data-workout]");
-    if(!start) return;
-    const workout=workoutById(start.dataset.workout);
+    const workoutId=getWorkoutId(card);
+    if(!workoutId) return;
+    const workout=workoutById(workoutId);
     if(!workout?.exercises?.length) return;
 
     card.classList.add("rp-with-exercises");
@@ -57,7 +63,7 @@
     const plan=document.getElementById("plan");
     if(!plan) return;
     const observer=new MutationObserver(()=>queueMicrotask(decorate));
-    observer.observe(plan,{childList:true});
+    observer.observe(plan,{childList:true,subtree:false});
   }
 
   window.RepPilotDayExercises={version:VERSION,refresh:decorate};
