@@ -21,7 +21,7 @@
   const stepFor=name=>/beinpresse|rumänisches kreuzheben/i.test(name||"")?5:2.5;
   const trainingWeight=(oneRM,targetReps,name)=>{
     const reps=Math.max(1,Math.floor(Number(targetReps||10)));
-    const raw=Number(oneRM||0)/(1+(reps+2)/30); // Ziel: ca. 2 Wiederholungen Reserve
+    const raw=Number(oneRM||0)/(1+(reps+2)/30);
     const step=stepFor(name);
     return Math.max(step,Math.floor((raw+1e-9)/step)*step);
   };
@@ -72,6 +72,7 @@
       .rp-test-result{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:13px 0}
       .rp-test-value{padding:11px;border:1px solid var(--line);border-radius:13px;background:#f9fafb}
       .rp-test-value small{display:block;color:var(--muted);font-size:10px;font-weight:900;letter-spacing:.05em}.rp-test-value strong{display:block;margin-top:4px;font-size:20px}
+      .rp-test-actions{display:grid;gap:8px}
       #strengthAppliedHint{margin:12px 0;padding:12px 13px;border:1px solid #dbe3ea;border-radius:14px;background:#f8fafc}
       #strengthAppliedHint[hidden]{display:none!important}#strengthAppliedHint small{display:block;color:var(--muted);font-size:10px;font-weight:900;letter-spacing:.07em}#strengthAppliedHint strong{display:block;margin-top:4px;font-size:16px}#strengthAppliedHint span{display:block;margin-top:3px;color:var(--muted);font-size:12px}
       .rp-strength-due{display:inline-flex;margin-left:6px;padding:3px 6px;border-radius:999px;background:#111827;color:#fff;font-size:9px!important;font-weight:900;vertical-align:middle}
@@ -94,10 +95,11 @@
       <p id="strengthInlinePrevious" class="muted"></p>
       <div class="rp-test-inputs"><div class="rp-test-field"><label for="strengthInlineWeight">Testgewicht (kg)</label><input id="strengthInlineWeight" type="number" min="0" step="0.5" inputmode="decimal"></div><div class="rp-test-field"><label for="strengthInlineReps">Saubere Wiederholungen</label><input id="strengthInlineReps" type="number" min="1" max="5" step="1" inputmode="numeric"></div></div>
       <div class="rp-test-result"><div class="rp-test-value"><small>GESCHÄTZTES 1RM</small><strong id="strengthInline1RM">–</strong></div><div class="rp-test-value"><small>NEUES ARBEITSGEWICHT</small><strong id="strengthInlineTraining">–</strong></div></div>
-      <button id="strengthInlineSave" type="button" class="wide">Messung übernehmen & Training starten</button>`;
+      <div class="rp-test-actions"><button id="strengthInlineSave" type="button" class="wide">Messung übernehmen & Training starten</button><button id="strengthInlineDefer" type="button" class="secondary wide">Gerät besetzt – später machen</button></div>`;
     setPanel.insertAdjacentElement("beforebegin",panel);
     panel.querySelectorAll("input").forEach(x=>x.addEventListener("input",previewInline));
     document.getElementById("strengthInlineSave").onclick=saveInline;
+    document.getElementById("strengthInlineDefer").onclick=()=>{if(typeof deferCurrentExercise==="function")deferCurrentExercise();};
     return panel;
   }
 
@@ -193,10 +195,7 @@
     const inSet=typeof phase!=="undefined"&&phase==="set";
     const firstSet=typeof si!=="undefined"&&si===0;
     if(!e||!inSet){hideInline();return;}
-    if(firstSet&&due(e.name)&&!e.strengthTestApplied){
-      showInline(e);
-      return;
-    }
+    if(firstSet&&due(e.name)&&!e.strengthTestApplied){showInline(e);return;}
     hideInline();
     const setPanel=document.getElementById("setPanel");if(setPanel)setPanel.hidden=false;
     showApplied(e);
@@ -204,15 +203,15 @@
 
   function markPlanDue(){
     document.querySelectorAll(".rp-day-exercise-list li").forEach(li=>{
-      li.querySelector(".rp-strength-due")?.remove();
       const strong=li.querySelector("strong");
       const name=(li.dataset.strengthName||strong?.childNodes?.[0]?.nodeValue||strong?.textContent||"").trim();
       if(!name)return;
       li.dataset.strengthName=name;
-      if(TEST_EXERCISES.has(name)&&due(name)){
-        const badge=document.createElement("small");badge.className="rp-strength-due";badge.textContent="Krafttest fällig";
-        strong?.appendChild(badge);
-      }
+      const existing=li.querySelector(".rp-strength-due");
+      const shouldShow=TEST_EXERCISES.has(name)&&due(name);
+      if(shouldShow&&!existing){
+        const badge=document.createElement("small");badge.className="rp-strength-due";badge.textContent="Krafttest fällig";strong?.appendChild(badge);
+      }else if(!shouldShow&&existing){existing.remove();}
     });
   }
 
