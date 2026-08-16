@@ -1,5 +1,5 @@
 {
-  "version": "11.8.47",
+  "version": "11.8.48",
   "releasedAt": "2026-08-16",
-  "notes": "Kraftmessung fuer alle Uebungen: alle 28 Tage direkt vor der Uebung; Gewichtsubungen mit e1RM und automatischem Arbeitsgewicht, Koerpergewichtsuebungen als Max-Wiederholungs-Benchmark"
+  "notes": "Erstlogin-Onboarding mit Groesse, Gewicht und Trainingslevel; automatische Startgewicht-Vorschlaege fuer neue Uebungen und korrekter Cloud-Profil-Sync"
 }
