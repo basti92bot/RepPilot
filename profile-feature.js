@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.49";
+  const VERSION="11.8.52";
   const LOCAL_KEY="reppilot-user-profile";
   const WEIGHT_HISTORY_KEY="reppilot-weight-history";
   const LEVEL_LABELS={beginner:"Einsteiger",advanced:"Fortgeschritten",pro:"Profi"};
