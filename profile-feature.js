@@ -83,6 +83,11 @@
     loadCloudProfile().then(renderProfile);
   }
 
+  function loadOnboardingFeature(){
+    if(document.getElementById("rpOnboardingFeatureScript")||window.RepPilotOnboarding)return;
+    const s=document.createElement("script");s.id="rpOnboardingFeatureScript";s.src=`onboarding-feature.js?v=${VERSION}`;s.async=true;document.body.appendChild(s);
+  }
+
   window.repPilotProfile={
     version:VERSION,
     get:readLocal,
@@ -91,5 +96,6 @@
     bodyweightLoad:(factor=.5)=>Number(readLocal().weightKg||0)*factor,
     levelLabel:v=>LEVEL_LABELS[v]||""
   };
-  document.addEventListener("DOMContentLoaded",ensureProfileUI);if(document.readyState!=="loading")ensureProfileUI();
+  const init=()=>{ensureProfileUI();loadOnboardingFeature();};
+  document.addEventListener("DOMContentLoaded",init);if(document.readyState!=="loading")init();
 })();
