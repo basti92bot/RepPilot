@@ -1,11 +1,12 @@
 (() => {
-const VERSION="11.8.56";
+const VERSION="11.8.57";
 const KEY="reppilot-selected-training-plan";
 const PROFILE_KEY="reppilot-user-profile";
 const STRENGTH_KEY="reppilot-strength-tests-v1";
 const DAY_ORDER=[1,2,3,4,5,6,0];
 const DAY_NAMES={1:"Montag",2:"Dienstag",3:"Mittwoch",4:"Donnerstag",5:"Freitag",6:"Samstag",0:"Sonntag"};
 const FOCUS_LABELS={strength:"Krafttraining",running:"Laufen",mixed:"Kraft + Laufen"};
+const VALID_FREQUENCIES=[2,3,4,5];
 
 const PLANS=[
 {id:"personalized",title:"Mein Trainingsplan",subtitle:"Automatisch aus deinen Trainingstagen und Zielen erstellt",icon:"🎯"},
@@ -69,6 +70,8 @@ function ensureCustomWorkouts(){
     put({id:"personal-lower-a",day:2,dayName:"",title:"Unterkörper A",exercises:[["Beinpresse",3,120],["Rumänisches Kreuzheben",3,60],["Beinstrecker",3,40],["Beinbeuger",3,40],["Wadenheben",3,60],["Hängendes Beinheben",2,0]]});
     put({id:"personal-upper-b",day:4,dayName:"",title:"Oberkörper B",exercises:[["Brustpresse",3,50],["Latzug breit",3,50],["Brustgestütztes Rudern",3,45],["Kabel-Flys",2,20],["Seitheben",2,8],["Einarmiger Trizeps am Kabelzug",2,10],["Scott-Curls",2,20],["Crunch-Maschine",2,30]]});
     put({id:"personal-lower-b",day:5,dayName:"",title:"Unterkörper B",exercises:[["Beinpresse",3,100],["Rumänisches Kreuzheben",3,50],["Beinbeuger",3,35],["Beinstrecker",3,35],["Wadenheben",3,55],["Hängendes Beinheben",2,0]]});
+    put({id:"personal-pull",day:2,dayName:"",title:"Pull",exercises:[["Brustgestütztes Rudern",3,50],["Latzug neutral",3,55],["Reverse Butterfly am Kabelzug",3,12],["Scott-Curls",3,20],["Schrägbank-Curls",2,12],["Hängendes Beinheben",2,0]]});
+    put({id:"personal-legs",day:3,dayName:"",title:"Beine",exercises:[["Beinpresse",3,120],["Rumänisches Kreuzheben",3,60],["Beinstrecker",3,40],["Beinbeuger",3,40],["Wadenheben",3,60],["Crunch-Maschine",2,30]]});
   }catch(e){console.error("Trainingsplan-Erweiterung fehlgeschlagen",e)}
 }
 
@@ -77,6 +80,7 @@ function ensureRunPlans(){
     if(!RUN_PLANS.easy)RUN_PLANS.easy={title:"Lockerer Dauerlauf",meta:"Ruhiges Gesprächstempo",intro:"Locker laufen. Das Tempo so wählen, dass du dich noch unterhalten kannst.",steps:[["Lockerer Lauf","frei","Ruhiges Gesprächstempo"]],note:"Gleichmäßig und entspannt bleiben."};
     RUN_PLANS.tempo={title:"Tempolauf",meta:"Zügig, aber kontrolliert",intro:"Nach dem Einlaufen folgt ein zusammenhängender zügiger Abschnitt. Du solltest noch kurze Sätze sprechen können.",steps:[["Einlaufen","10 Minuten","Locker"],["Tempolauf","15–20 Minuten","Zügig und gleichmäßig"],["Auslaufen","5–10 Minuten","Sehr locker"]],note:"Nicht sprinten. Ziel ist ein kontrolliertes, gleichmäßiges Tempo."};
     RUN_PLANS.long={title:"Langer Dauerlauf",meta:"45–60 Minuten locker",intro:"Ruhiger längerer Lauf für die Grundlagenausdauer. Das Tempo bleibt bewusst entspannt.",steps:[["Langer Lauf","45–60 Minuten","Ruhiges Gesprächstempo"]],note:"Lieber etwas langsamer laufen und die Zeit sauber durchziehen."};
+    RUN_PLANS.recovery={title:"Regenerationslauf",meta:"20–30 Minuten sehr locker",intro:"Sehr lockerer Lauf zur aktiven Erholung. Tempo bewusst niedrig halten.",steps:[["Regenerationslauf","20–30 Minuten","Sehr locker"]],note:"Dieser Lauf soll sich leicht anfühlen – kein Tempotraining."};
   }catch(e){console.warn("Laufpläne konnten nicht ergänzt werden",e)}
 }
 
@@ -94,19 +98,21 @@ function sessionsFor(focus,count){
   if(focus==="strength"){
     if(count===2)return[strengthSession("loss-a","Ganzkörper A","Ganzkörper · ca. 50–60 Min."),strengthSession("loss-b","Ganzkörper B","Ganzkörper · ca. 50–60 Min.")];
     if(count===3)return[strengthSession("push","Push","Brust, Schulter, Trizeps"),strengthSession("pull-legs","Pull + Beine","Rücken, Beine, Bizeps"),strengthSession("upper-hypertrophy","Oberkörper","Brust, Rücken, Schulter, Arme")];
-    return[strengthSession("personal-upper-a","Oberkörper A","Brust, Rücken, Schulter, Arme"),strengthSession("personal-lower-a","Unterkörper A","Beine, Gesäß, Core"),strengthSession("personal-upper-b","Oberkörper B","Brust, Rücken, Schulter, Arme"),strengthSession("personal-lower-b","Unterkörper B","Beine, Gesäß, Core")];
+    if(count===4)return[strengthSession("personal-upper-a","Oberkörper A","Brust, Rücken, Schulter, Arme"),strengthSession("personal-lower-a","Unterkörper A","Beine, Gesäß, Core"),strengthSession("personal-upper-b","Oberkörper B","Brust, Rücken, Schulter, Arme"),strengthSession("personal-lower-b","Unterkörper B","Beine, Gesäß, Core")];
+    return[strengthSession("push","Push","Brust, Schulter, Trizeps"),strengthSession("personal-pull","Pull","Rücken, hintere Schulter, Bizeps"),strengthSession("personal-legs","Beine","Beine, Gesäß, Core"),strengthSession("personal-upper-a","Oberkörper","Brust, Rücken, Schulter, Arme"),strengthSession("personal-lower-b","Unterkörper","Beine, Gesäß, Core")];
   }
   if(focus==="running"){
-    const runs=[runSession("interval","Intervalltraining","Schnelle Intervalle + lockere Pausen"),runSession("easy","Lockerer Dauerlauf","Ruhiges Gesprächstempo"),runSession("tempo","Tempolauf","Zügig, aber kontrolliert"),runSession("long","Langer Dauerlauf","45–60 Minuten locker")];return runs.slice(0,count);
+    const runs=[runSession("interval","Intervalltraining","Schnelle Intervalle + lockere Pausen"),runSession("recovery","Regenerationslauf","20–30 Minuten sehr locker"),runSession("tempo","Tempolauf","Zügig, aber kontrolliert"),runSession("easy","Lockerer Dauerlauf","Ruhiges Gesprächstempo"),runSession("long","Langer Dauerlauf","45–60 Minuten locker")];return runs.slice(0,count);
   }
   if(count===2)return[strengthSession("loss-a","Ganzkörper Kraft","Ganzkörper · ca. 50–60 Min."),runSession("easy","Lockerer Dauerlauf","Ruhiges Gesprächstempo")];
   if(count===3)return[strengthSession("loss-a","Ganzkörper A","Ganzkörper · ca. 50–60 Min."),runSession("interval","Intervalltraining","Schnelle Intervalle + lockere Pausen"),strengthSession("loss-b","Ganzkörper B","Ganzkörper · ca. 50–60 Min.")];
-  return[strengthSession("loss-a","Ganzkörper A","Ganzkörper · ca. 50–60 Min."),runSession("interval","Intervalltraining","Schnelle Intervalle + lockere Pausen"),strengthSession("loss-b","Ganzkörper B","Ganzkörper · ca. 50–60 Min."),runSession("easy","Lockerer Dauerlauf","Ruhiges Gesprächstempo")];
+  if(count===4)return[strengthSession("loss-a","Ganzkörper A","Ganzkörper · ca. 50–60 Min."),runSession("interval","Intervalltraining","Schnelle Intervalle + lockere Pausen"),strengthSession("loss-b","Ganzkörper B","Ganzkörper · ca. 50–60 Min."),runSession("easy","Lockerer Dauerlauf","Ruhiges Gesprächstempo")];
+  return[strengthSession("push","Push","Brust, Schulter, Trizeps"),runSession("interval","Intervalltraining","Schnelle Intervalle + lockere Pausen"),strengthSession("pull-legs","Pull + Beine","Rücken, Beine, Bizeps"),runSession("easy","Lockerer Dauerlauf","Ruhiges Gesprächstempo"),strengthSession("upper-hypertrophy","Oberkörper","Brust, Rücken, Schulter, Arme")];
 }
 
 function personalizedWeek(){
   const p=profileData(),count=Number(p.trainingDaysPerWeek),days=normalizeDays(p.trainingDays),focus=p.trainingFocus;
-  if(!FOCUS_LABELS[focus]||![2,3,4].includes(count)||days.length!==count)return MUSCLE_WEEK;
+  if(!FOCUS_LABELS[focus]||!VALID_FREQUENCIES.includes(count)||days.length!==count)return MUSCLE_WEEK;
   const sessions=sessionsFor(focus,count),byDay=new Map(days.map((day,i)=>[day,sessions[i]]));
   return DAY_ORDER.map(day=>{const s=byDay.get(day);return s?{day,dayName:DAY_NAMES[day],...s}:{day,dayName:DAY_NAMES[day],title:"Ruhetag",type:"rest",meta:"Erholung oder lockere Bewegung"}});
 }
