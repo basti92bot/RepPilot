@@ -9,6 +9,15 @@
     if(card)card.remove();
   };
 
+  function loadPersonalRecords(){
+    if(document.getElementById("rpPersonalRecordsScript")||window.RepPilotPersonalRecords)return;
+    const s=document.createElement("script");
+    s.id="rpPersonalRecordsScript";
+    s.src=`personal-records-feature.js?v=${VERSION}`;
+    s.async=false;
+    document.body.appendChild(s);
+  }
+
   function ensureStyles(){
     if(document.getElementById("rpBottomNavFixStyles"))return;
     const s=document.createElement("style");
@@ -95,6 +104,7 @@
   function init(){
     ensureStyles();
     removePlanCard();
+    loadPersonalRecords();
 
     const home=document.getElementById("home");
     if(home){
