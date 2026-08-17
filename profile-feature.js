@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.56";
+  const VERSION="11.8.57";
   const LOCAL_KEY="reppilot-user-profile";
   const WEIGHT_HISTORY_KEY="reppilot-weight-history";
   const LEVEL_LABELS={beginner:"Einsteiger",advanced:"Fortgeschritten",pro:"Profi"};
@@ -7,6 +7,7 @@
   const FOCUS_LABELS={strength:"Krafttraining",running:"Laufen",mixed:"Kraft + Laufen"};
   const DAY_LABELS={1:"Mo",2:"Di",3:"Mi",4:"Do",5:"Fr",6:"Sa",0:"So"};
   const DAY_ORDER=[1,2,3,4,5,6,0];
+  const VALID_FREQUENCIES=[2,3,4,5];
 
   const readLocal=()=>{try{return JSON.parse(localStorage.getItem(LOCAL_KEY)||"{}")||{}}catch{return{}}};
   const writeLocal=p=>localStorage.setItem(LOCAL_KEY,JSON.stringify(p));
@@ -107,7 +108,7 @@
     if(document.getElementById("profile"))return;
     const main=document.querySelector("main"),nav=document.querySelector("nav");if(!main||!nav)return;
     const section=document.createElement("section");section.id="profile";section.className="view";
-    section.innerHTML=`<h2>Profil</h2><article class="card profile-card"><div class="profile-head"><div><small>DEIN PROFIL</small><h2>Körper & Training</h2></div><button id="editProfileBtn" class="secondary">Bearbeiten</button></div><div id="profileSummary"></div><div id="profileForm" hidden><label for="profileHeight">Größe</label><div class="weight"><input id="profileHeight" type="number" min="100" max="250" step="1" inputmode="numeric"><span>cm</span></div><label for="profileWeight">Körpergewicht</label><div class="weight"><input id="profileWeight" type="number" min="30" max="300" step="0.1" inputmode="decimal"><span>kg</span></div><label for="profileSex">Geschlecht</label><select id="profileSex"><option value="male">Männlich</option><option value="female">Weiblich</option></select><label for="profileLevel">Trainingslevel</label><select id="profileLevel"><option value="beginner">Einsteiger</option><option value="advanced">Fortgeschritten</option><option value="pro">Profi</option></select><label for="profileTrainingFocus">Was möchtest du trainieren?</label><select id="profileTrainingFocus"><option value="strength">Krafttraining</option><option value="running">Laufen</option><option value="mixed">Kraft + Laufen</option></select><label for="profileTrainingDaysPerWeek">Wie oft pro Woche?</label><select id="profileTrainingDaysPerWeek"><option value="2">2 Tage</option><option value="3">3 Tage</option><option value="4">4 Tage</option></select><label>An welchen Tagen?</label><div class="profile-day-grid">${profileDaysMarkup()}</div><p id="profileDaysNote" class="profile-form-note"></p><button id="saveProfileBtn" class="wide">Profil speichern</button></div><div id="profileWeightHistory"></div></article>`;
+    section.innerHTML=`<h2>Profil</h2><article class="card profile-card"><div class="profile-head"><div><small>DEIN PROFIL</small><h2>Körper & Training</h2></div><button id="editProfileBtn" class="secondary">Bearbeiten</button></div><div id="profileSummary"></div><div id="profileForm" hidden><label for="profileHeight">Größe</label><div class="weight"><input id="profileHeight" type="number" min="100" max="250" step="1" inputmode="numeric"><span>cm</span></div><label for="profileWeight">Körpergewicht</label><div class="weight"><input id="profileWeight" type="number" min="30" max="300" step="0.1" inputmode="decimal"><span>kg</span></div><label for="profileSex">Geschlecht</label><select id="profileSex"><option value="male">Männlich</option><option value="female">Weiblich</option></select><label for="profileLevel">Trainingslevel</label><select id="profileLevel"><option value="beginner">Einsteiger</option><option value="advanced">Fortgeschritten</option><option value="pro">Profi</option></select><label for="profileTrainingFocus">Was möchtest du trainieren?</label><select id="profileTrainingFocus"><option value="strength">Krafttraining</option><option value="running">Laufen</option><option value="mixed">Kraft + Laufen</option></select><label for="profileTrainingDaysPerWeek">Wie oft pro Woche?</label><select id="profileTrainingDaysPerWeek"><option value="2">2 Tage</option><option value="3">3 Tage</option><option value="4">4 Tage</option><option value="5">5 Tage</option></select><label>An welchen Tagen?</label><div class="profile-day-grid">${profileDaysMarkup()}</div><p id="profileDaysNote" class="profile-form-note"></p><button id="saveProfileBtn" class="wide">Profil speichern</button></div><div id="profileWeightHistory"></div></article>`;
     main.appendChild(section);
 
     const btn=document.createElement("button");btn.dataset.view="profile";btn.textContent="Profil";nav.appendChild(btn);nav.style.gridTemplateColumns="repeat(4,1fr)";
@@ -134,7 +135,7 @@
 
     document.getElementById("saveProfileBtn").onclick=async()=>{
       const heightCm=Number(document.getElementById("profileHeight").value),weightKg=Number(document.getElementById("profileWeight").value),sex=document.getElementById("profileSex").value,trainingLevel=document.getElementById("profileLevel").value,trainingFocus=document.getElementById("profileTrainingFocus").value,trainingDaysPerWeek=Number(document.getElementById("profileTrainingDaysPerWeek").value),trainingDays=readProfileDays();
-      if(heightCm<100||heightCm>250||weightKg<30||weightKg>300||!SEX_LABELS[sex]||!LEVEL_LABELS[trainingLevel]||!FOCUS_LABELS[trainingFocus]||![2,3,4].includes(trainingDaysPerWeek))return;
+      if(heightCm<100||heightCm>250||weightKg<30||weightKg>300||!SEX_LABELS[sex]||!LEVEL_LABELS[trainingLevel]||!FOCUS_LABELS[trainingFocus]||!VALID_FREQUENCIES.includes(trainingDaysPerWeek))return;
       if(trainingDays.length!==trainingDaysPerWeek){document.getElementById("profileDaysNote").textContent=`Bitte genau ${trainingDaysPerWeek} Tage auswählen.`;return;}
       const old=readLocal();
       await saveProfile({heightCm,weightKg,sex,trainingLevel,trainingFocus,trainingDaysPerWeek,trainingDays,onboardingCompletedAt:old.onboardingCompletedAt||new Date().toISOString()});
