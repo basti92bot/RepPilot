@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.59";
+  const VERSION="11.8.58";
   const STRENGTH_KEY="reppilot-strength-tests-v1";
   const BODYWEIGHT=/liegestütz|liegestuetz|hängend.*bein|hanging leg raise|unterarmstütz|seitstütz|beinheben|bergsteiger|hüftheben|ausfallschritt|kniebeugen|rückenstrecker|schneeengel|arm-bein-strecken|y-t-heben/i;
   const num=v=>{const n=Number(v);return Number.isFinite(n)?n:0};
