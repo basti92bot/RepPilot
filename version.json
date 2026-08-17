@@ -1,5 +1,5 @@
 {
-  "version": "11.8.56",
+  "version": "11.8.57",
   "releasedAt": "2026-08-17",
-  "notes": "Onboarding erweitert um Trainingsart, 2/3/4 Trainingstage pro Woche und frei wählbare Wochentage. RepPilot erstellt daraus automatisch persönliche Kraft-, Lauf- oder Kombi-Wochenpläne; Einstellungen werden im Profil und in Supabase gespeichert."
+  "notes": "5 Trainingstage pro Woche ergänzt. Für Kraft + Laufen nutzt der 5-Tage-Plan drei Krafttage und zwei Läufe: Push, Intervalltraining, Pull + Beine, lockerer Dauerlauf und Oberkörper. Auch reine Kraft- und Laufpläne unterstützen jetzt 5 Tage."
 }
