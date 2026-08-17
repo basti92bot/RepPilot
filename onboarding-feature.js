@@ -32,7 +32,7 @@
 
   function sexFactorFor(name,sex){
     if(sex==="male")return 1;
-    if(sex==="female")return isLowerBody(name)?.90:.78;
+    if(sex==="female")return isLowerBody(name) ? .90 : .78;
     return 0;
   }
 
@@ -84,17 +84,11 @@
   }
 
   function strengthRecords(){try{const x=JSON.parse(localStorage.getItem(STRENGTH_KEY)||"[]");return Array.isArray(x)?x:[]}catch{return[]}}
-
   function seedStrengthCycle(profile,at){
     try{
       if(profile?.trainingLevel!=="beginner"||profile?.trainingFocus==="running")return;
       const rows=strengthRecords(),existing=new Set(rows.filter(x=>x?.exercise).map(x=>x.exercise)),seen=new Set();
-      (Array.isArray(WORKOUTS)?WORKOUTS:[]).forEach(w=>(w.exercises||[]).forEach(([name,,base])=>{
-        if(!name)return;
-        const key=String(w?.id||"").startsWith("home-")?`home::${name}`:name;
-        if(seen.has(key)||existing.has(key))return;seen.add(key);
-        rows.push({date:at,exercise:key,mode:"onboarding",trainingWeight:suggestWeight(name,base,profile),formula:"Einsteiger-Onboarding-Startwert; erste Kraftmessung nach 28 Tagen"});
-      }));
+      (Array.isArray(WORKOUTS)?WORKOUTS:[]).forEach(w=>(w.exercises||[]).forEach(([name,,base])=>{if(!name)return;const key=String(w?.id||"").startsWith("home-")?`home::${name}`:name;if(seen.has(key)||existing.has(key))return;seen.add(key);rows.push({date:at,exercise:key,mode:"onboarding",trainingWeight:suggestWeight(name,base,profile),formula:"Einsteiger-Onboarding-Startwert; erste Kraftmessung nach 28 Tagen"});}));
       localStorage.setItem(STRENGTH_KEY,JSON.stringify(rows));
     }catch(e){console.warn("Krafttest-Zyklus konnte nicht vorbereitet werden",e)}
   }
@@ -112,12 +106,7 @@
     const btn=document.getElementById("rpOnboardingSave");btn.disabled=true;btn.textContent="Plan wird erstellt …";
     try{
       if(window.repPilotProfile?.save)await window.repPilotProfile.save(profile);else localStorage.setItem("reppilot-user-profile",JSON.stringify(profile));
-      localStorage.setItem(PLAN_KEY,"personalized");
-      seedStrengthCycle(profile,at);
-      o.hidden=true;
-      window.RepPilotStrengthTest?.refresh?.();
-      window.RepPilotTrainingPlan?.refresh?.();
-      try{if(typeof renderHome==="function")renderHome()}catch{}
+      localStorage.setItem(PLAN_KEY,"personalized");seedStrengthCycle(profile,at);o.hidden=true;window.RepPilotStrengthTest?.refresh?.();window.RepPilotTrainingPlan?.refresh?.();try{if(typeof renderHome==="function")renderHome()}catch{}
     }finally{btn.disabled=false;btn.textContent="Plan erstellen & RepPilot starten";}
   }
 
@@ -126,29 +115,22 @@
     const{data}=await c.auth.getSession();if(!data?.session){o.hidden=true;return;}
     const p=window.repPilotProfile?.refresh?await window.repPilotProfile.refresh():window.repPilotProfile?.get?.()||{};
     const days=validDays(p?.trainingDays),complete=!!p?.onboardingCompletedAt&&!!SEXES[p?.sex]&&!!LEVELS[p?.trainingLevel]&&!!FOCUS[p?.trainingFocus]&&[2,3,4].includes(Number(p?.trainingDaysPerWeek))&&days.length===Number(p?.trainingDaysPerWeek);
-    if(complete){o.hidden=true;return;}
+    if(complete){localStorage.setItem(PLAN_KEY,"personalized");o.hidden=true;window.RepPilotTrainingPlan?.refresh?.();return;}
 
-    document.getElementById("rpOnboardingHeight").value=p?.heightCm||"";
-    document.getElementById("rpOnboardingWeight").value=p?.weightKg||"";
+    document.getElementById("rpOnboardingHeight").value=p?.heightCm||"";document.getElementById("rpOnboardingWeight").value=p?.weightKg||"";
     if(SEXES[p?.sex]){o.dataset.sex=p.sex;selectOption(o,"[data-rp-sex]","rpSex",p.sex);}
     if(LEVELS[p?.trainingLevel]){o.dataset.level=p.trainingLevel;selectOption(o,"[data-rp-level]","rpLevel",p.trainingLevel);}
     if(FOCUS[p?.trainingFocus]){o.dataset.focus=p.trainingFocus;selectOption(o,"[data-rp-focus]","rpFocus",p.trainingFocus);}
     if([2,3,4].includes(Number(p?.trainingDaysPerWeek))){o.dataset.frequency=String(p.trainingDaysPerWeek);selectOption(o,"[data-rp-frequency]","rpFrequency",p.trainingDaysPerWeek);}
     o.querySelectorAll("[data-rp-day]").forEach(b=>b.classList.toggle("selected",days.includes(Number(b.dataset.rpDay))));updateDayCount(o);
-
-    const existing=!!p?.onboardingCompletedAt;
-    document.getElementById("rpOnboardingTitle").textContent=existing?"Dein Trainingsplan fehlt noch":"Dein persönlicher Trainingsplan 🏋️";
-    document.getElementById("rpOnboardingIntro").textContent=existing?"Deine Körperdaten sind schon da. Ergänze Trainingsart, Häufigkeit und Wochentage – RepPilot erstellt daraus deinen persönlichen Wochenplan.":"Gib kurz deine Daten und Trainingswünsche an. RepPilot erstellt daraus deinen Wochenplan und passende Startgewichte.";
-    o.scrollTop=0;o.hidden=false;
+    const existing=!!p?.onboardingCompletedAt;document.getElementById("rpOnboardingTitle").textContent=existing?"Dein Trainingsplan fehlt noch":"Dein persönlicher Trainingsplan 🏋️";document.getElementById("rpOnboardingIntro").textContent=existing?"Deine Körperdaten sind schon da. Ergänze Trainingsart, Häufigkeit und Wochentage – RepPilot erstellt daraus deinen persönlichen Wochenplan.":"Gib kurz deine Daten und Trainingswünsche an. RepPilot erstellt daraus deinen Wochenplan und passende Startgewichte.";o.scrollTop=0;o.hidden=false;
   }
 
   function ensureHint(){let b=document.getElementById("rpStartWeightHint");if(b)return b;const anchor=document.getElementById("lastTraining");if(!anchor)return null;b=document.createElement("div");b.id="rpStartWeightHint";b.hidden=true;anchor.insertAdjacentElement("afterend",b);return b;}
   function renderHint(){const b=ensureHint();if(!b)return;let e=null;try{e=typeof current==="function"?current():null}catch{}const s=e?.onboardingSuggestion,p=window.repPilotProfile?.get?.()||{};b.hidden=!s;if(s)b.innerHTML=`<small>STARTGEWICHT-VORSCHLAG</small><strong>${fmt(s.weight)} kg</strong><span>Aus ${fmt(p.weightKg)} kg Körpergewicht + ${SEXES[p.sex]?.label||""} + Level ${LEVELS[p.trainingLevel]?.label||""}. Nur als Startpunkt – bei unsauberer Technik direkt leichter.</span>`;}
   function applySuggestions(){let a=null;try{a=typeof active!=="undefined"?active:null}catch{}const p=window.repPilotProfile?.get?.()||{};if(!a||!p.weightKg||!SEXES[p.sex]||!LEVELS[p.trainingLevel])return;for(const e of a.exercises||[]){if(e.lastTraining||isBodyweight(e.name))continue;const base=Number(e.sets?.[0]?.weight||0);if(!base)continue;const weight=suggestWeight(e.name,base,p);if(!weight)continue;e.onboardingSuggestion={weight,base,level:p.trainingLevel,sex:p.sex};(e.sets||[]).forEach(s=>{if(!s.done)s.weight=weight;});}}
   function installWorkoutHook(){if(window.__rpOnboardingWorkoutInstalled||typeof start!=="function")return;window.__rpOnboardingWorkoutInstalled=true;const baseStart=start;start=function(){const result=baseStart.apply(this,arguments);try{applySuggestions();if(typeof renderWorkout==="function")renderWorkout();}catch(e){console.warn("Startgewicht konnte nicht gesetzt werden",e)}return result;};if(typeof renderSet==="function"){const baseRenderSet=renderSet;renderSet=function(){const result=baseRenderSet.apply(this,arguments);try{renderHint();}catch{}return result;};}}
-
   function init(){ensureStyles();ensureOverlay();ensureHint();installWorkoutHook();window.repPilotSupabase?.auth?.onAuthStateChange?.((_event,session)=>{if(session)setTimeout(maybeShow,0);else ensureOverlay().hidden=true;});maybeShow();}
-
   window.RepPilotOnboarding={version:VERSION,levels:LEVELS,sexes:SEXES,focus:FOCUS,suggestWeight,sexFactorFor,show:maybeShow};
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
 })();
