@@ -1,5 +1,5 @@
 {
-  "version": "11.8.58",
+  "version": "11.8.59",
   "releasedAt": "2026-08-17",
-  "notes": "Die große Karte mit dem aktuell ausgewählten Trainingsplan wurde von der Hauptseite entfernt. Planwahl und aktiver Plan bleiben im Profil sichtbar; Wochenplan und heutige Einheit bleiben unverändert."
+  "notes": "iPhone-Web-App-Installation stabilisiert: fester PWA-Startpfad und Scope, erneuerte Apple-Web-App-Metadaten, festes Touch-Icon ohne Cache-Query und neuer Service-Worker-Cache. Persönliche Rekorde im Verlauf bleiben enthalten."
 }
