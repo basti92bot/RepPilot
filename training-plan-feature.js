@@ -102,7 +102,10 @@ function sessionsFor(focus,count){
     return[strengthSession("push","Push","Brust, Schulter, Trizeps"),strengthSession("personal-pull","Pull","Rücken, hintere Schulter, Bizeps"),strengthSession("personal-legs","Beine","Beine, Gesäß, Core"),strengthSession("personal-upper-a","Oberkörper","Brust, Rücken, Schulter, Arme"),strengthSession("personal-lower-b","Unterkörper","Beine, Gesäß, Core")];
   }
   if(focus==="running"){
-    const runs=[runSession("interval","Intervalltraining","Schnelle Intervalle + lockere Pausen"),runSession("recovery","Regenerationslauf","20–30 Minuten sehr locker"),runSession("tempo","Tempolauf","Zügig, aber kontrolliert"),runSession("easy","Lockerer Dauerlauf","Ruhiges Gesprächstempo"),runSession("long","Langer Dauerlauf","45–60 Minuten locker")];return runs.slice(0,count);
+    if(count===2)return[runSession("interval","Intervalltraining","Schnelle Intervalle + lockere Pausen"),runSession("easy","Lockerer Dauerlauf","Ruhiges Gesprächstempo")];
+    if(count===3)return[runSession("interval","Intervalltraining","Schnelle Intervalle + lockere Pausen"),runSession("easy","Lockerer Dauerlauf","Ruhiges Gesprächstempo"),runSession("tempo","Tempolauf","Zügig, aber kontrolliert")];
+    if(count===4)return[runSession("interval","Intervalltraining","Schnelle Intervalle + lockere Pausen"),runSession("easy","Lockerer Dauerlauf","Ruhiges Gesprächstempo"),runSession("tempo","Tempolauf","Zügig, aber kontrolliert"),runSession("long","Langer Dauerlauf","45–60 Minuten locker")];
+    return[runSession("interval","Intervalltraining","Schnelle Intervalle + lockere Pausen"),runSession("recovery","Regenerationslauf","20–30 Minuten sehr locker"),runSession("tempo","Tempolauf","Zügig, aber kontrolliert"),runSession("easy","Lockerer Dauerlauf","Ruhiges Gesprächstempo"),runSession("long","Langer Dauerlauf","45–60 Minuten locker")];
   }
   if(count===2)return[strengthSession("loss-a","Ganzkörper Kraft","Ganzkörper · ca. 50–60 Min."),runSession("easy","Lockerer Dauerlauf","Ruhiges Gesprächstempo")];
   if(count===3)return[strengthSession("loss-a","Ganzkörper A","Ganzkörper · ca. 50–60 Min."),runSession("interval","Intervalltraining","Schnelle Intervalle + lockere Pausen"),strengthSession("loss-b","Ganzkörper B","Ganzkörper · ca. 50–60 Min.")];
