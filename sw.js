@@ -1,13 +1,12 @@
-const CACHE="reppilot-v11-8-62";
-const VERSION="11.8.62";
+const CACHE="reppilot-v11-8-63";
+const VERSION="11.8.63";
 const ASSETS=[
   "./index.html",
   "./styles.css?v=11.8.10",
   "./header-fix.css?v=11.8.27",
-  "./manifest.json?v=11.8.62",
-  "./icon-192.png?v=11.8.62",
-  "./icon-512.png?v=11.8.62",
-  "./reppilot-muscleman-v11.8.20.svg",
+  "./manifest.json?v=11.8.63",
+  "./reppilot-muscleman-logo-v11.8.26.png?v=11.8.63",
+  "./reppilot-muscleman-v11.8.20.svg?v=11.8.63",
   "./auth.js?v=11.8.8",
   "./storage-bridge.js?v=11.8.8",
   "./app.js?v=11.8.8",
