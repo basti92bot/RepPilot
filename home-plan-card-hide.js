@@ -1,8 +1,7 @@
 (() => {
-  const VERSION="11.8.59";
+  const VERSION="11.8.60";
   const CARD_ID="selectedTrainingPlanHome";
   const FALLBACK_CLASS="rp-nav-visual-fallback";
-  const APP_ICON="reppilot-muscleman-logo-v11.8.26.png";
   let raf=0;
 
   const removePlanCard=()=>{
@@ -10,39 +9,19 @@
     if(card)card.remove();
   };
 
-  function ensurePwaMeta(){
-    const head=document.head;
-    if(!head)return;
+  function normalizePwaHead(){
     document.documentElement.dataset.appVersion=VERSION;
     const versionLabel=document.querySelector("header h1 span");
     if(versionLabel)versionLabel.textContent=`v${VERSION}`;
     document.title=`RepPilot v${VERSION}`;
 
-    const setMeta=(name,content)=>{
-      let el=head.querySelector(`meta[name="${name}"]`);
-      if(!el){el=document.createElement("meta");el.name=name;head.appendChild(el)}
-      el.content=content;
-    };
-    setMeta("mobile-web-app-capable","yes");
-    setMeta("apple-mobile-web-app-capable","yes");
-    setMeta("apple-mobile-web-app-title","RepPilot");
-    setMeta("apple-mobile-web-app-status-bar-style","default");
+    // Safari/WebKit prefers apple-touch-icon over manifest icons. The old
+    // 128px touch icon rendered as a blank tile in the iOS share sheet, so
+    // let the manifest provide the Home Screen icon instead.
+    document.querySelectorAll('link[rel="apple-touch-icon"]').forEach(el=>el.remove());
 
-    let manifest=head.querySelector('link[rel="manifest"]');
-    if(!manifest){manifest=document.createElement("link");manifest.rel="manifest";head.appendChild(manifest)}
-    manifest.href=`manifest.json?v=${VERSION}`;
-
-    let touch=head.querySelector('link[rel="apple-touch-icon"]');
-    if(!touch){touch=document.createElement("link");touch.rel="apple-touch-icon";head.appendChild(touch)}
-    touch.href=APP_ICON;
-    touch.setAttribute("sizes","128x128");
-    touch.setAttribute("type","image/png");
-
-    let icon=head.querySelector('link[rel="icon"]');
-    if(!icon){icon=document.createElement("link");icon.rel="icon";head.appendChild(icon)}
-    icon.href=APP_ICON;
-    icon.setAttribute("sizes","128x128");
-    icon.setAttribute("type","image/png");
+    const manifest=document.querySelector('link[rel="manifest"]');
+    if(manifest)manifest.href=`manifest.json?v=${VERSION}`;
   }
 
   function loadPersonalRecords(){
@@ -138,7 +117,7 @@
   }
 
   function init(){
-    ensurePwaMeta();
+    normalizePwaHead();
     ensureStyles();
     removePlanCard();
     loadPersonalRecords();
@@ -160,7 +139,7 @@
 
     verifyNav(true);
     setTimeout(()=>verifyNav(true),250);
-    window.RepPilotHomePlanCard={version:VERSION,remove:removePlanCard,refreshNavigation:()=>verifyNav(true),refreshPwa:ensurePwaMeta};
+    window.RepPilotHomePlanCard={version:VERSION,remove:removePlanCard,refreshNavigation:()=>verifyNav(true)};
   }
 
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});
