@@ -1,5 +1,5 @@
 {
-  "version": "11.8.62",
+  "version": "11.8.63",
   "releasedAt": "2026-08-18",
-  "notes": "iOS/PWA-App-Symbol repariert. RepPilot verwendet wieder die bewährten icon-192.png und icon-512.png im Manifest und setzt icon-192.png zusätzlich statisch und dynamisch als apple-touch-icon. Der Code entfernt das Apple-Touch-Icon nicht mehr. Service-Worker und Cache wurden auf v11.8.62 aktualisiert. Trainingspläne und bestehende Trainingsfunktionen bleiben unverändert."
+  "notes": "App-Symbol auf iPhone korrigiert. Die fehlerhaften icon-192.png/icon-512.png werden nicht mehr für die PWA verwendet. Stattdessen nutzt RepPilot das vorhandene quadratische Muskelmann-Logo reppilot-muscleman-logo-v11.8.26.png als apple-touch-icon und PNG-App-Icon; das Muskelmann-SVG bleibt als allgemeiner Fallback. Manifest, Startseite, iOS-Head-Normalisierung und Service-Worker-Cache sind auf v11.8.63 abgestimmt. Vor Release wurden PWA, Pause/Sticky-Aktionen, Navigation, Pushup-Logik, Progression, Krafttest, Home-Workout und 2–5-Tage-Pläne gegengeprüft."
 }
