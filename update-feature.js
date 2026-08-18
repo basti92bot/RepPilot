@@ -112,7 +112,12 @@
     if ("serviceWorker" in navigator) {
       await withTimeout((async () => {
         const registrations = await navigator.serviceWorker.getRegistrations();
-        await Promise.allSettled(registrations.map(reg => reg.unregister()));
+        const appPath = new URL("./", location.href).pathname;
+        const own = registrations.filter(reg => {
+          try { return new URL(reg.scope).pathname.startsWith(appPath); }
+          catch { return false; }
+        });
+        await Promise.allSettled(own.map(reg => reg.unregister()));
       })());
     }
 
@@ -151,8 +156,6 @@
     } catch {}
 
     const next = networkReloadUrl(target);
-    // unregister() wirkt erst bei der nächsten Navigation vollständig. Deshalb
-    // bewusst auf eine frische URL navigieren statt nur location.reload().
     location.replace(next);
     setTimeout(() => { location.href = next; }, 900);
   }
