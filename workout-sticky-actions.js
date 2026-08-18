@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.40";
+  const VERSION = "11.8.61";
   let bar = null;
   let observer = null;
 
@@ -51,6 +51,27 @@
     bar.style.bottom = `${h + 8}px`;
   }
 
+  const DIRECT_ACTIONS = {
+    completeSetBtn:"completeSet",
+    deferExerciseBtn:"deferCurrentExercise",
+    addRestBtn:"addRest",
+    skipRestBtn:"finishRest",
+    startNextBtn:"nextExercise",
+    skipNextBtn:"skipExercise",
+    finishWorkoutBtn:"finish"
+  };
+
+  function runAction(original){
+    if(!original || original.disabled) return;
+    const fnName = DIRECT_ACTIONS[original.id];
+    const fn = fnName ? window[fnName] : null;
+    if(typeof fn === "function"){
+      fn();
+      return;
+    }
+    original.click();
+  }
+
   function proxy(original, label, secondary=false){
     if(!available(original)) return null;
     const btn = document.createElement("button");
@@ -58,7 +79,13 @@
     btn.textContent = label || original.textContent.trim();
     if(secondary) btn.className = "secondary";
     btn.disabled = original.disabled;
-    btn.onclick = () => original.click();
+    btn.dataset.proxyFor = original.id || "";
+    btn.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      runAction(original);
+      queueMicrotask(update);
+    });
     return btn;
   }
 
@@ -84,13 +111,13 @@
 
     if(visible(completePanel)){
       const next = document.getElementById("nextExerciseBlock");
-      const finish = document.getElementById("finishWorkoutBlock");
+      const finishBlock = document.getElementById("finishWorkoutBlock");
       if(visible(next)){
         const secondary = proxy(document.getElementById("skipNextBtn"), "Überspringen", true);
         const primary = proxy(document.getElementById("startNextBtn"), "Nächste Übung");
         return [secondary, primary].filter(Boolean);
       }
-      if(visible(finish)){
+      if(visible(finishBlock)){
         const primary = proxy(document.getElementById("finishWorkoutBtn"), "Training speichern");
         return [primary].filter(Boolean);
       }
@@ -128,7 +155,7 @@
     update();
   }
 
-  window.RepPilotStickyActions = {version:VERSION,refresh:update};
+  window.RepPilotStickyActions = {version:VERSION,refresh:update,runAction};
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded",init,{once:true});
   else init();
 })();
