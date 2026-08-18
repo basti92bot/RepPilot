@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.61";
+  const VERSION="11.8.62";
   const CARD_ID="selectedTrainingPlanHome";
   const FALLBACK_CLASS="rp-nav-visual-fallback";
   const KEYBOARD_CLASS="rp-keyboard-open";
@@ -16,7 +16,25 @@
     const versionLabel=document.querySelector("header h1 span");
     if(versionLabel)versionLabel.textContent=`v${VERSION}`;
     document.title=`RepPilot v${VERSION}`;
-    document.querySelectorAll('link[rel="apple-touch-icon"]').forEach(el=>el.remove());
+
+    let touchIcon=document.querySelector('link[rel="apple-touch-icon"]');
+    if(!touchIcon){
+      touchIcon=document.createElement("link");
+      touchIcon.rel="apple-touch-icon";
+      document.head.appendChild(touchIcon);
+    }
+    touchIcon.href=`icon-192.png?v=${VERSION}`;
+
+    let pngIcon=document.querySelector('link[rel="icon"][type="image/png"]');
+    if(!pngIcon){
+      pngIcon=document.createElement("link");
+      pngIcon.rel="icon";
+      pngIcon.type="image/png";
+      pngIcon.sizes="192x192";
+      document.head.appendChild(pngIcon);
+    }
+    pngIcon.href=`icon-192.png?v=${VERSION}`;
+
     const manifest=document.querySelector('link[rel="manifest"]');
     if(manifest)manifest.href=`manifest.json?v=${VERSION}`;
   }
