@@ -1,5 +1,5 @@
 {
-  "version": "11.8.59",
-  "releasedAt": "2026-08-17",
-  "notes": "iPhone-Web-App-Installation stabilisiert: fester PWA-Startpfad und Scope, erneuerte Apple-Web-App-Metadaten, festes Touch-Icon ohne Cache-Query und neuer Service-Worker-Cache. Persönliche Rekorde im Verlauf bleiben enthalten."
+  "version": "11.8.60",
+  "releasedAt": "2026-08-18",
+  "notes": "iOS-Web-App-Installation neu aufgebaut: Der Service Worker schreibt HTML nicht mehr um, Safari verwendet das Manifest-Icon statt des fehlerhaften alten Touch-Icons und der GitHub-Pages-Startpfad/Scope ist fest auf /RepPilot/ gesetzt."
 }
