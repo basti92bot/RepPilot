@@ -1,5 +1,6 @@
 (() => {
   const VERSION="11.8.61";
+  const PLAN_KEY="reppilot-selected-training-plan";
 
   const DEFINITIONS={
     push:[["Schrägbankdrücken",3,60],["Brustpresse",3,50],["Schulterpresse",3,35],["Kabel-Flys",2,20],["Seitheben am Kabelzug",3,7.5],["Überkopf-Trizepsstrecken am Kabelzug",2,20],["Trizepsdrücken am Seilzug",2,25],["Crunch-Maschine",3,30]],
@@ -32,6 +33,26 @@
     return true;
   }
 
+  function isMusclePlan(){
+    const raw=localStorage.getItem(PLAN_KEY);
+    return !raw||["muscle","push","pull-legs","upper-hypertrophy"].includes(raw);
+  }
+
+  function alignManualMuscleWeek(){
+    if(!isMusclePlan())return false;
+    const week=window.RepPilotTrainingPlan?.selectedWeek?.();
+    if(!Array.isArray(week))return false;
+    const patch=(day,data)=>{const row=week.find(x=>Number(x.day)===day);if(row)Object.assign(row,data);};
+    patch(1,{title:"Push",type:"strength",workoutId:"push",meta:"Brust, Schulter, Trizeps · ca. 45–55 Min.",runId:undefined});
+    patch(2,{title:"Intervalltraining",type:"run",runId:"interval",meta:"Schnelle Intervalle + lockere Pausen · ca. 37 Min.",workoutId:undefined});
+    patch(3,{title:"Pull + Beine",type:"strength",workoutId:"pull-legs",meta:"Rücken, Beine, Bizeps · ca. 60–70 Min.",runId:undefined});
+    patch(4,{title:"Lockerer Dauerlauf",type:"run",runId:"easy",meta:"Ruhiges Gesprächstempo · ca. 35–45 Min.",workoutId:undefined});
+    patch(5,{title:"Oberkörper",type:"strength",workoutId:"upper-hypertrophy",meta:"Brust, Rücken, Schulter, Arme · ca. 45–55 Min.",runId:undefined});
+    patch(6,{title:"Ruhetag",type:"rest",meta:"Erholung oder lockere Bewegung",workoutId:undefined,runId:undefined});
+    patch(0,{title:"Ruhetag",type:"rest",meta:"Erholung",workoutId:undefined,runId:undefined});
+    return true;
+  }
+
   function audit(){
     const issues=[];
     const result={version:VERSION,ok:true,workouts:{},issues};
@@ -43,34 +64,40 @@
       const duplicate=[...new Set(names.filter((n,i)=>names.indexOf(n)!==i))];
       if(duplicate.length)issues.push(`${id}: doppelt ${duplicate.join(", ")}`);
       if(workout.exercises.length!==expected.length)issues.push(`${id}: Übungszahl ${workout.exercises.length}/${expected.length}`);
-      workout.exercises.forEach((row,i)=>{
-        if(row[0]!==expected[i][0]||Number(row[1])!==Number(expected[i][1]))issues.push(`${id}: Reihenfolge/Sätze bei Position ${i+1}`);
-      });
+      workout.exercises.forEach((row,i)=>{if(row[0]!==expected[i][0]||Number(row[1])!==Number(expected[i][1]))issues.push(`${id}: Reihenfolge/Sätze bei Position ${i+1}`);});
       const totalSets=workout.exercises.reduce((sum,row)=>sum+Number(row[1]||0),0);
       if(totalSets<13||totalSets>24)issues.push(`${id}: Satzvolumen ${totalSets} außerhalb Zielbereich 13–24`);
       result.workouts[id]={exercises:workout.exercises.length,sets:totalSets};
     });
-    ["Kabel-Flys","Crunch-Maschine"].forEach(name=>{
-      if(!WORKOUTS.some(w=>(w.exercises||[]).some(e=>e[0]===name)))issues.push(`${name}: bevorzugter Name fehlt`);
-    });
+    ["Kabel-Flys","Crunch-Maschine"].forEach(name=>{if(!WORKOUTS.some(w=>(w.exercises||[]).some(e=>e[0]===name)))issues.push(`${name}: bevorzugter Name fehlt`);});
+    if(isMusclePlan()){
+      const week=window.RepPilotTrainingPlan?.selectedWeek?.()||[];
+      const sequence=[1,2,3,4,5].map(day=>week.find(x=>Number(x.day)===day)?.type+":"+(week.find(x=>Number(x.day)===day)?.workoutId||week.find(x=>Number(x.day)===day)?.runId||""));
+      const expected=["strength:push","run:interval","strength:pull-legs","run:easy","strength:upper-hypertrophy"];
+      if(JSON.stringify(sequence)!==JSON.stringify(expected))issues.push("Muskelaufbau-Woche: Reihenfolge stimmt nicht");
+    }
     result.ok=issues.length===0;
     return result;
   }
 
   function refresh(){
     apply();
+    alignManualMuscleWeek();
     try{if(typeof renderHome==="function")renderHome();}catch{}
-    queueMicrotask(()=>{
-      window.RepPilotDayExercises?.refresh?.();
-      window.RepPilotPlanTitleFix?.refresh?.();
-      window.RepPilotStrengthTest?.refresh?.();
-    });
+    queueMicrotask(()=>{window.RepPilotDayExercises?.refresh?.();window.RepPilotPlanTitleFix?.refresh?.();window.RepPilotStrengthTest?.refresh?.();});
     const result=audit();
     if(!result.ok)console.warn("RepPilot Trainingsplan-Audit",result.issues);
     return result;
   }
 
-  function init(){refresh();}
+  function init(){
+    refresh();
+    document.addEventListener("click",event=>{
+      if(!event.target.closest?.("[data-plan-select]"))return;
+      setTimeout(()=>{alignManualMuscleWeek();try{window.RepPilotTrainingPlan?.refresh?.();}catch{}window.RepPilotDayExercises?.refresh?.();},0);
+    });
+  }
+
   window.RepPilotPlanQuality={version:VERSION,refresh,audit,definitions:DEFINITIONS};
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
 })();
