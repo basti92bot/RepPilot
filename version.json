@@ -1,5 +1,5 @@
 {
-  "version": "11.8.60",
+  "version": "11.8.61",
   "releasedAt": "2026-08-18",
-  "notes": "v11.8.60 stabilisiert die iOS-Web-App und enthält einen Trainings-Hotfix: Die Sticky-Aktionsleiste führt Satz abschließen, +30 Sek., Pause überspringen, später machen, nächste Übung, überspringen und Training speichern jetzt direkt aus. Außerdem wurden die v11.8.60 Cache-Einträge für Sticky-Aktionen und Updater angeglichen."
+  "notes": "Trainingspläne vollständig optimiert und vor Veröffentlichung per Smoke-Test geprüft. Push wurde auf Schrägbankdrücken, Brustpresse, Schulterpresse, Kabel-Flys, Seitheben am Kabelzug, zwei Trizepsübungen und Crunch-Maschine optimiert. Pull + Beine, Oberkörper, Ganzkörper A/B, Ober-/Unterkörper A/B, Pull, Beine und alle drei Home Workouts wurden in Reihenfolge und Satzvolumen ausbalanciert. Der manuelle Muskelaufbau-Wochenplan nutzt jetzt Push, Intervall, Pull + Beine, lockeren Dauerlauf und Oberkörper ohne zwei Krafttage direkt hintereinander. Bestehende Pause-, Sticky-, Navigation-, Pushup-, Progressions-, Krafttest-, Profil- und PWA-Funktionen wurden gegengeprüft."
 }
