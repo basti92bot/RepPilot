@@ -26,13 +26,13 @@ const ASSETS=[
   "./stretch-routine-feature.js?v=11.8.28",
   "./timer-sound-feature.js?v=11.8.58",
   "./navigation-fix.js?v=11.8.58",
-  "./workout-sticky-actions.js?v=11.8.58",
+  "./workout-sticky-actions.js?v=11.8.60",
   "./day-exercise-overview.js?v=11.8.58",
   "./pushup-feature.js?v=11.8.58",
   "./plan-title-fix.js?v=11.8.58",
   "./strength-test-feature.js?v=11.8.58",
   "./reset-feature.js?v=11.8.58",
-  "./update-feature.js?v=11.8.32"
+  "./update-feature.js?v=11.8.60"
 ];
 
 self.addEventListener("install",event=>{
