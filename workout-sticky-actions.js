@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.61";
+  const VERSION = "11.8.60";
   let bar = null;
   let observer = null;
 
