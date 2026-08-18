@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.62";
+  const VERSION="11.8.63";
   const CARD_ID="selectedTrainingPlanHome";
   const FALLBACK_CLASS="rp-nav-visual-fallback";
   const KEYBOARD_CLASS="rp-keyboard-open";
@@ -23,17 +23,18 @@
       touchIcon.rel="apple-touch-icon";
       document.head.appendChild(touchIcon);
     }
-    touchIcon.href=`icon-192.png?v=${VERSION}`;
+    touchIcon.href=`reppilot-muscleman-logo-v11.8.26.png?v=${VERSION}`;
 
     let pngIcon=document.querySelector('link[rel="icon"][type="image/png"]');
     if(!pngIcon){
       pngIcon=document.createElement("link");
       pngIcon.rel="icon";
       pngIcon.type="image/png";
-      pngIcon.sizes="192x192";
+      pngIcon.sizes="128x128";
       document.head.appendChild(pngIcon);
     }
-    pngIcon.href=`icon-192.png?v=${VERSION}`;
+    pngIcon.sizes="128x128";
+    pngIcon.href=`reppilot-muscleman-logo-v11.8.26.png?v=${VERSION}`;
 
     const manifest=document.querySelector('link[rel="manifest"]');
     if(manifest)manifest.href=`manifest.json?v=${VERSION}`;
