@@ -1,5 +1,5 @@
 {
-  "version": "11.8.61",
+  "version": "11.8.62",
   "releasedAt": "2026-08-18",
-  "notes": "Trainingspläne vollständig optimiert und vor Veröffentlichung per Smoke-Test geprüft. Push wurde auf Schrägbankdrücken, Brustpresse, Schulterpresse, Kabel-Flys, Seitheben am Kabelzug, zwei Trizepsübungen und Crunch-Maschine optimiert. Pull + Beine, Oberkörper, Ganzkörper A/B, Ober-/Unterkörper A/B, Pull, Beine und alle drei Home Workouts wurden in Reihenfolge und Satzvolumen ausbalanciert. Der manuelle Muskelaufbau-Wochenplan nutzt jetzt Push, Intervall, Pull + Beine, lockeren Dauerlauf und Oberkörper ohne zwei Krafttage direkt hintereinander. Bestehende Pause-, Sticky-, Navigation-, Pushup-, Progressions-, Krafttest-, Profil- und PWA-Funktionen wurden gegengeprüft."
+  "notes": "iOS/PWA-App-Symbol repariert. RepPilot verwendet wieder die bewährten icon-192.png und icon-512.png im Manifest und setzt icon-192.png zusätzlich statisch und dynamisch als apple-touch-icon. Der Code entfernt das Apple-Touch-Icon nicht mehr. Service-Worker und Cache wurden auf v11.8.62 aktualisiert. Trainingspläne und bestehende Trainingsfunktionen bleiben unverändert."
 }
