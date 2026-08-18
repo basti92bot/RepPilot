@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.60";
+  const VERSION="11.8.61";
   const CARD_ID="selectedTrainingPlanHome";
   const FALLBACK_CLASS="rp-nav-visual-fallback";
   const KEYBOARD_CLASS="rp-keyboard-open";
@@ -16,12 +16,7 @@
     const versionLabel=document.querySelector("header h1 span");
     if(versionLabel)versionLabel.textContent=`v${VERSION}`;
     document.title=`RepPilot v${VERSION}`;
-
-    // Safari/WebKit prefers apple-touch-icon over manifest icons. The old
-    // 128px touch icon rendered as a blank tile in the iOS share sheet, so
-    // let the manifest provide the Home Screen icon instead.
     document.querySelectorAll('link[rel="apple-touch-icon"]').forEach(el=>el.remove());
-
     const manifest=document.querySelector('link[rel="manifest"]');
     if(manifest)manifest.href=`manifest.json?v=${VERSION}`;
   }
@@ -42,28 +37,10 @@
     s.textContent=`
       body{padding-bottom:0!important;min-height:100dvh}
       main{padding-bottom:calc(116px + env(safe-area-inset-bottom,0px))!important}
-      body>nav{
-        position:fixed!important;
-        left:0!important;right:0!important;top:auto!important;bottom:0!important;
-        width:100%!important;z-index:10000!important;
-        transform:translateZ(0);-webkit-transform:translateZ(0);
-        padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))!important;
-      }
-      body>nav.${FALLBACK_CLASS}{
-        position:absolute!important;
-        top:var(--rp-nav-fallback-top)!important;
-        bottom:auto!important;
-        transform:none!important;-webkit-transform:none!important;
-      }
-      body.rp-nav-visual-fallback #rpWorkoutActions{
-        position:absolute!important;
-        top:var(--rp-sticky-fallback-top)!important;
-        bottom:auto!important;
-      }
-      body.${KEYBOARD_CLASS}>nav,
-      body.${KEYBOARD_CLASS} #rpWorkoutActions{
-        display:none!important;
-      }
+      body>nav{position:fixed!important;left:0!important;right:0!important;top:auto!important;bottom:0!important;width:100%!important;z-index:10000!important;transform:translateZ(0);-webkit-transform:translateZ(0);padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))!important}
+      body>nav.${FALLBACK_CLASS}{position:absolute!important;top:var(--rp-nav-fallback-top)!important;bottom:auto!important;transform:none!important;-webkit-transform:none!important}
+      body.rp-nav-visual-fallback #rpWorkoutActions{position:absolute!important;top:var(--rp-sticky-fallback-top)!important;bottom:auto!important}
+      body.${KEYBOARD_CLASS}>nav,body.${KEYBOARD_CLASS} #rpWorkoutActions{display:none!important}
     `;
     document.head.appendChild(s);
   }
@@ -80,10 +57,7 @@
     clearTimeout(keyboardTimer);
     const focused=isTextInput(document.activeElement);
     document.body.classList.toggle(KEYBOARD_CLASS,focused);
-    if(focused){
-      const nav=document.querySelector("body>nav");
-      if(nav)clearFallback(nav);
-    }
+    if(focused){const nav=document.querySelector("body>nav");if(nav)clearFallback(nav);}
   }
 
   function scheduleKeyboardCloseCheck(){
@@ -98,11 +72,7 @@
   function visualViewportData(){
     const vv=window.visualViewport;
     if(!vv)return null;
-    return {
-      expectedBottom:vv.offsetTop+vv.height,
-      pageTop:Number.isFinite(vv.pageTop)?vv.pageTop:(window.scrollY+vv.offsetTop),
-      height:vv.height
-    };
+    return{expectedBottom:vv.offsetTop+vv.height,pageTop:Number.isFinite(vv.pageTop)?vv.pageTop:(window.scrollY+vv.offsetTop),height:vv.height};
   }
 
   function syncStickyFallback(navTop){
@@ -133,18 +103,10 @@
     raf=requestAnimationFrame(()=>{
       const nav=document.querySelector("body>nav");
       if(!nav)return;
-      if(document.body.classList.contains(KEYBOARD_CLASS)){
-        clearFallback(nav);
-        return;
-      }
+      if(document.body.classList.contains(KEYBOARD_CLASS)){clearFallback(nav);return;}
       const data=visualViewportData();
       if(!data)return;
-
-      if(nav.classList.contains(FALLBACK_CLASS)&&!forceFixedCheck){
-        applyFallback(nav,data);
-        return;
-      }
-
+      if(nav.classList.contains(FALLBACK_CLASS)&&!forceFixedCheck){applyFallback(nav,data);return;}
       clearFallback(nav);
       requestAnimationFrame(()=>{
         if(document.body.classList.contains(KEYBOARD_CLASS))return;
@@ -156,39 +118,21 @@
   }
 
   function init(){
-    normalizePwaHead();
-    ensureStyles();
-    removePlanCard();
-    loadPersonalRecords();
-
+    normalizePwaHead();ensureStyles();removePlanCard();loadPersonalRecords();
     const home=document.getElementById("home");
-    if(home){
-      const observer=new MutationObserver(removePlanCard);
-      observer.observe(home,{childList:true,subtree:true});
-    }
-
+    if(home){const observer=new MutationObserver(removePlanCard);observer.observe(home,{childList:true,subtree:true});}
     const bodyObserver=new MutationObserver(()=>verifyNav(false));
     bodyObserver.observe(document.body,{childList:true});
-
-    document.addEventListener("focusin",event=>{
-      if(isTextInput(event.target))syncKeyboardState();
-    },true);
-    document.addEventListener("focusout",event=>{
-      if(isTextInput(event.target))scheduleKeyboardCloseCheck();
-    },true);
-
+    document.addEventListener("focusin",event=>{if(isTextInput(event.target))syncKeyboardState();},true);
+    document.addEventListener("focusout",event=>{if(isTextInput(event.target))scheduleKeyboardCloseCheck();},true);
     window.addEventListener("scroll",()=>verifyNav(false),{passive:true});
     window.addEventListener("resize",()=>{syncKeyboardState();verifyNav(true)},{passive:true});
     window.addEventListener("orientationchange",()=>setTimeout(()=>{syncKeyboardState();verifyNav(true)},120),{passive:true});
     window.visualViewport?.addEventListener("scroll",()=>verifyNav(false),{passive:true});
     window.visualViewport?.addEventListener("resize",()=>{syncKeyboardState();verifyNav(true)},{passive:true});
-
-    syncKeyboardState();
-    verifyNav(true);
-    setTimeout(()=>verifyNav(true),250);
+    syncKeyboardState();verifyNav(true);setTimeout(()=>verifyNav(true),250);
     window.RepPilotHomePlanCard={version:VERSION,remove:removePlanCard,refreshNavigation:()=>verifyNav(true)};
   }
 
-  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});
-  else init();
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
 })();
