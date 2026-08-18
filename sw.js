@@ -1,8 +1,85 @@
-const CACHE="reppilot-v11-8-59";
-const VERSION="11.8.59";
-const ASSETS=["./index.html","./styles.css?v=11.8.10","./header-fix.css?v=11.8.27","./manifest.json?v=11.8.59","./reppilot-muscleman-logo-v11.8.26.png","./reppilot-muscleman-v11.8.20.svg","./home-plan-card-hide.js?v=11.8.59","./personal-records-feature.js?v=11.8.59"];
-function upgradeHtml(text){let html=text.replace(/data-app-version="[^"]+"/,`data-app-version="${VERSION}"`).replace(/RepPilot v\d+\.\d+\.\d+/g,`RepPilot v${VERSION}`).replace(/<h1>RepPilot <span>v\d+\.\d+\.\d+<\/span><\/h1>/,`<h1>RepPilot <span>v${VERSION}</span></h1>`).replace(/manifest\.json(?:\?v=[^"']+)?/g,`manifest.json?v=${VERSION}`).replace(/sw\.js(?:\?v=[^"']+)?/g,`sw.js?v=${VERSION}`).replace(/<meta name="apple-mobile-web-app-capable" content="[^"]*">/,`<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default">`).replace(/<link rel="apple-touch-icon"[^>]*>/,`<link rel="apple-touch-icon" sizes="128x128" type="image/png" href="reppilot-muscleman-logo-v11.8.26.png"><link rel="icon" sizes="128x128" type="image/png" href="reppilot-muscleman-logo-v11.8.26.png">`);["workout-fix","profile-feature","bodyweight-auto","training-plan-feature","home-plan-card-hide","home-workout-feature","onboarding-feature","progression-feature","timer-sound-feature","navigation-fix","workout-sticky-actions","day-exercise-overview","pushup-feature","plan-title-fix","strength-test-feature","reset-feature"].forEach(name=>{html=html.replace(new RegExp(`${name}\\.js\\?v=[^\"']+`,`g`),`${name}.js?v=${VERSION}`)});return html}
-async function htmlResponse(r){if(!r||!r.ok)return r;const text=await r.text();return new Response(upgradeHtml(text),{status:r.status,statusText:r.statusText,headers:r.headers})}
-self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});
-self.addEventListener("activate",e=>{e.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)));await self.clients.claim()})())});
-self.addEventListener("fetch",e=>{if(e.request.method!=="GET")return;if(e.request.mode==="navigate"){e.respondWith((async()=>{try{const fresh=await fetch(e.request,{cache:"no-store"});if(fresh.ok)(await caches.open(CACHE)).put("./index.html",fresh.clone());return htmlResponse(fresh)}catch{const cached=await caches.match("./index.html");return cached?htmlResponse(cached):Response.error()}})());return}e.respondWith((async()=>{try{const fresh=await fetch(e.request,{cache:"no-store"});if(fresh.ok)(await caches.open(CACHE)).put(e.request,fresh.clone());return fresh}catch{return(await caches.match(e.request))||Response.error()}})())});
+const CACHE="reppilot-v11-8-60";
+const VERSION="11.8.60";
+const ASSETS=[
+  "./index.html",
+  "./styles.css?v=11.8.10",
+  "./header-fix.css?v=11.8.27",
+  "./manifest.json?v=11.8.60",
+  "./reppilot-muscleman-logo-v11.8.26.png",
+  "./reppilot-muscleman-v11.8.20.svg",
+  "./auth.js?v=11.8.8",
+  "./storage-bridge.js?v=11.8.8",
+  "./app.js?v=11.8.8",
+  "./workout-fix.js?v=11.8.58",
+  "./run-feature.js?v=11.8.8",
+  "./run-dashboard-feature.js?v=11.8.34",
+  "./profile-feature.js?v=11.8.58",
+  "./apple-health-feature.js?v=11.8.35",
+  "./shortcut-health-feature.js?v=11.8.37",
+  "./bodyweight-auto.js?v=11.8.58",
+  "./training-plan-feature.js?v=11.8.58",
+  "./home-plan-card-hide.js?v=11.8.60",
+  "./personal-records-feature.js?v=11.8.60",
+  "./home-workout-feature.js?v=11.8.58",
+  "./onboarding-feature.js?v=11.8.58",
+  "./progression-feature.js?v=11.8.58",
+  "./stretch-routine-feature.js?v=11.8.28",
+  "./timer-sound-feature.js?v=11.8.58",
+  "./navigation-fix.js?v=11.8.58",
+  "./workout-sticky-actions.js?v=11.8.58",
+  "./day-exercise-overview.js?v=11.8.58",
+  "./pushup-feature.js?v=11.8.58",
+  "./plan-title-fix.js?v=11.8.58",
+  "./strength-test-feature.js?v=11.8.58",
+  "./reset-feature.js?v=11.8.58",
+  "./update-feature.js?v=11.8.32"
+];
+
+self.addEventListener("install",event=>{
+  self.skipWaiting();
+  event.waitUntil((async()=>{
+    const cache=await caches.open(CACHE);
+    await Promise.allSettled(ASSETS.map(asset=>cache.add(asset)));
+  })());
+});
+
+self.addEventListener("activate",event=>{
+  event.waitUntil((async()=>{
+    const keys=await caches.keys();
+    await Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)));
+    await self.clients.claim();
+  })());
+});
+
+self.addEventListener("fetch",event=>{
+  if(event.request.method!=="GET")return;
+
+  if(event.request.mode==="navigate"){
+    event.respondWith((async()=>{
+      try{
+        const fresh=await fetch(event.request,{cache:"no-store"});
+        if(fresh.ok){
+          const cache=await caches.open(CACHE);
+          await cache.put("./index.html",fresh.clone());
+        }
+        return fresh;
+      }catch{
+        return (await caches.match("./index.html"))||Response.error();
+      }
+    })());
+    return;
+  }
+
+  event.respondWith((async()=>{
+    try{
+      const fresh=await fetch(event.request,{cache:"no-store"});
+      if(fresh.ok){
+        const cache=await caches.open(CACHE);
+        await cache.put(event.request,fresh.clone());
+      }
+      return fresh;
+    }catch{
+      return (await caches.match(event.request))||Response.error();
+    }
+  })());
+});
