@@ -2,7 +2,9 @@
   const VERSION="11.8.60";
   const CARD_ID="selectedTrainingPlanHome";
   const FALLBACK_CLASS="rp-nav-visual-fallback";
+  const KEYBOARD_CLASS="rp-keyboard-open";
   let raf=0;
+  let keyboardTimer=0;
 
   const removePlanCard=()=>{
     const card=document.getElementById(CARD_ID);
@@ -58,8 +60,39 @@
         top:var(--rp-sticky-fallback-top)!important;
         bottom:auto!important;
       }
+      body.${KEYBOARD_CLASS}>nav,
+      body.${KEYBOARD_CLASS} #rpWorkoutActions{
+        display:none!important;
+      }
     `;
     document.head.appendChild(s);
+  }
+
+  function isTextInput(el){
+    if(!el)return false;
+    if(el.matches?.("textarea,[contenteditable='true']"))return true;
+    if(!el.matches?.("input"))return false;
+    const type=String(el.type||"text").toLowerCase();
+    return !["button","submit","reset","checkbox","radio","range","color","file","hidden"].includes(type);
+  }
+
+  function syncKeyboardState(){
+    clearTimeout(keyboardTimer);
+    const focused=isTextInput(document.activeElement);
+    document.body.classList.toggle(KEYBOARD_CLASS,focused);
+    if(focused){
+      const nav=document.querySelector("body>nav");
+      if(nav)clearFallback(nav);
+    }
+  }
+
+  function scheduleKeyboardCloseCheck(){
+    clearTimeout(keyboardTimer);
+    keyboardTimer=setTimeout(()=>{
+      const focused=isTextInput(document.activeElement);
+      document.body.classList.toggle(KEYBOARD_CLASS,focused);
+      if(!focused)verifyNav(true);
+    },320);
   }
 
   function visualViewportData(){
@@ -80,6 +113,7 @@
   }
 
   function applyFallback(nav,data){
+    if(document.body.classList.contains(KEYBOARD_CLASS))return;
     const top=Math.max(0,data.pageTop+data.height-nav.offsetHeight);
     nav.style.setProperty("--rp-nav-fallback-top",`${top}px`);
     nav.classList.add(FALLBACK_CLASS);
@@ -99,6 +133,10 @@
     raf=requestAnimationFrame(()=>{
       const nav=document.querySelector("body>nav");
       if(!nav)return;
+      if(document.body.classList.contains(KEYBOARD_CLASS)){
+        clearFallback(nav);
+        return;
+      }
       const data=visualViewportData();
       if(!data)return;
 
@@ -109,6 +147,7 @@
 
       clearFallback(nav);
       requestAnimationFrame(()=>{
+        if(document.body.classList.contains(KEYBOARD_CLASS))return;
         const rect=nav.getBoundingClientRect();
         const delta=Math.abs(rect.bottom-data.expectedBottom);
         if(delta>32)applyFallback(nav,data);
@@ -131,12 +170,20 @@
     const bodyObserver=new MutationObserver(()=>verifyNav(false));
     bodyObserver.observe(document.body,{childList:true});
 
-    window.addEventListener("scroll",()=>verifyNav(false),{passive:true});
-    window.addEventListener("resize",()=>verifyNav(true),{passive:true});
-    window.addEventListener("orientationchange",()=>setTimeout(()=>verifyNav(true),120),{passive:true});
-    window.visualViewport?.addEventListener("scroll",()=>verifyNav(false),{passive:true});
-    window.visualViewport?.addEventListener("resize",()=>verifyNav(true),{passive:true});
+    document.addEventListener("focusin",event=>{
+      if(isTextInput(event.target))syncKeyboardState();
+    },true);
+    document.addEventListener("focusout",event=>{
+      if(isTextInput(event.target))scheduleKeyboardCloseCheck();
+    },true);
 
+    window.addEventListener("scroll",()=>verifyNav(false),{passive:true});
+    window.addEventListener("resize",()=>{syncKeyboardState();verifyNav(true)},{passive:true});
+    window.addEventListener("orientationchange",()=>setTimeout(()=>{syncKeyboardState();verifyNav(true)},120),{passive:true});
+    window.visualViewport?.addEventListener("scroll",()=>verifyNav(false),{passive:true});
+    window.visualViewport?.addEventListener("resize",()=>{syncKeyboardState();verifyNav(true)},{passive:true});
+
+    syncKeyboardState();
     verifyNav(true);
     setTimeout(()=>verifyNav(true),250);
     window.RepPilotHomePlanCard={version:VERSION,remove:removePlanCard,refreshNavigation:()=>verifyNav(true)};
