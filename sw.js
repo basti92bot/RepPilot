@@ -1,16 +1,16 @@
-const CACHE="reppilot-v11-8-60";
-const VERSION="11.8.60";
+const CACHE="reppilot-v11-8-61";
+const VERSION="11.8.61";
 const ASSETS=[
   "./index.html",
   "./styles.css?v=11.8.10",
   "./header-fix.css?v=11.8.27",
-  "./manifest.json?v=11.8.60",
+  "./manifest.json?v=11.8.61",
   "./reppilot-muscleman-logo-v11.8.26.png",
   "./reppilot-muscleman-v11.8.20.svg",
   "./auth.js?v=11.8.8",
   "./storage-bridge.js?v=11.8.8",
   "./app.js?v=11.8.8",
-  "./workout-fix.js?v=11.8.58",
+  "./workout-fix.js?v=11.8.61",
   "./run-feature.js?v=11.8.8",
   "./run-dashboard-feature.js?v=11.8.34",
   "./profile-feature.js?v=11.8.58",
@@ -18,8 +18,8 @@ const ASSETS=[
   "./shortcut-health-feature.js?v=11.8.37",
   "./bodyweight-auto.js?v=11.8.58",
   "./training-plan-feature.js?v=11.8.58",
-  "./home-plan-card-hide.js?v=11.8.60",
-  "./personal-records-feature.js?v=11.8.60",
+  "./home-plan-card-hide.js?v=11.8.61",
+  "./personal-records-feature.js?v=11.8.61",
   "./home-workout-feature.js?v=11.8.58",
   "./onboarding-feature.js?v=11.8.58",
   "./progression-feature.js?v=11.8.58",
@@ -32,6 +32,7 @@ const ASSETS=[
   "./plan-title-fix.js?v=11.8.58",
   "./strength-test-feature.js?v=11.8.58",
   "./reset-feature.js?v=11.8.58",
+  "./training-plan-quality-feature.js?v=11.8.61",
   "./update-feature.js?v=11.8.60"
 ];
 
@@ -53,33 +54,21 @@ self.addEventListener("activate",event=>{
 
 self.addEventListener("fetch",event=>{
   if(event.request.method!=="GET")return;
-
   if(event.request.mode==="navigate"){
     event.respondWith((async()=>{
       try{
         const fresh=await fetch(event.request,{cache:"no-store"});
-        if(fresh.ok){
-          const cache=await caches.open(CACHE);
-          await cache.put("./index.html",fresh.clone());
-        }
+        if(fresh.ok){const cache=await caches.open(CACHE);await cache.put("./index.html",fresh.clone());}
         return fresh;
-      }catch{
-        return (await caches.match("./index.html"))||Response.error();
-      }
+      }catch{return(await caches.match("./index.html"))||Response.error();}
     })());
     return;
   }
-
   event.respondWith((async()=>{
     try{
       const fresh=await fetch(event.request,{cache:"no-store"});
-      if(fresh.ok){
-        const cache=await caches.open(CACHE);
-        await cache.put(event.request,fresh.clone());
-      }
+      if(fresh.ok){const cache=await caches.open(CACHE);await cache.put(event.request,fresh.clone());}
       return fresh;
-    }catch{
-      return (await caches.match(event.request))||Response.error();
-    }
+    }catch{return(await caches.match(event.request))||Response.error();}
   })());
 });
