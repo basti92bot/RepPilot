@@ -2,8 +2,10 @@
   if (window.RepPilotUpdate) return;
 
   const CHECK_INTERVAL = 5 * 60 * 1000;
+  const ACTION_TIMEOUT = 3500;
   let lastCheck = 0;
   let latestVersion = null;
+  let updating = false;
 
   const readCurrentVersion = () => {
     const fromHtml = document.documentElement?.dataset?.appVersion;
@@ -60,7 +62,11 @@
       </div>
       <button id="repPilotUpdateBtn" type="button">Aktualisieren</button>`;
     document.body.appendChild(banner);
-    document.getElementById("repPilotUpdateBtn").onclick = () => forceUpdate(latestVersion);
+    document.getElementById("repPilotUpdateBtn").addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      forceUpdate(latestVersion);
+    });
     return banner;
   };
 
@@ -77,15 +83,19 @@
     if (banner) banner.hidden = true;
   };
 
+  const fetchLatestVersion = async () => {
+    const response = await fetch(`./version.json?ts=${Date.now()}`, { cache: "no-store" });
+    if (!response.ok) return "";
+    const data = await response.json();
+    return String(data?.version || "").trim();
+  };
+
   const checkForUpdate = async ({ force = false } = {}) => {
     const now = Date.now();
     if (!force && now - lastCheck < 30000) return;
     lastCheck = now;
     try {
-      const response = await fetch(`./version.json?ts=${now}`, { cache: "no-store" });
-      if (!response.ok) return;
-      const data = await response.json();
-      const remote = String(data?.version || "").trim();
+      const remote = await fetchLatestVersion();
       const current = readCurrentVersion();
       if (!remote) return;
       if (compareVersions(remote, current) > 0) showUpdate(remote);
@@ -93,28 +103,58 @@
     } catch {}
   };
 
+  const withTimeout = promise => Promise.race([
+    promise,
+    new Promise(resolve => setTimeout(resolve, ACTION_TIMEOUT))
+  ]);
+
+  const cleanRepPilotRuntime = async () => {
+    if ("serviceWorker" in navigator) {
+      await withTimeout((async () => {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        await Promise.allSettled(registrations.map(reg => reg.unregister()));
+      })());
+    }
+
+    if ("caches" in window) {
+      await withTimeout((async () => {
+        const keys = await caches.keys();
+        await Promise.allSettled(keys.filter(key => key.startsWith("reppilot-")).map(key => caches.delete(key)));
+      })());
+    }
+  };
+
+  const networkReloadUrl = version => {
+    const url = new URL("./", location.href);
+    url.searchParams.set("rpv", version || String(Date.now()));
+    url.searchParams.set("refresh", String(Date.now()));
+    return url.toString();
+  };
+
   async function forceUpdate(version) {
-    if (!version) return;
+    if (updating) return;
+    updating = true;
+
     const button = document.getElementById("repPilotUpdateBtn");
+    const text = document.getElementById("repPilotUpdateText");
     if (button) {
       button.disabled = true;
       button.textContent = "Aktualisiere…";
     }
+    if (text) text.textContent = "Cache wird bereinigt und RepPilot neu geladen…";
+
+    let target = String(version || latestVersion || "").trim();
     try {
-      sessionStorage.setItem("reppilot-update-target", version);
-      if ("serviceWorker" in navigator) {
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        await Promise.allSettled(registrations.map(reg => reg.update()));
-      }
-      if ("caches" in window) {
-        const keys = await caches.keys();
-        await Promise.all(keys.filter(key => key.startsWith("reppilot-")).map(key => caches.delete(key)));
-      }
+      if (!target) target = await fetchLatestVersion();
+      if (target) sessionStorage.setItem("reppilot-update-target", target);
+      await cleanRepPilotRuntime();
     } catch {}
-    const url = new URL(location.href);
-    url.searchParams.set("rpv", version);
-    url.searchParams.set("refresh", String(Date.now()));
-    location.replace(url.toString());
+
+    const next = networkReloadUrl(target);
+    // unregister() wirkt erst bei der nächsten Navigation vollständig. Deshalb
+    // bewusst auf eine frische URL navigieren statt nur location.reload().
+    location.replace(next);
+    setTimeout(() => { location.href = next; }, 900);
   }
 
   const init = () => {
@@ -128,7 +168,12 @@
     });
   };
 
-  window.RepPilotUpdate = { check: () => checkForUpdate({ force: true }), install: forceUpdate, current: readCurrentVersion };
+  window.RepPilotUpdate = {
+    check: () => checkForUpdate({ force: true }),
+    install: forceUpdate,
+    current: readCurrentVersion,
+    clean: cleanRepPilotRuntime
+  };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
   else init();
