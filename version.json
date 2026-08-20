@@ -1,5 +1,5 @@
 {
-  "version": "11.8.63",
-  "releasedAt": "2026-08-18",
-  "notes": "App-Symbol auf iPhone korrigiert. Die fehlerhaften icon-192.png/icon-512.png werden nicht mehr für die PWA verwendet. Stattdessen nutzt RepPilot das vorhandene quadratische Muskelmann-Logo reppilot-muscleman-logo-v11.8.26.png als apple-touch-icon und PNG-App-Icon; das Muskelmann-SVG bleibt als allgemeiner Fallback. Manifest, Startseite, iOS-Head-Normalisierung und Service-Worker-Cache sind auf v11.8.63 abgestimmt. Vor Release wurden PWA, Pause/Sticky-Aktionen, Navigation, Pushup-Logik, Progression, Krafttest, Home-Workout und 2–5-Tage-Pläne gegengeprüft."
+  "version": "11.8.64",
+  "releasedAt": "2026-08-20",
+  "notes": "Logische Trainingsverläufe werden nach Anmeldung automatisch aus der RepPilot-Cloud wiederhergestellt. Krafttrainings werden inklusive Übungen, Sätzen, Wiederholungen und Gewichten geladen; plausible gespeicherte Läufe werden ebenfalls übernommen. Lokale und Cloud-Einträge werden dedupliziert. Offensichtlich fehlerhafte Laufdaten wie 0 km oder unrealistische Distanz/Zeit-Kombinationen werden nicht in den Verlauf übernommen. Aktuell sind zwei vollständige Cloud-Krafttrainings mit 16 Übungen und 40 Sätzen sicher wiederherstellbar. Cloud-History-Modul, Startseite, Manifest, PWA-Helfer und Service-Worker sind auf v11.8.64 abgestimmt; bestehende Trainingspläne und Trainingsfunktionen bleiben unverändert."
 }
