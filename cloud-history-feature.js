@@ -57,7 +57,7 @@
     });
   }
 
-  function inferWorkoutId(title) {
+  function inferWorkoutId(title,cloudId) {
     const t = norm(title);
     if (t === "push") return "push";
     if (t.includes("pull") && t.includes("beine")) return "pull-legs";
@@ -65,7 +65,7 @@
     if (t.includes("home workout a")) return "home-a";
     if (t.includes("home workout b")) return "home-b";
     if (t.includes("home workout c")) return "home-c";
-    return `cloud-workout-${Date.now()}`;
+    return `cloud-workout-${cloudId || "unknown"}`;
   }
 
   function workoutToHistory(workout, exercises, sets) {
@@ -88,7 +88,7 @@
 
     const entry = {
       type:"strength",
-      id: inferWorkoutId(workout.title),
+      id: inferWorkoutId(workout.title,workout.id),
       source:"repilot_cloud",
       cloudId: workout.id,
       title: workout.title || "Krafttraining",
