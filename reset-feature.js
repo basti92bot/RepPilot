@@ -1,10 +1,11 @@
 (() => {
-  const VERSION = "11.8.56";
+  const VERSION = "11.8.65";
   const HISTORY_KEY = "reppilot-history";
   const PROFILE_KEY = "reppilot-user-profile";
   const WEIGHT_HISTORY_KEY = "reppilot-weight-history";
   const PLAN_KEY = "reppilot-selected-training-plan";
   const STRENGTH_TEST_KEY = "reppilot-strength-tests-v1";
+  const BACKUP_KEY = "reppilot-training-data-backup-v1";
 
   function injectStyles(){
     if(document.getElementById("resetFeatureStyles")) return;
@@ -16,27 +17,119 @@
     document.head.appendChild(style);
   }
 
-  function removeHistoryLocal(){const keys=[];for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(key&&key.startsWith("reppilot-history"))keys.push(key)}keys.forEach(key=>localStorage.removeItem(key));localStorage.removeItem(HISTORY_KEY);}
-  async function currentUser(){try{const client=window.repPilotSupabase;if(!client)return null;const {data}=await client.auth.getUser();return data?.user||null}catch{return null}}
-  async function clearCloudRuns(){try{const client=window.repPilotSupabase,user=await currentUser();if(!client||!user)return;await client.from("runs").delete().eq("user_id",user.id)}catch(error){console.warn("Cloud-Laufverlauf konnte nicht gelöscht werden",error)}}
+  async function currentUser(){
+    try{
+      const client=window.repPilotSupabase;
+      if(!client)return null;
+      const {data}=await client.auth.getUser();
+      return data?.user||null;
+    }catch{return null}
+  }
+
+  async function clearCloudTrainingData(){
+    const client=window.repPilotSupabase;
+    const user=await currentUser();
+    if(!client||!user)return {ok:true,cloud:false};
+
+    const operations=[
+      ["workouts",client.from("workouts").delete().eq("user_id",user.id)],
+      ["runs",client.from("runs").delete().eq("user_id",user.id)],
+      ["apple_workouts",client.from("apple_workouts").delete().eq("user_id",user.id)]
+    ];
+
+    for(const [name,promise] of operations){
+      const {error}=await promise;
+      if(error)throw new Error(`${name}: ${error.message||error}`);
+    }
+    return {ok:true,cloud:true};
+  }
+
   async function clearCloudProfile(){
     try{
       const client=window.repPilotSupabase,user=await currentUser();if(!client||!user)return;
       const {error}=await client.from("profiles").update({height_cm:null,weight_kg:null,training_level:null,sex:null,onboarding_completed_at:null,training_focus:null,training_days_per_week:null,training_days:null}).eq("id",user.id);
       if(error)throw error;
-    }catch(error){console.warn("Cloud-Profil konnte nicht zurückgesetzt werden",error)}
+    }catch(error){
+      console.warn("Cloud-Profil konnte nicht zurückgesetzt werden",error);
+      throw error;
+    }
   }
-  function refreshScreens(){try{if(typeof renderHistory==="function")renderHistory()}catch{}try{if(typeof renderHome==="function")renderHome()}catch{}try{window.repPilotProfile?.refresh?.().then(p=>window.repPilotProfile?.render?.(p))}catch{}}
-  async function resetHistory(){const ok=confirm("Verlauf wirklich zurücksetzen? Alle gespeicherten Kraft- und Lauftrainings werden gelöscht. Das kann nicht rückgängig gemacht werden.");if(!ok)return;removeHistoryLocal();await clearCloudRuns();refreshScreens();alert("Verlauf wurde zurückgesetzt.");}
-  async function resetAll(){
-    const ok=confirm("Alle App-Daten wirklich zurücksetzen? Verlauf, Körperdaten, Kraftmessungen, Trainingswünsche und Trainingsplan werden gelöscht. Dein Konto bleibt bestehen und die Einrichtung startet danach neu.");if(!ok)return;
-    removeHistoryLocal();[PROFILE_KEY,WEIGHT_HISTORY_KEY,PLAN_KEY,STRENGTH_TEST_KEY].forEach(key=>localStorage.removeItem(key));await Promise.all([clearCloudRuns(),clearCloudProfile()]);alert("App-Daten wurden zurückgesetzt. Nach dem Neuladen startet die Einrichtung erneut.");location.reload();
+
+  function removeTrainingLocal(){
+    if(window.RepPilotTrainingDataPersistence?.resetLocalTrainingData){
+      window.RepPilotTrainingDataPersistence.resetLocalTrainingData();
+      return;
+    }
+    const keys=[];
+    for(let i=0;i<localStorage.length;i++){
+      const key=localStorage.key(i);
+      if(key&&key.startsWith("reppilot-history"))keys.push(key);
+    }
+    keys.forEach(key=>localStorage.removeItem(key));
+    [HISTORY_KEY,STRENGTH_TEST_KEY,BACKUP_KEY,"reppilot-last-cloud-sync","reppilot-cloud-history-sync-v1","reppilot-apple-health-sync"].forEach(key=>localStorage.removeItem(key));
   }
+
+  function refreshScreens(){
+    try{if(typeof renderHistory==="function")renderHistory()}catch{}
+    try{if(typeof renderHome==="function")renderHome()}catch{}
+    try{window.RepPilotPersonalRecords?.refresh?.()}catch{}
+    try{window.repPilotProfile?.refresh?.().then(p=>window.repPilotProfile?.render?.(p))}catch{}
+  }
+
+  async function resetTrainingData(){
+    const ok=confirm("Trainingsdaten wirklich zurücksetzen? Kraft- und Lauftrainings, Sätze, Gewichte, Wiederholungen, Rekorde, Kraftmessungen und importierte Apple-Workouts werden dauerhaft gelöscht. Das kann nicht rückgängig gemacht werden.");
+    if(!ok)return;
+
+    const button=document.getElementById("resetTrainingDataBtn");
+    if(button){button.disabled=true;button.querySelector("strong").textContent="Trainingsdaten werden gelöscht …";}
+    try{
+      await clearCloudTrainingData();
+      removeTrainingLocal();
+      refreshScreens();
+      alert("Trainingsdaten wurden vollständig zurückgesetzt.");
+      location.reload();
+    }catch(error){
+      console.error("Trainingsdaten konnten nicht vollständig zurückgesetzt werden",error);
+      alert("Trainingsdaten wurden NICHT gelöscht, weil die Cloud nicht vollständig zurückgesetzt werden konnte. Bitte Verbindung prüfen und erneut versuchen.");
+      if(button){button.disabled=false;button.querySelector("strong").textContent="Trainingsdaten zurücksetzen";}
+    }
+  }
+
+  async function resetProfileSettings(){
+    const ok=confirm("Profil und Einstellungen wirklich zurücksetzen? Körperdaten, Trainingswünsche und ausgewählter Plan werden gelöscht. Deine gespeicherten Trainings, Läufe, Gewichte, Kraftmessungen und Rekorde bleiben erhalten.");
+    if(!ok)return;
+    try{
+      [PROFILE_KEY,WEIGHT_HISTORY_KEY,PLAN_KEY].forEach(key=>localStorage.removeItem(key));
+      await clearCloudProfile();
+      alert("Profil und Einstellungen wurden zurückgesetzt. Deine Trainingsdaten bleiben erhalten.");
+      location.reload();
+    }catch(error){
+      alert("Profil konnte nicht vollständig zurückgesetzt werden. Deine Trainingsdaten wurden nicht verändert.");
+    }
+  }
+
   function ensureUI(){
-    const profile=document.getElementById("profile");if(!profile||document.getElementById("resetDataSection"))return false;injectStyles();const section=document.createElement("div");section.id="resetDataSection";section.className="reset-section";section.innerHTML=`<h2>Daten & Verlauf</h2><article class="card reset-card"><button type="button" class="reset-row" id="resetHistoryBtn"><span><strong>Verlauf zurücksetzen</strong><small>Kraft- und Lauftrainings sowie Rekorde löschen.</small></span><span class="reset-arrow">›</span></button><button type="button" class="reset-row" id="resetAllDataBtn"><span><strong>Alle App-Daten zurücksetzen</strong><small>Verlauf, Körperdaten, Kraftmessungen, Trainingswünsche und Plan löschen. Danach startet die Einrichtung erneut.</small></span><span class="reset-arrow">›</span></button></article>`;profile.appendChild(section);document.getElementById("resetHistoryBtn").onclick=resetHistory;document.getElementById("resetAllDataBtn").onclick=resetAll;return true;
+    const profile=document.getElementById("profile");
+    if(!profile||document.getElementById("resetDataSection"))return false;
+    injectStyles();
+    const section=document.createElement("div");
+    section.id="resetDataSection";
+    section.className="reset-section";
+    section.innerHTML=`<h2>Daten & Verlauf</h2><article class="card reset-card"><button type="button" class="reset-row" id="resetTrainingDataBtn"><span><strong>Trainingsdaten zurücksetzen</strong><small>Alle Kraft- und Lauftrainings, Sätze, Gewichte, Wiederholungen, Rekorde, Kraftmessungen und Apple-Workouts löschen. Nur diese Aktion darf Trainingsdaten löschen.</small></span><span class="reset-arrow">›</span></button><button type="button" class="reset-row" id="resetProfileSettingsBtn"><span><strong>Profil & Einstellungen zurücksetzen</strong><small>Körperdaten, Trainingswünsche und Plan zurücksetzen. Gespeicherte Trainingsdaten bleiben vollständig erhalten.</small></span><span class="reset-arrow">›</span></button></article>`;
+    profile.appendChild(section);
+    document.getElementById("resetTrainingDataBtn").onclick=resetTrainingData;
+    document.getElementById("resetProfileSettingsBtn").onclick=resetProfileSettings;
+    return true;
   }
-  function init(){if(ensureUI())return;let tries=0;const timer=setInterval(()=>{tries++;if(ensureUI()||tries>=20)clearInterval(timer)},250)}
-  window.RepPilotReset={version:VERSION};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
+
+  function init(){
+    if(ensureUI())return;
+    let tries=0;
+    const timer=setInterval(()=>{tries++;if(ensureUI()||tries>=20)clearInterval(timer)},250);
+  }
+
+  window.RepPilotReset={version:VERSION,resetTrainingData};
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
 })();
 
 (() => {
