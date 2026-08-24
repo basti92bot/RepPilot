@@ -1,9 +1,9 @@
 (() => {
-  const VERSION="11.8.61";
+  const VERSION="11.8.67";
   const PLAN_KEY="reppilot-selected-training-plan";
 
   const DEFINITIONS={
-    push:[["Schrägbankdrücken",3,60],["Brustpresse",3,50],["Schulterpresse",3,35],["Kabel-Flys",2,20],["Seitheben am Kabelzug",3,7.5],["Überkopf-Trizepsstrecken am Kabelzug",2,20],["Trizepsdrücken am Seilzug",2,25],["Crunch-Maschine",3,30]],
+    push:[["Schrägbankdrücken",3,60],["Brustpresse",3,50],["Schulterpresse",3,35],["Kabel-Flys",2,20],["Seitheben Maschine",3,20],["Überkopf-Trizepsstrecken am Kabelzug",2,20],["Trizepsdrücken am Seilzug",2,25],["Crunch-Maschine",3,30]],
     "pull-legs":[["Beinpresse",3,120],["Brustgestütztes Rudern",3,50],["Rumänisches Kreuzheben",3,60],["Latzug neutral",3,55],["Beinbeuger",2,40],["Reverse Butterfly am Kabelzug",2,10],["Schrägbank-Curls",2,12],["Wadenheben",3,60],["Hängendes Beinheben",2,0]],
     "upper-hypertrophy":[["Schrägbankdrücken leicht",3,50],["Brustgestütztes Rudern",3,45],["Latzug breit",3,50],["Liegestütze bis Maximum",2,0],["Seitheben",3,8],["Reverse Butterfly am Kabelzug",2,10],["Hammercurls",2,12],["Einarmiger Trizeps am Kabelzug",2,10],["Crunch-Maschine",2,30]],
     "loss-a":[["Beinpresse",3,80],["Brustpresse",3,40],["Latzug neutral",3,45],["Rumänisches Kreuzheben",3,50],["Schulterpresse",2,25],["Schrägbank-Curls",2,10],["Trizepsdrücken am Seilzug",2,20],["Crunch-Maschine",2,25]],
@@ -30,6 +30,7 @@
       workout.title=TITLES[id]||workout.title;
       workout.exercises=clone(rows);
     });
+    try{if(typeof TIPS!=="undefined")TIPS["Seitheben Maschine"]="Ellenbogen führen, Schultern unten lassen und kontrolliert bis etwa Schulterhöhe heben.";}catch{}
     return true;
   }
 
@@ -69,7 +70,9 @@
       if(totalSets<13||totalSets>24)issues.push(`${id}: Satzvolumen ${totalSets} außerhalb Zielbereich 13–24`);
       result.workouts[id]={exercises:workout.exercises.length,sets:totalSets};
     });
-    ["Kabel-Flys","Crunch-Maschine"].forEach(name=>{if(!WORKOUTS.some(w=>(w.exercises||[]).some(e=>e[0]===name)))issues.push(`${name}: bevorzugter Name fehlt`);});
+    ["Kabel-Flys","Crunch-Maschine","Seitheben Maschine"].forEach(name=>{if(!WORKOUTS.some(w=>(w.exercises||[]).some(e=>e[0]===name)))issues.push(`${name}: bevorzugter Name fehlt`);});
+    const push=WORKOUTS.find(w=>w.id==="push");
+    if(push&&push.exercises.some(e=>e[0]==="Seitheben am Kabelzug"))issues.push("Push: falsche Seitheben-Variante");
     if(isMusclePlan()){
       const week=window.RepPilotTrainingPlan?.selectedWeek?.()||[];
       const sequence=[1,2,3,4,5].map(day=>week.find(x=>Number(x.day)===day)?.type+":"+(week.find(x=>Number(x.day)===day)?.workoutId||week.find(x=>Number(x.day)===day)?.runId||""));
