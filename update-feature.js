@@ -1,8 +1,11 @@
 (() => {
   if (window.RepPilotUpdate) return;
 
+  const VERSION = "11.8.66";
   const CHECK_INTERVAL = 5 * 60 * 1000;
   const ACTION_TIMEOUT = 3500;
+  const STRENGTH_KEY = "reppilot-strength-tests-v1";
+  const UPDATE_STRENGTH_BACKUP_KEY = "reppilot-strength-tests-update-backup-v1";
   let lastCheck = 0;
   let latestVersion = null;
   let updating = false;
@@ -24,6 +27,45 @@
       if (av !== bv) return av > bv ? 1 : -1;
     }
     return 0;
+  };
+
+  const validStrengthRaw = raw => {
+    if (!raw) return false;
+    try {
+      const rows = JSON.parse(raw);
+      return Array.isArray(rows) && rows.length > 0;
+    } catch {
+      return false;
+    }
+  };
+
+  const backupStrengthMeasurements = () => {
+    try {
+      window.RepPilotTrainingDataPersistence?.refreshBackup?.();
+      const raw = localStorage.getItem(STRENGTH_KEY);
+      if (validStrengthRaw(raw)) {
+        localStorage.setItem(UPDATE_STRENGTH_BACKUP_KEY, raw);
+        return true;
+      }
+    } catch (error) {
+      console.warn("Kraftmessungen konnten vor dem Update nicht zusätzlich gesichert werden", error);
+    }
+    return false;
+  };
+
+  const restoreStrengthMeasurements = () => {
+    try {
+      const current = localStorage.getItem(STRENGTH_KEY);
+      const backup = localStorage.getItem(UPDATE_STRENGTH_BACKUP_KEY);
+      if (!validStrengthRaw(current) && validStrengthRaw(backup)) {
+        localStorage.setItem(STRENGTH_KEY, backup);
+      } else if (validStrengthRaw(current)) {
+        localStorage.setItem(UPDATE_STRENGTH_BACKUP_KEY, current);
+      }
+      window.RepPilotTrainingDataPersistence?.refreshBackup?.();
+    } catch (error) {
+      console.warn("Kraftmessungen konnten nach dem Update nicht wiederhergestellt werden", error);
+    }
   };
 
   const applyVisibleVersion = version => {
@@ -146,10 +188,11 @@
       button.disabled = true;
       button.textContent = "Aktualisiere…";
     }
-    if (text) text.textContent = "Cache wird bereinigt und RepPilot neu geladen…";
+    if (text) text.textContent = "Kraftmessungen werden gesichert, Cache bereinigt und RepPilot neu geladen…";
 
     let target = String(version || latestVersion || "").trim();
     try {
+      backupStrengthMeasurements();
       if (!target) target = await fetchLatestVersion();
       if (target) sessionStorage.setItem("reppilot-update-target", target);
       await cleanRepPilotRuntime();
@@ -161,6 +204,7 @@
   }
 
   const init = () => {
+    restoreStrengthMeasurements();
     const current = readCurrentVersion();
     applyVisibleVersion(current);
     ensureBanner();
@@ -172,10 +216,13 @@
   };
 
   window.RepPilotUpdate = {
+    version: VERSION,
     check: () => checkForUpdate({ force: true }),
     install: forceUpdate,
     current: readCurrentVersion,
-    clean: cleanRepPilotRuntime
+    clean: cleanRepPilotRuntime,
+    backupStrengthMeasurements,
+    restoreStrengthMeasurements
   };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
