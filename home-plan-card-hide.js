@@ -1,10 +1,11 @@
 (() => {
-  const VERSION="11.8.66";
+  const VERSION="11.8.67";
   const CARD_ID="selectedTrainingPlanHome";
   const FALLBACK_CLASS="rp-nav-visual-fallback";
   const KEYBOARD_CLASS="rp-keyboard-open";
   let raf=0;
   let keyboardTimer=0;
+  let workoutWasActive=false;
 
   const removePlanCard=()=>{
     const card=document.getElementById(CARD_ID);
@@ -136,10 +137,31 @@
     });
   }
 
+  function resetWorkoutViewport(){
+    const workout=document.getElementById("workout");
+    const active=!!workout?.classList.contains("active");
+    if(active&&!workoutWasActive){
+      const reset=()=>{
+        window.scrollTo(0,0);
+        document.documentElement.scrollTop=0;
+        document.body.scrollTop=0;
+      };
+      requestAnimationFrame(reset);
+      setTimeout(reset,60);
+    }
+    workoutWasActive=active;
+  }
+
   function init(){
     normalizePwaHead();ensureStyles();removePlanCard();loadPersonalRecords();
     const home=document.getElementById("home");
     if(home){const observer=new MutationObserver(removePlanCard);observer.observe(home,{childList:true,subtree:true});}
+    const workout=document.getElementById("workout");
+    if(workout){
+      workoutWasActive=workout.classList.contains("active");
+      const workoutObserver=new MutationObserver(resetWorkoutViewport);
+      workoutObserver.observe(workout,{attributes:true,attributeFilter:["class"]});
+    }
     const bodyObserver=new MutationObserver(()=>verifyNav(false));
     bodyObserver.observe(document.body,{childList:true});
     document.addEventListener("focusin",event=>{if(isTextInput(event.target))syncKeyboardState();},true);
@@ -150,7 +172,7 @@
     window.visualViewport?.addEventListener("scroll",()=>verifyNav(false),{passive:true});
     window.visualViewport?.addEventListener("resize",()=>{syncKeyboardState();verifyNav(true)},{passive:true});
     syncKeyboardState();verifyNav(true);setTimeout(()=>verifyNav(true),250);
-    window.RepPilotHomePlanCard={version:VERSION,remove:removePlanCard,refreshNavigation:()=>verifyNav(true)};
+    window.RepPilotHomePlanCard={version:VERSION,remove:removePlanCard,refreshNavigation:()=>verifyNav(true),resetWorkoutViewport};
   }
 
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
