@@ -11,14 +11,14 @@ const WORKOUTS=[
 ["Crunch-Maschine",3,30]
 ]},
 {id:"pull-legs",day:3,dayName:"Mittwoch",title:"Pull + Beine",exercises:[
-["Rumänisches Kreuzheben",3,60],
+["Beinpresse",3,120],
 ["Brustgestütztes Rudern",3,50],
 ["Beinstrecker",3,40],
 ["Latzug neutral",3,55],
-["Incline Curls",3,12],
-["Wadenheben",3,60],
+["Beinbeuger",3,40],
 ["Reverse Butterfly am Kabel",2,10],
-["Preacher Curls",2,20],
+["Incline Curls",2,12],
+["Wadenheben",3,60],
 ["Hanging Leg Raises",2,0]
 ]},
 {id:"upper-hypertrophy",day:5,dayName:"Freitag",title:"Oberkörper + Beine",exercises:[
