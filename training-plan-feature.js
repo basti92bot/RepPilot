@@ -1,5 +1,5 @@
 (() => {
-const VERSION="11.8.57";
+const VERSION="11.8.68";
 const KEY="reppilot-selected-training-plan";
 const PROFILE_KEY="reppilot-user-profile";
 const STRENGTH_KEY="reppilot-strength-tests-v1";
@@ -64,14 +64,14 @@ function ensureCustomWorkouts(){
     put({id:"home-a",day:1,dayName:"Montag",title:"Home Workout A",exercises:[["Kniebeugen",3,0],["Liegestütze bis Maximum",3,0],["Rückwärts-Ausfallschritte",3,0],["Rückenstrecker in Bauchlage",3,0],["Hüftheben",3,0],["Schulter-Liegestütze",2,0],["Diagonales Arm-Bein-Strecken",3,0],["Unterarmstütz",3,0]]});
     put({id:"home-b",day:3,dayName:"Mittwoch",title:"Home Workout B",exercises:[["Stationäre Ausfallschritte",3,0],["Enge Liegestütze",3,0],["Einbeiniges Hüftheben",3,0],["Schneeengel in Bauchlage",3,0],["Diagonales Arm-Bein-Strecken im Vierfüßlerstand",3,0],["Wadenheben",3,0],["Seitstütz",2,0],["Beinheben",3,0]]});
     put({id:"home-c",day:5,dayName:"Freitag",title:"Home Workout C",exercises:[["Tempo-Kniebeugen",3,0],["Liegestütze bis Maximum",3,0],["Rückwärts-Ausfallschritte",3,0],["Y-T-Heben in Bauchlage",3,0],["Hüftheben mit Beinwechsel",3,0],["Schulter-Liegestütze",2,0],["Bergsteiger",3,0],["Unterarmstütz",3,0]]});
-    put({id:"loss-a",day:1,dayName:"Montag",title:"Ganzkörper A",exercises:[["Beinpresse",3,80],["Brustpresse",3,40],["Latzug neutral",3,45],["Schulterpresse",2,25],["Rumänisches Kreuzheben",3,50],["Trizepsdrücken am Seilzug",2,20],["Schrägbank-Curls",2,10],["Crunch-Maschine",3,25]]});
+    put({id:"loss-a",day:1,dayName:"Montag",title:"Ganzkörper A",exercises:[["Beinpresse",3,80],["Brustpresse",3,40],["Latzug neutral",3,45],["Beinstrecker",2,35],["Beinbeuger",2,35],["Schulterpresse",2,25],["Schrägbank-Curls",2,10],["Trizepsdrücken am Seilzug",2,20],["Crunch-Maschine",2,25]]});
     put({id:"loss-b",day:5,dayName:"Freitag",title:"Ganzkörper B",exercises:[["Beinbeuger",3,35],["Schrägbankdrücken leicht",3,40],["Brustgestütztes Rudern",3,40],["Beinstrecker",3,35],["Seitheben",2,6],["Hammercurls",2,10],["Einarmiger Trizeps am Kabelzug",2,8],["Wadenheben",3,50],["Crunch-Maschine",3,25]]});
     put({id:"personal-upper-a",day:1,dayName:"",title:"Oberkörper A",exercises:[["Schrägbankdrücken",3,60],["Brustgestütztes Rudern",3,50],["Schulterpresse",3,35],["Latzug neutral",3,55],["Seitheben am Kabelzug",2,7.5],["Trizepsdrücken am Seilzug",2,25],["Schrägbank-Curls",2,12],["Crunch-Maschine",2,30]]});
-    put({id:"personal-lower-a",day:2,dayName:"",title:"Unterkörper A",exercises:[["Beinpresse",3,120],["Rumänisches Kreuzheben",3,60],["Beinstrecker",3,40],["Beinbeuger",3,40],["Wadenheben",3,60],["Hängendes Beinheben",2,0]]});
+    put({id:"personal-lower-a",day:2,dayName:"",title:"Unterkörper A",exercises:[["Beinpresse",3,120],["Beinstrecker",3,40],["Beinbeuger",3,40],["Wadenheben",3,60],["Hängendes Beinheben",2,0]]});
     put({id:"personal-upper-b",day:4,dayName:"",title:"Oberkörper B",exercises:[["Brustpresse",3,50],["Latzug breit",3,50],["Brustgestütztes Rudern",3,45],["Kabel-Flys",2,20],["Seitheben",2,8],["Einarmiger Trizeps am Kabelzug",2,10],["Scott-Curls",2,20],["Crunch-Maschine",2,30]]});
-    put({id:"personal-lower-b",day:5,dayName:"",title:"Unterkörper B",exercises:[["Beinpresse",3,100],["Rumänisches Kreuzheben",3,50],["Beinbeuger",3,35],["Beinstrecker",3,35],["Wadenheben",3,55],["Hängendes Beinheben",2,0]]});
+    put({id:"personal-lower-b",day:5,dayName:"",title:"Unterkörper B",exercises:[["Beinpresse",3,100],["Beinbeuger",3,35],["Beinstrecker",3,35],["Wadenheben",3,55],["Hängendes Beinheben",2,0]]});
     put({id:"personal-pull",day:2,dayName:"",title:"Pull",exercises:[["Brustgestütztes Rudern",3,50],["Latzug neutral",3,55],["Reverse Butterfly am Kabelzug",3,12],["Scott-Curls",3,20],["Schrägbank-Curls",2,12],["Hängendes Beinheben",2,0]]});
-    put({id:"personal-legs",day:3,dayName:"",title:"Beine",exercises:[["Beinpresse",3,120],["Rumänisches Kreuzheben",3,60],["Beinstrecker",3,40],["Beinbeuger",3,40],["Wadenheben",3,60],["Crunch-Maschine",2,30]]});
+    put({id:"personal-legs",day:3,dayName:"",title:"Beine",exercises:[["Beinpresse",3,120],["Beinstrecker",3,40],["Beinbeuger",3,40],["Wadenheben",3,60],["Crunch-Maschine",2,30]]});
   }catch(e){console.error("Trainingsplan-Erweiterung fehlgeschlagen",e)}
 }
 
