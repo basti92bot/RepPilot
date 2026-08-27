@@ -1,5 +1,5 @@
 {
-  "version": "11.8.67",
-  "releasedAt": "2026-08-24",
-  "notes": "Push-Tag und Workout-UI korrigiert. Im Push ersetzt 'Seitheben Maschine' das bisherige 'Seitheben am Kabelzug'; der Plan bleibt bei 8 Übungen und 21 Arbeitssätzen. Beim Wechsel in ein Krafttraining wird die Seite nun zuverlässig an den Anfang gesetzt, sodass Trainingsname und Abbrechen-Button nicht mehr unter dem Sticky-Header verschwinden. Manifest, Startseite, geänderte Module und Service-Worker-Cache sind auf v11.8.67 abgestimmt. Vor Release wurden alle 14 Kraft-/Home-Vorlagen auf Duplikate und Satzvolumen geprüft sowie Pause/Sticky-Aktionen, aktive Navigation, Übungs-Dropdown, Pushup-Logik, Progression, Krafttest inklusive Überspringen, Home-30-Sekunden-Pause, 2–5-Tage-Pläne und PWA-Konfiguration gegengeprüft."
+  "version": "11.8.68",
+  "releasedAt": "2026-08-27",
+  "notes": "Rumänisches Kreuzheben aus allen aktiven Trainingsplänen entfernt. Pull + Beine nutzt jetzt Beinstrecker und Beinbeuger. Auch Ganzkörper A sowie die personalisierten Unterkörper-/Beinpläne wurden entsprechend umgestellt. Der Plan-Audit blockiert künftig einen Release, falls Rumänisches Kreuzheben wieder in einem aktiven Plan auftaucht. Vor Release wurden alle 14 Kraft-/Home-Vorlagen, Satzvolumen, Fresh-Device-Precache, 2-Tage-Laufplan, 5-Tage-Mix sowie die bestehende Sticky-/Pause-, Navigation-, Dropdown-, Pushup-, Progressions-, Krafttest- und Home-Workout-Logik geprüft."
 }
