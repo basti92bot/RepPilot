@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.61";
+  const VERSION = "11.8.68";
 
   const replaceWorkout = (id,title,exercises) => {
     const workout = WORKOUTS.find(w => w.id === id);
@@ -22,9 +22,9 @@
   replaceWorkout("pull-legs","Pull + Beine",[
     ["Beinpresse",3,120],
     ["Brustgestütztes Rudern",3,50],
-    ["Rumänisches Kreuzheben",3,60],
+    ["Beinstrecker",3,40],
     ["Latzug neutral",3,55],
-    ["Beinbeuger",2,40],
+    ["Beinbeuger",3,40],
     ["Reverse Butterfly am Kabelzug",2,10],
     ["Schrägbank-Curls",2,12],
     ["Wadenheben",3,60],
