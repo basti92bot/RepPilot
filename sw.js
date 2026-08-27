@@ -1,26 +1,26 @@
-const CACHE="reppilot-v11-8-67";
-const VERSION="11.8.67";
+const CACHE="reppilot-v11-8-68";
+const VERSION="11.8.68";
 const ASSETS=[
   "./index.html",
   "./styles.css?v=11.8.10",
   "./header-fix.css?v=11.8.27",
-  "./manifest.json?v=11.8.67",
-  "./reppilot-muscleman-logo-v11.8.26.png?v=11.8.67",
-  "./reppilot-muscleman-v11.8.20.svg?v=11.8.67",
+  "./manifest.json?v=11.8.68",
+  "./reppilot-muscleman-logo-v11.8.26.png?v=11.8.68",
+  "./reppilot-muscleman-v11.8.20.svg?v=11.8.68",
   "./auth.js?v=11.8.8",
   "./storage-bridge.js?v=11.8.65",
-  "./app.js?v=11.8.8",
+  "./app.js?v=11.8.68",
   "./cloud-history-feature.js?v=11.8.64",
-  "./workout-fix.js?v=11.8.61",
+  "./workout-fix.js?v=11.8.68",
   "./run-feature.js?v=11.8.8",
   "./run-dashboard-feature.js?v=11.8.34",
   "./profile-feature.js?v=11.8.58",
   "./apple-health-feature.js?v=11.8.35",
   "./shortcut-health-feature.js?v=11.8.37",
   "./bodyweight-auto.js?v=11.8.58",
-  "./training-plan-feature.js?v=11.8.58",
-  "./home-plan-card-hide.js?v=11.8.67",
-  "./personal-records-feature.js?v=11.8.67",
+  "./training-plan-feature.js?v=11.8.68",
+  "./home-plan-card-hide.js?v=11.8.68",
+  "./personal-records-feature.js?v=11.8.68",
   "./home-workout-feature.js?v=11.8.58",
   "./onboarding-feature.js?v=11.8.58",
   "./progression-feature.js?v=11.8.58",
@@ -33,7 +33,7 @@ const ASSETS=[
   "./plan-title-fix.js?v=11.8.58",
   "./strength-test-feature.js?v=11.8.58",
   "./reset-feature.js?v=11.8.65",
-  "./training-plan-quality-feature.js?v=11.8.67",
+  "./training-plan-quality-feature.js?v=11.8.68",
   "./update-feature.js?v=11.8.66"
 ];
 
