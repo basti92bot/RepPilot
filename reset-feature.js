@@ -1,10 +1,11 @@
 (() => {
-  const VERSION = "11.8.65";
+  const VERSION = "11.8.69";
   const HISTORY_KEY = "reppilot-history";
   const PROFILE_KEY = "reppilot-user-profile";
   const WEIGHT_HISTORY_KEY = "reppilot-weight-history";
   const PLAN_KEY = "reppilot-selected-training-plan";
   const STRENGTH_TEST_KEY = "reppilot-strength-tests-v1";
+  const STRENGTH_STATE_KEY = "reppilot-strength-test-state-v2";
   const BACKUP_KEY = "reppilot-training-data-backup-v1";
 
   function injectStyles(){
@@ -66,7 +67,7 @@
       if(key&&key.startsWith("reppilot-history"))keys.push(key);
     }
     keys.forEach(key=>localStorage.removeItem(key));
-    [HISTORY_KEY,STRENGTH_TEST_KEY,BACKUP_KEY,"reppilot-last-cloud-sync","reppilot-cloud-history-sync-v1","reppilot-apple-health-sync"].forEach(key=>localStorage.removeItem(key));
+    [HISTORY_KEY,STRENGTH_TEST_KEY,STRENGTH_STATE_KEY,BACKUP_KEY,"reppilot-last-cloud-sync","reppilot-cloud-history-sync-v1","reppilot-apple-health-sync"].forEach(key=>localStorage.removeItem(key));
   }
 
   function refreshScreens(){
