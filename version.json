@@ -1,5 +1,5 @@
 {
-  "version": "11.8.84",
+  "version": "11.8.85",
   "releasedAt": "2026-08-28",
-  "notes": "Ski-Workout angepasst: normaler Seitstuetz durch Seitstuetz mit erhoehten Fuessen auf Sofa oder Bettkante ersetzt. Normale Variante bleibt als leichtere Alternative in der Beschreibung."
+  "notes": "Apple-Health-Bereich im Profil kompakter gemacht. Sichtbar bleiben nur Apple Health und Aktualisieren. Verbindungsstatus, Statistiken, Hinweistext und iPhone-Kurzbefehle liegen jetzt in einem aufklappbaren Details-Dropdown."
 }

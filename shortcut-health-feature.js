@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.36";
+  const VERSION="11.8.85";
   const TOKEN_KEY="reppilot-shortcut-health-token";
   const ENDPOINT="https://tpuufwcywwhrggfptzpi.supabase.co/functions/v1/shortcut-health-import";
 
@@ -36,7 +36,7 @@
     `;document.head.appendChild(s);
   }
   function ensureUI(){
-    const card=document.getElementById("appleHealthCard");if(!card)return false;
+    const card=document.getElementById("appleHealthCard"),details=document.getElementById("appleHealthDetailsContent");if(!card)return false;
     if(document.getElementById("shortcutHealthBox"))return true;
     ensureStyles();
     const box=document.createElement("div");box.id="shortcutHealthBox";box.className="shortcut-health-box";
@@ -50,7 +50,7 @@
         <button id="shortcutRegenerateBtn" type="button" class="secondary full" hidden>Neuen Schlüssel erzeugen</button>
       </div>
       <p id="shortcutHealthFeedback" class="shortcut-health-feedback"></p>`;
-    card.appendChild(box);
+    (details||card).appendChild(box);
     document.getElementById("shortcutTokenBtn").onclick=createOrCopyToken;
     document.getElementById("shortcutEndpointBtn").onclick=async()=>feedback(await copy(ENDPOINT)?"API-Adresse kopiert ✓":"Kopieren nicht möglich");
     document.getElementById("shortcutRegenerateBtn").onclick=()=>createToken(true);

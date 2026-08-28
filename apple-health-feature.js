@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.35";
+  const VERSION="11.8.85";
   const SYNC_KEY="reppilot-apple-health-sync";
   let syncing=false;
 
@@ -26,6 +26,12 @@
       .apple-health-metric small{display:block;color:var(--muted);font-size:10px;font-weight:900}
       .apple-health-metric strong{display:block;margin-top:3px;font-size:16px}
       .apple-health-note{margin:10px 0 0;color:var(--muted);font-size:12px;line-height:1.45}
+      .apple-health-details{margin-top:14px;border-top:1px solid var(--line)}
+      .apple-health-details summary{list-style:none;cursor:pointer;padding:12px 0 2px;font-size:13px;font-weight:900;color:var(--muted);display:flex;align-items:center;justify-content:space-between;gap:12px}
+      .apple-health-details summary::-webkit-details-marker{display:none}
+      .apple-health-details summary:after{content:"⌄";font-size:18px;color:var(--muted);transition:transform .18s ease}
+      .apple-health-details[open] summary:after{transform:rotate(180deg)}
+      .apple-health-details-content{padding-top:2px}
     `;
     document.head.appendChild(style);
   }
@@ -45,9 +51,14 @@
         <div class="apple-health-title"><div class="apple-health-icon"></div><div><small>APPLE FITNESS</small><h3>Apple Health</h3></div></div>
         <button id="appleHealthRefreshBtn" class="secondary" type="button">Aktualisieren</button>
       </div>
-      <div class="apple-health-state" id="appleHealthState"><strong>HealthKit-Bridge bereit</strong><span>Noch keine Apple-Workouts importiert.</span></div>
-      <div id="appleHealthMetrics" class="apple-health-metrics" hidden></div>
-      <p class="apple-health-note">RepPilot liest HealthKit nicht direkt im Browser. Die iPhone-Bridge überträgt ausschließlich die von dir freigegebenen Workout-Daten in deinen eigenen RepPilot-Account.</p>`;
+      <details id="appleHealthDetails" class="apple-health-details">
+        <summary>Details anzeigen</summary>
+        <div id="appleHealthDetailsContent" class="apple-health-details-content">
+          <div class="apple-health-state" id="appleHealthState"><strong>HealthKit-Bridge bereit</strong><span>Noch keine Apple-Workouts importiert.</span></div>
+          <div id="appleHealthMetrics" class="apple-health-metrics" hidden></div>
+          <p class="apple-health-note">RepPilot liest HealthKit nicht direkt im Browser. Die iPhone-Bridge überträgt ausschließlich die von dir freigegebenen Workout-Daten in deinen eigenen RepPilot-Account.</p>
+        </div>
+      </details>`;
     profileCard.insertAdjacentElement("afterend",card);
     document.getElementById("appleHealthRefreshBtn").onclick=syncFromCloud;
     return card;
