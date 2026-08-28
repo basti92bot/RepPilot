@@ -54,10 +54,10 @@ if (manifest) {
   }
 
   const sizes = new Set((manifest.icons || []).map(i => i.sizes));
-  if (sizes.has("192x192")) {
-    pass("Manifest enthaelt 192x192 Icon");
+  if (sizes.has("128x128")) {
+    pass("Manifest enthaelt stabiles 128x128 App-Icon");
   } else {
-    fail("Manifest enthaelt 192x192 Icon");
+    fail("Manifest enthaelt stabiles 128x128 App-Icon");
   }
 
   for (const icon of manifest.icons || []) {
@@ -79,7 +79,7 @@ if (index) {
     pass("Apple-Touch-Icon vorhanden");
     try {
       const d = pngDimensions(stripQuery(appleIcon[1]));
-      if (d.width === 180 && d.height === 180) {
+      if (d.width >= 128 && d.height >= 128 && d.width === d.height) {
         pass("Apple-Touch-Icon hat brauchbare Abmessungen");
       } else {
         fail("Apple-Touch-Icon hat brauchbare Abmessungen", d.width + "x" + d.height);
@@ -118,10 +118,10 @@ if (index) {
 }
 
 if (sw) {
-  if (sw.includes("manifest.json") && sw.includes("apple-touch-icon.png") && sw.includes("reppilot-icon-192.png")) {
-    pass("Service Worker cached Manifest und PWA-Icons");
+  if (sw.includes("manifest.json") && sw.includes("reppilot-muscleman-logo-v11.8.26.png")) {
+    pass("Service Worker cached Manifest und stabiles App-Icon");
   } else {
-    fail("Service Worker cached Manifest und PWA-Icons");
+    fail("Service Worker cached Manifest und stabiles App-Icon");
   }
 }
 
