@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.81";
+  const VERSION = "11.8.82";
   const RUNNER_EXERCISES = [
     {
       icon:"🦶",
@@ -60,6 +60,81 @@
   ];
 
   let runnerIndex = 0;
+
+  const SKI_EXERCISES = [
+    {
+      icon:"🧱",
+      name:"Wall Sit",
+      dose:"3 × 45–60 Sek.",
+      equipment:"Wand",
+      text:"Rücken flach an die Wand, Knie ungefähr 90 Grad. Druck gleichmäßig über beide Füße verteilen und die Position sauber halten."
+    },
+    {
+      icon:"🏋️",
+      name:"Goblet Squats",
+      dose:"3 × 12",
+      equipment:"Kettlebell optional",
+      text:"Kettlebell vor der Brust halten. Kontrolliert tief gehen, Knie folgen den Fußspitzen und der Oberkörper bleibt stabil. Ohne Kettlebell als langsame Kniebeuge."
+    },
+    {
+      icon:"↩️",
+      name:"Rückwärts-Ausfallschritte",
+      dose:"3 × 10 je Seite",
+      equipment:"Kettlebell optional",
+      text:"Großen Schritt zurück und kontrolliert absenken. Über das vordere Bein hochdrücken. Mit Kettlebell vor der Brust schwerer."
+    },
+    {
+      icon:"⬇️",
+      name:"Langsame Step-Downs",
+      dose:"3 × 8 je Seite",
+      equipment:"Stabile Stufe oder niedriger Hocker",
+      text:"Auf einer stabilen Erhöhung stehen und das freie Bein langsam Richtung Boden absenken. Das Standknie bleibt kontrolliert über dem Fuß. Drei Sekunden absenken."
+    },
+    {
+      icon:"↔️",
+      name:"Seitliche Ausfallschritte",
+      dose:"3 × 10 je Seite",
+      equipment:"Kettlebell optional",
+      text:"Seitlich weit aussteigen, Hüfte nach hinten schieben und das andere Bein gestreckt lassen. Über das belastete Bein zurückdrücken."
+    },
+    {
+      icon:"⛷️",
+      name:"Skater Jumps",
+      dose:"3 × 20 Sek.",
+      equipment:"Ohne Equipment",
+      text:"Seitlich von einem Bein auf das andere springen. Landung weich abfangen, Knie stabil halten und kurz kontrollieren, bevor du zurückspringst."
+    },
+    {
+      icon:"🦶",
+      name:"Einbeiniges Wadenheben",
+      dose:"3 × 15 je Seite",
+      equipment:"Wand nur für Balance",
+      text:"Langsam auf den Vorfuß drücken, oben kurz halten und kontrolliert absenken. Volle Bewegungsamplitude nutzen."
+    },
+    {
+      icon:"⚖️",
+      name:"Einbeinige Kniebeuge",
+      dose:"2 × 8 je Seite",
+      equipment:"Stuhl oder Wand optional",
+      text:"Auf einem Bein kontrolliert absenken. Hüfte bleibt stabil und das Knie folgt der Fußrichtung. Bei Bedarf leicht an Wand oder Stuhl festhalten."
+    },
+    {
+      icon:"🔥",
+      name:"Seitstütz",
+      dose:"2 × 30–45 Sek. je Seite",
+      equipment:"Bodenmatte",
+      text:"Körper in einer Linie halten. Hüfte aktiv oben lassen und den Rumpf fest anspannen."
+    },
+    {
+      icon:"🏁",
+      name:"Wall Sit Finish",
+      dose:"1 × Maximum sauber",
+      equipment:"Wand",
+      text:"Zum Abschluss noch einmal Wall Sit. So lange halten, wie die Position technisch sauber bleibt."
+    }
+  ];
+
+  let skiIndex = 0;
 
   function styles(){
     if(document.getElementById("trainingHubStyles")) return;
@@ -163,6 +238,15 @@
         </div>
         <div class="training-hub-actions"><button id="openRunnerStrength">Öffnen</button></div>
       </article>
+
+      <article class="card training-hub-card">
+        <div class="training-hub-icon">⛷️</div>
+        <div>
+          <h3>Ski-Workout zuhause</h3>
+          <p>Oberschenkel, seitliche Stabilität, Einbein-Kontrolle, Waden und Core. Ca. 25 Minuten. Kettlebell optional.</p>
+        </div>
+        <div class="training-hub-actions"><button id="openSkiStrength">Öffnen</button></div>
+      </article>
       <article class="card training-hub-card">
         <div class="training-hub-icon">🏠</div>
         <div>
@@ -177,6 +261,7 @@
       </article>`;
     document.getElementById("openStretchTraining").onclick=openStretching;
     document.getElementById("openRunnerStrength").onclick=renderRunnerOverview;
+    document.getElementById("openSkiStrength").onclick=renderSkiOverview;
     root.querySelectorAll("[data-home-workout]").forEach(b=>b.onclick=()=>startHome(b.dataset.homeWorkout));
   }
 
@@ -235,6 +320,62 @@
     document.getElementById("runnerDone").onclick=backToHub;
   }
 
+
+  function renderSkiOverview(){
+    document.getElementById("trainingHubOverview").hidden=true;
+    const session=document.getElementById("runnerStrengthSession");
+    session.hidden=false;
+    session.innerHTML=`
+      <div class="top"><div><small>SKI-TRAINING ZUHAUSE</small><h2>Ski-Workout</h2></div><button id="closeSkiTraining" class="secondary">Zurück</button></div>
+      <article class="card">
+        <p>Diese Einheit bereitet Beine und Rumpf gezielt auf die Belastung beim Skifahren vor. Fokus auf Quadrizeps-Ausdauer, Bremskraft, seitliche Stabilität und Einbein-Kontrolle.</p>
+        <div class="runner-equipment"><span>⏱ ca. 25 Min.</span><span>🏠 zuhause</span><span>🧱 Wand</span><span>🧘 Matte</span><span>🏋️ Kettlebell optional</span></div>
+        <button id="startSkiRoutine" class="wide">Routine starten</button>
+      </article>
+      <div class="runner-list">
+        ${SKI_EXERCISES.map((x,i)=>`<article><h3>${i+1}. ${x.icon} ${x.name}</h3><p class="runner-dose">${x.dose}</p><p>${x.text}</p><small>${x.equipment}</small></article>`).join("")}
+      </div>`;
+    document.getElementById("closeSkiTraining").onclick=backToHub;
+    document.getElementById("startSkiRoutine").onclick=()=>{skiIndex=0;renderSkiStep()};
+  }
+
+  function renderSkiStep(){
+    const x=SKI_EXERCISES[skiIndex];
+    const session=document.getElementById("runnerStrengthSession");
+    session.innerHTML=`
+      <div class="top"><div><small>ÜBUNG ${skiIndex+1} VON ${SKI_EXERCISES.length}</small><h2>Ski-Workout</h2></div><button id="endSkiRoutine" class="secondary">Beenden</button></div>
+      <div class="track"><div style="width:${((skiIndex+1)/SKI_EXERCISES.length)*100}%"></div></div>
+      <article class="card runner-session-card">
+        <div class="runner-session-icon">${x.icon}</div>
+        <h2>${x.name}</h2>
+        <p class="runner-dose">${x.dose}</p>
+        <div class="note">${x.text}</div>
+        <div class="runner-equipment"><span>${x.equipment}</span></div>
+        <div class="runner-session-actions">
+          <button id="skiPrev" class="secondary" ${skiIndex===0?"disabled":""}>Zurück</button>
+          <button id="skiNext">${skiIndex===SKI_EXERCISES.length-1?"Routine abschließen":"Übung erledigt"}</button>
+        </div>
+      </article>`;
+    document.getElementById("endSkiRoutine").onclick=renderSkiOverview;
+    document.getElementById("skiPrev").onclick=()=>{if(skiIndex>0){skiIndex--;renderSkiStep()}};
+    document.getElementById("skiNext").onclick=()=>{
+      if(skiIndex>=SKI_EXERCISES.length-1)return renderSkiComplete();
+      skiIndex++;renderSkiStep();
+    };
+  }
+
+  function renderSkiComplete(){
+    const session=document.getElementById("runnerStrengthSession");
+    session.innerHTML=`
+      <article class="card center">
+        <div class="check">✓</div>
+        <h2>Ski-Workout erledigt</h2>
+        <p class="muted">Oberschenkel, seitliche Stabilität, Waden und Core sind durch.</p>
+        <button id="skiDone" class="wide">Zurück zu Training</button>
+      </article>`;
+    document.getElementById("skiDone").onclick=backToHub;
+  }
+
   function backToHub(){
     document.getElementById("runnerStrengthSession").hidden=true;
     document.getElementById("trainingHubOverview").hidden=false;
@@ -247,7 +388,7 @@
     renderHub();
     const nav=document.querySelector('nav button[data-view="trainingHub"]');
     if(nav) nav.addEventListener("click",()=>setTimeout(()=>{renderHub();backToHub()},0));
-    window.RepPilotTrainingHub={version:VERSION,runnerExercises:RUNNER_EXERCISES,refresh:renderHub};
+    window.RepPilotTrainingHub={version:VERSION,runnerExercises:RUNNER_EXERCISES,skiExercises:SKI_EXERCISES,refresh:renderHub};
   }
 
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});
