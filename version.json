@@ -1,5 +1,5 @@
 {
-  "version": "11.8.69",
+  "version": "11.8.70",
   "releasedAt": "2026-08-28",
-  "notes": "Kraftmessung dauerhaft repariert. Messungen werden jetzt redundant gespeichert und direkt nach dem Speichern wieder eingelesen und verifiziert. Alte und neue Übungsnamen werden bei der Fälligkeitsprüfung vereinheitlicht, damit ein gespeicherter Test nicht wegen einer Namensänderung erneut als fällig erscheint. Der zusätzliche Bestätigungsstatus wird durch Storage-Backup, App-Updates und normale localStorage-Clears geschützt und nur beim expliziten Zurücksetzen der Trainingsdaten gelöscht. Vor Release wurden Syntax, Speichern/Wiederfinden, Alias-Migration, 28-Tage-Fälligkeit, Home-Benchmarks, Fresh-Device-Precache, Sticky-/Pause-Aktionen, Navigation, Pushup-Logik, Progression, Krafttest-Skip, Home-Workout, alle 14 Trainingsvorlagen, 2-Tage-Laufplan und 5-Tage-Mix geprüft."
+  "notes": "Oberkörper-Training erweitert: Bauch Rotation wurde nach der Crunch-Maschine mit 2 Sätzen bei 20 kg ergänzt. Technikvorgabe: 10 kontrollierte Wiederholungen je Seite, ohne Schwung und mit gleicher Belastung rechts/links. Der Oberkörper-Tag umfasst damit 24 Arbeitssätze und wird mit ca. 50–60 Minuten angegeben. Vor Release wurden Syntax, PWA/Cache, Übungszuordnung, Pause/Sticky-Aktionen, Navigation, Pushup-Logik, Progression, Krafttest, Home-Workout, 2–5-Tage-Pläne, 2-Tage-Laufplan und 5-Tage-Mix geprüft."
 }
