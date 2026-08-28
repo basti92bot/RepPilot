@@ -1,5 +1,5 @@
 {
-  "version": "11.8.87",
+  "version": "11.8.88",
   "releasedAt": "2026-08-28",
-  "notes": "Startansicht auf iPhone kompakter: Header, Logo und oberer Abstand reduziert, damit das heutige Workout beim Öffnen vollständig sichtbar ist."
+  "notes": "Startansicht weiter optimiert: Abstand unter dem heutigen Workout reduziert, damit die Überschrift Wochenplan auf dem iPhone vollständig oberhalb der Navigation sichtbar ist."
 }
