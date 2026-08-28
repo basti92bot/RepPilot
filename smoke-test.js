@@ -12,6 +12,13 @@ const fail = (label, detail) => {
 const exists = rel => fs.existsSync(path.join(root, rel));
 const read = rel => fs.readFileSync(path.join(root, rel), "utf8");
 const stripQuery = value => value.split("?")[0].replace(/^\.\//, "");
+const pngDimensions = rel => {
+  const buf = fs.readFileSync(path.join(root, rel));
+  if (buf.length < 24 || buf[0] !== 0x89 || buf.toString("ascii", 1, 4) !== "PNG") {
+    throw new Error("kein gueltiges PNG");
+  }
+  return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
+};
 
 let index = "";
 let manifest = null;
@@ -70,6 +77,16 @@ if (index) {
   const appleIcon = index.match(/rel=["']apple-touch-icon["'][^>]+href=["']([^"']+)["']/i);
   if (appleIcon && exists(stripQuery(appleIcon[1]))) {
     pass("Apple-Touch-Icon vorhanden");
+    try {
+      const d = pngDimensions(stripQuery(appleIcon[1]));
+      if (d.width >= 180 && d.height >= 180 && d.width === d.height) {
+        pass("Apple-Touch-Icon hat brauchbare Abmessungen");
+      } else {
+        fail("Apple-Touch-Icon hat brauchbare Abmessungen", d.width + "x" + d.height);
+      }
+    } catch (e) {
+      fail("Apple-Touch-Icon hat brauchbare Abmessungen", e.message);
+    }
   } else {
     fail("Apple-Touch-Icon vorhanden");
   }
