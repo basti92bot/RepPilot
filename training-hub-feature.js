@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.78";
+  const VERSION = "11.8.81";
   const RUNNER_EXERCISES = [
     {
       icon:"🦶",
@@ -73,7 +73,18 @@
       .training-hub-card p{margin:0;color:var(--muted);font-size:14px;line-height:1.4}
       .training-hub-actions{display:grid;gap:8px}
       .home-workout-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
-      .home-workout-grid button{padding:11px 8px}
+      .home-workout-box{border:1px solid var(--line);border-radius:14px;background:#f9fafb;overflow:hidden}
+      .home-workout-box>button{width:100%;border-radius:0}
+      .home-workout-details{border-top:1px solid var(--line)}
+      .home-workout-details summary{list-style:none;cursor:pointer;padding:11px 12px;font-size:13px;font-weight:900;display:flex;justify-content:space-between;align-items:center;gap:10px}
+      .home-workout-details summary::-webkit-details-marker{display:none}
+      .home-workout-details summary:after{content:"⌄";font-size:17px;color:var(--muted);transition:transform .18s ease}
+      .home-workout-details[open] summary:after{transform:rotate(180deg)}
+      .home-workout-exercises{list-style:none;margin:0;padding:0;border-top:1px solid var(--line);background:#fff}
+      .home-workout-exercises li{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border-bottom:1px solid var(--line);font-size:13px}
+      .home-workout-exercises li:last-child{border-bottom:0}
+      .home-workout-exercises strong{font-size:13px}
+      .home-workout-exercises span{white-space:nowrap;color:var(--muted);font-weight:800}
       .runner-equipment{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 16px}
       .runner-equipment span{padding:7px 9px;border-radius:999px;background:#f3f4f6;font-size:12px;font-weight:800}
       .runner-list{display:grid;gap:10px;margin-top:14px}
@@ -113,6 +124,28 @@
     if(typeof start==="function") start(id);
   }
 
+  function homeWorkoutData(id){
+    try{
+      return Array.isArray(WORKOUTS)?WORKOUTS.find(w=>w.id===id)||null:null;
+    }catch{return null}
+  }
+
+  function homeWorkoutMarkup(id,label){
+    const workout=homeWorkoutData(id);
+    const exercises=Array.isArray(workout?.exercises)?workout.exercises:[];
+    const list=exercises.length
+      ? exercises.map(e=>`<li><strong>${e?.[0]||"Übung"}</strong><span>${Number(e?.[1]||0)} ${Number(e?.[1]||0)===1?"Satz":"Sätze"}</span></li>`).join("")
+      : '<li><strong>Übungen werden beim Start geladen</strong></li>';
+    return `
+      <div class="home-workout-box">
+        <button data-home-workout="${id}">${label}</button>
+        <details class="home-workout-details">
+          <summary>Übungen anzeigen</summary>
+          <ul class="home-workout-exercises">${list}</ul>
+        </details>
+      </div>`;
+  }
+
   function renderHub(){
     const root=document.getElementById("trainingHubCards");
     if(!root)return;
@@ -136,9 +169,9 @@
           <h3>Home Workout</h3>
           <p>Ganzkörpertraining zuhause. Bodenmatte reicht. 30 Sekunden Pause.</p>
           <div class="home-workout-grid">
-            <button data-home-workout="home-a">Workout A</button>
-            <button data-home-workout="home-b">Workout B</button>
-            <button data-home-workout="home-c">Workout C</button>
+            ${homeWorkoutMarkup("home-a","Workout A")}
+            ${homeWorkoutMarkup("home-b","Workout B")}
+            ${homeWorkoutMarkup("home-c","Workout C")}
           </div>
         </div>
       </article>`;

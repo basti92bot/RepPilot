@@ -1,5 +1,5 @@
 {
-  "version": "11.8.80",
+  "version": "11.8.81",
   "releasedAt": "2026-08-28",
-  "notes": "Kraftmessung im Home Workout vollstaendig deaktiviert. Home Workout A, B und C zeigen keine 4-Wochen-Kraftmessung, keinen Benchmark-faellig-Hinweis und keine uebernommene Messung mehr. Studio-Trainings bleiben unveraendert."
+  "notes": "Home Workout im Reiter Training erweitert. Workout A, B und C haben jetzt jeweils ein Dropdown 'Übungen anzeigen' mit Übungsnamen und Satzanzahl direkt vor dem Start."
 }
