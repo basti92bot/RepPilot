@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.69";
+  const VERSION="11.8.80";
   const KEY="reppilot-strength-tests-v1";
   const STATE_KEY="reppilot-strength-test-state-v2";
   const INTERVAL_DAYS=28;
@@ -102,6 +102,7 @@
     return null;
   }
   function due(name,workoutId=currentWorkoutId()){
+    if(isHomeWorkoutId(workoutId))return false;
     if(!tracked(name))return false;
     const last=latestFor(name,workoutId);
     if(!last)return true;
@@ -231,6 +232,13 @@
 
   function applyInline(){
     ensureStyles();ensureInlinePanel();ensureAppliedHint();const e=currentExercise(),workoutId=currentWorkoutId(),inSet=typeof phase!=="undefined"&&phase==="set",firstSet=typeof si!=="undefined"&&si===0;
+    const applied=document.getElementById("strengthAppliedHint");
+    if(isHomeWorkoutId(workoutId)){
+      hideInline();
+      if(applied)applied.hidden=true;
+      const setPanel=document.getElementById("setPanel");if(setPanel&&inSet)setPanel.hidden=false;
+      return;
+    }
     if(!e||!inSet){hideInline();return;}
     if(firstSet&&due(e.name,workoutId)&&!e.strengthTestApplied&&!e.strengthTestSkipped){showInline(e);return;}
     hideInline();const setPanel=document.getElementById("setPanel");if(setPanel)setPanel.hidden=false;showApplied(e);
@@ -243,7 +251,7 @@
   function markPlanDue(){
     document.querySelectorAll(".rp-day-exercise-list li").forEach(li=>{
       const strong=li.querySelector("strong"),name=(li.dataset.strengthName||strong?.childNodes?.[0]?.nodeValue||strong?.textContent||"").trim();if(!name)return;li.dataset.strengthName=name;
-      const workoutId=workoutIdForListItem(li),existing=li.querySelector(".rp-strength-due"),shouldShow=tracked(name)&&due(name,workoutId);
+      const workoutId=workoutIdForListItem(li),existing=li.querySelector(".rp-strength-due"),shouldShow=!isHomeWorkoutId(workoutId)&&tracked(name)&&due(name,workoutId);
       if(shouldShow&&!existing){const badge=document.createElement("small");badge.className="rp-strength-due";badge.textContent=isBodyweight(name,workoutId)?"Benchmark fällig":"Krafttest fällig";strong?.appendChild(badge);}else if(!shouldShow&&existing)existing.remove();
     });
   }

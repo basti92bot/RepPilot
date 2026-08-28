@@ -1,5 +1,5 @@
 {
-  "version": "11.8.79",
+  "version": "11.8.80",
   "releasedAt": "2026-08-28",
-  "notes": "Endloses Leer-Scrollen auf iPhone behoben. Der alte Visual-Viewport-Fallback hat die Bottom-Navigation beim Scrollen absolut immer weiter nach unten verschoben und damit die Dokumenthoehe vergroessert. Dieser Fallback wurde entfernt. Bottom-Navigation bleibt jetzt ausschliesslich fixed, View-Wechsel setzen die Scrollposition auf 0."
+  "notes": "Kraftmessung im Home Workout vollstaendig deaktiviert. Home Workout A, B und C zeigen keine 4-Wochen-Kraftmessung, keinen Benchmark-faellig-Hinweis und keine uebernommene Messung mehr. Studio-Trainings bleiben unveraendert."
 }
