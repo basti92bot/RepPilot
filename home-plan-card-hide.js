@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.68";
+  const VERSION="11.8.69";
   const CARD_ID="selectedTrainingPlanHome";
   const FALLBACK_CLASS="rp-nav-visual-fallback";
   const KEYBOARD_CLASS="rp-keyboard-open";
