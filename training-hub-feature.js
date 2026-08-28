@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.83";
+  const VERSION = "11.8.84";
   const RUNNER_EXERCISES = [
     {
       icon:"🦶",
@@ -119,11 +119,11 @@
       text:"Hinteren Fuß erhöht auf Sofa, Hocker oder Bettkante ablegen. Vorderes Bein trägt die Last. Hüfte kontrolliert nach unten absenken und über den vorderen Fuß wieder hochdrücken. Kettlebell vor der Brust macht die Übung schwerer."
     },
     {
-      icon:"🔥",
-      name:"Seitstütz",
+      icon:"🛋️",
+      name:"Seitstütz mit Füßen erhöht",
       dose:"2 × 30–45 Sek. je Seite",
-      equipment:"Bodenmatte",
-      text:"Körper in einer Linie halten. Hüfte aktiv oben lassen und den Rumpf fest anspannen."
+      equipment:"Sofa oder Bettkante · Bodenmatte",
+      text:"Beide Füße erhöht auf Sofa oder Bettkante ablegen und den Seitstütz halten. Hüfte aktiv oben lassen und den Körper in einer Linie stabilisieren. Wenn das zu schwer ist, die Füße normal auf dem Boden lassen."
     },
     {
       icon:"🏁",
