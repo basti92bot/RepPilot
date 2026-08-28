@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.82";
+  const VERSION = "11.8.83";
   const RUNNER_EXERCISES = [
     {
       icon:"🦶",
@@ -112,11 +112,11 @@
       text:"Langsam auf den Vorfuß drücken, oben kurz halten und kontrolliert absenken. Volle Bewegungsamplitude nutzen."
     },
     {
-      icon:"⚖️",
-      name:"Einbeinige Kniebeuge",
-      dose:"2 × 8 je Seite",
-      equipment:"Stuhl oder Wand optional",
-      text:"Auf einem Bein kontrolliert absenken. Hüfte bleibt stabil und das Knie folgt der Fußrichtung. Bei Bedarf leicht an Wand oder Stuhl festhalten."
+      icon:"🛋️",
+      name:"Bulgarian Split Squats",
+      dose:"3 × 8 je Seite",
+      equipment:"Sofa, Hocker oder Bettkante · Kettlebell optional",
+      text:"Hinteren Fuß erhöht auf Sofa, Hocker oder Bettkante ablegen. Vorderes Bein trägt die Last. Hüfte kontrolliert nach unten absenken und über den vorderen Fuß wieder hochdrücken. Kettlebell vor der Brust macht die Übung schwerer."
     },
     {
       icon:"🔥",
@@ -329,7 +329,7 @@
       <div class="top"><div><small>SKI-TRAINING ZUHAUSE</small><h2>Ski-Workout</h2></div><button id="closeSkiTraining" class="secondary">Zurück</button></div>
       <article class="card">
         <p>Diese Einheit bereitet Beine und Rumpf gezielt auf die Belastung beim Skifahren vor. Fokus auf Quadrizeps-Ausdauer, Bremskraft, seitliche Stabilität und Einbein-Kontrolle.</p>
-        <div class="runner-equipment"><span>⏱ ca. 25 Min.</span><span>🏠 zuhause</span><span>🧱 Wand</span><span>🧘 Matte</span><span>🏋️ Kettlebell optional</span></div>
+        <div class="runner-equipment"><span>⏱ ca. 25 Min.</span><span>🏠 zuhause</span><span>🧱 Wand</span><span>🧘 Matte</span><span>🛋️ Sofa/Hocker</span><span>🏋️ Kettlebell optional</span></div>
         <button id="startSkiRoutine" class="wide">Routine starten</button>
       </article>
       <div class="runner-list">
