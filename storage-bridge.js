@@ -1,8 +1,9 @@
 (() => {
-  const VERSION = "11.8.65";
+  const VERSION = "11.8.69";
   const STABLE_HISTORY_KEY = "reppilot-history";
   const HISTORY_PREFIX = "reppilot-history";
   const STRENGTH_KEY = "reppilot-strength-tests-v1";
+  const STRENGTH_STATE_KEY = "reppilot-strength-test-state-v2";
   const BACKUP_KEY = "reppilot-training-data-backup-v1";
   const RESET_AT_KEY = "reppilot-training-reset-at";
   const SYNC_META_KEYS = [
@@ -24,6 +25,16 @@
       return Array.isArray(value) ? value : [];
     } catch {
       return [];
+    }
+  };
+
+  const parseObject = raw => {
+    if (!raw) return {};
+    try {
+      const value = JSON.parse(raw);
+      return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+    } catch {
+      return {};
     }
   };
 
@@ -123,16 +134,19 @@
     if (destructiveWriteAllowed) return;
     const historyRows = parseArray(nativeGet.call(localStorage, STABLE_HISTORY_KEY));
     const strengthRows = parseArray(nativeGet.call(localStorage, STRENGTH_KEY));
+    const strengthState = parseObject(nativeGet.call(localStorage, STRENGTH_STATE_KEY));
     const existing = readBackup();
     const mergedHistory = mergeHistory(existing.history || [], historyRows);
     const mergedStrength = mergeStrength(existing.strengthTests || [], strengthRows);
+    const mergedStrengthState = { ...(existing.strengthState || {}), ...strengthState };
     if (!mergedHistory.length && !mergedStrength.length && !existing.updatedAt) return;
     nativeSet.call(localStorage, BACKUP_KEY, JSON.stringify({
       schema: 1,
       version: VERSION,
       updatedAt: new Date().toISOString(),
       history: mergedHistory,
-      strengthTests: mergedStrength
+      strengthTests: mergedStrength,
+      strengthState: mergedStrengthState
     }));
   };
 
@@ -151,6 +165,11 @@
       const mergedStrength = mergeStrength(backup.strengthTests || [], currentStrength);
       if (mergedStrength.length) {
         nativeSet.call(localStorage, STRENGTH_KEY, JSON.stringify(mergedStrength));
+      }
+      const currentStrengthState = parseObject(nativeGet.call(localStorage, STRENGTH_STATE_KEY));
+      const mergedStrengthState = { ...(backup.strengthState || {}), ...currentStrengthState };
+      if (Object.keys(mergedStrengthState).length) {
+        nativeSet.call(localStorage, STRENGTH_STATE_KEY, JSON.stringify(mergedStrengthState));
       }
       writeBackup();
     } catch (error) {
@@ -192,13 +211,21 @@
       }
     }
 
+    if (normalizedKey === STRENGTH_STATE_KEY) {
+      const existing = parseObject(nativeGet.call(localStorage, STRENGTH_STATE_KEY));
+      const incoming = parseObject(value);
+      const result = nativeSet.call(localStorage, STRENGTH_STATE_KEY, JSON.stringify({ ...existing, ...incoming }));
+      writeBackup();
+      return result;
+    }
+
     return nativeSet.call(this, normalizedKey, value);
   };
 
   Storage.prototype.removeItem = function(key) {
     const normalizedKey = normalizeHistoryKey(key);
     if (this === localStorage && !destructiveWriteAllowed &&
-        (normalizedKey === STABLE_HISTORY_KEY || normalizedKey === STRENGTH_KEY || normalizedKey === BACKUP_KEY)) {
+        (normalizedKey === STABLE_HISTORY_KEY || normalizedKey === STRENGTH_KEY || normalizedKey === STRENGTH_STATE_KEY || normalizedKey === BACKUP_KEY)) {
       console.warn(`RepPilot schützt Trainingsdaten vor automatischem Löschen: ${normalizedKey}`);
       return;
     }
@@ -211,10 +238,12 @@
     }
     const historyRaw = nativeGet.call(localStorage, STABLE_HISTORY_KEY);
     const strengthRaw = nativeGet.call(localStorage, STRENGTH_KEY);
+    const strengthStateRaw = nativeGet.call(localStorage, STRENGTH_STATE_KEY);
     const backupRaw = nativeGet.call(localStorage, BACKUP_KEY);
     const result = nativeClear.call(localStorage);
     if (historyRaw) nativeSet.call(localStorage, STABLE_HISTORY_KEY, historyRaw);
     if (strengthRaw) nativeSet.call(localStorage, STRENGTH_KEY, strengthRaw);
+    if (strengthStateRaw) nativeSet.call(localStorage, STRENGTH_STATE_KEY, strengthStateRaw);
     if (backupRaw) nativeSet.call(localStorage, BACKUP_KEY, backupRaw);
     console.warn("RepPilot hat Trainingsdaten bei localStorage.clear() automatisch erhalten.");
     return result;
@@ -226,6 +255,7 @@
       for (const key of rawHistoryKeys()) nativeRemove.call(localStorage, key);
       nativeRemove.call(localStorage, STABLE_HISTORY_KEY);
       nativeRemove.call(localStorage, STRENGTH_KEY);
+      nativeRemove.call(localStorage, STRENGTH_STATE_KEY);
       nativeRemove.call(localStorage, BACKUP_KEY);
       SYNC_META_KEYS.forEach(key => nativeRemove.call(localStorage, key));
       nativeSet.call(localStorage, RESET_AT_KEY, new Date().toISOString());
@@ -239,6 +269,7 @@
     return {
       history: parseArray(nativeGet.call(localStorage, STABLE_HISTORY_KEY)),
       strengthTests: parseArray(nativeGet.call(localStorage, STRENGTH_KEY)),
+      strengthState: parseObject(nativeGet.call(localStorage, STRENGTH_STATE_KEY)),
       backup: readBackup()
     };
   }
@@ -247,6 +278,7 @@
     version: VERSION,
     historyKey: STABLE_HISTORY_KEY,
     strengthKey: STRENGTH_KEY,
+    strengthStateKey: STRENGTH_STATE_KEY,
     backupKey: BACKUP_KEY,
     resetLocalTrainingData,
     snapshot,
