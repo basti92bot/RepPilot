@@ -1,5 +1,5 @@
 {
-  "version": "11.8.85",
+  "version": "11.8.86",
   "releasedAt": "2026-08-28",
-  "notes": "Apple-Health-Bereich im Profil kompakter gemacht. Sichtbar bleiben nur Apple Health und Aktualisieren. Verbindungsstatus, Statistiken, Hinweistext und iPhone-Kurzbefehle liegen jetzt in einem aufklappbaren Details-Dropdown."
+  "notes": "Profil kompakter: Körper & Training und Trainingsplan wählen sind jetzt aufklappbare Dropdown-Bereiche. Apple Health bleibt kompakt. Daten & Verlauf mit Zurücksetzen wird immer ganz unten im Profil einsortiert."
 }

@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.69";
+  const VERSION = "11.8.86";
   const HISTORY_KEY = "reppilot-history";
   const PROFILE_KEY = "reppilot-user-profile";
   const WEIGHT_HISTORY_KEY = "reppilot-weight-history";
@@ -111,7 +111,9 @@
 
   function ensureUI(){
     const profile=document.getElementById("profile");
-    if(!profile||document.getElementById("resetDataSection"))return false;
+    if(!profile)return false;
+    const existing=document.getElementById("resetDataSection");
+    if(existing){if(existing!==profile.lastElementChild)profile.appendChild(existing);return true;}
     injectStyles();
     const section=document.createElement("div");
     section.id="resetDataSection";
@@ -120,6 +122,8 @@
     profile.appendChild(section);
     document.getElementById("resetTrainingDataBtn").onclick=resetTrainingData;
     document.getElementById("resetProfileSettingsBtn").onclick=resetProfileSettings;
+    const observer=new MutationObserver(()=>{if(section!==profile.lastElementChild)requestAnimationFrame(()=>profile.appendChild(section));});
+    observer.observe(profile,{childList:true});
     return true;
   }
 
