@@ -5,7 +5,7 @@ const ASSETS=[
   "./styles.css?v=11.8.10",
   "./header-fix.css?v=11.8.27",
   "./manifest.json?v=11.8.72",
-  "./reppilot-app-icon-v11.8.71.png",
+  "./reppilot-app-icon-v11.8.72.png",
   "./icon-192.png",
   "./icon-512.png",
   "./auth.js?v=11.8.8",
