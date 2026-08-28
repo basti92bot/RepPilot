@@ -1,5 +1,5 @@
 {
-  "version": "11.8.68",
-  "releasedAt": "2026-08-27",
-  "notes": "Rumänisches Kreuzheben aus allen aktiven Trainingsplänen entfernt. Pull + Beine nutzt jetzt Beinstrecker und Beinbeuger. Auch Ganzkörper A sowie die personalisierten Unterkörper-/Beinpläne wurden entsprechend umgestellt. Der Plan-Audit blockiert künftig einen Release, falls Rumänisches Kreuzheben wieder in einem aktiven Plan auftaucht. Vor Release wurden alle 14 Kraft-/Home-Vorlagen, Satzvolumen, Fresh-Device-Precache, 2-Tage-Laufplan, 5-Tage-Mix sowie die bestehende Sticky-/Pause-, Navigation-, Dropdown-, Pushup-, Progressions-, Krafttest- und Home-Workout-Logik geprüft."
+  "version": "11.8.69",
+  "releasedAt": "2026-08-28",
+  "notes": "Kraftmessung dauerhaft repariert. Messungen werden jetzt redundant gespeichert und direkt nach dem Speichern wieder eingelesen und verifiziert. Alte und neue Übungsnamen werden bei der Fälligkeitsprüfung vereinheitlicht, damit ein gespeicherter Test nicht wegen einer Namensänderung erneut als fällig erscheint. Der zusätzliche Bestätigungsstatus wird durch Storage-Backup, App-Updates und normale localStorage-Clears geschützt und nur beim expliziten Zurücksetzen der Trainingsdaten gelöscht. Vor Release wurden Syntax, Speichern/Wiederfinden, Alias-Migration, 28-Tage-Fälligkeit, Home-Benchmarks, Fresh-Device-Precache, Sticky-/Pause-Aktionen, Navigation, Pushup-Logik, Progression, Krafttest-Skip, Home-Workout, alle 14 Trainingsvorlagen, 2-Tage-Laufplan und 5-Tage-Mix geprüft."
 }
