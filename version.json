@@ -1,5 +1,5 @@
 {
-  "version": "11.8.73",
+  "version": "11.8.74",
   "releasedAt": "2026-08-28",
-  "notes": "iOS-Appsymbol repariert. Das fehlerhafte fast leere 192x192-PNG wurde ersetzt. Das echte RepPilot-Muskelmann-Logo aus dem Header wird jetzt als neues 192x192 Apple-Touch-Icon und PWA-Icon mit eigenem Dateinamen verwendet, damit iOS keinen alten Icon-Cache wiederverwendet. Smoke-Test erweitert um echte PNG-Abmessungspruefung."
+  "notes": "iOS Home-Screen-Reset. Apple-Touch-Icon auf den Safari-Standardpfad /RepPilot/apple-touch-icon.png umgestellt, exakt 180x180 und ohne Transparenz. Manifest auf ein einziges gueltiges 192x192-Muskelmann-PNG reduziert. Alte fehlerhafte PWA-Icon-Referenzen entfernt und Cache-Version angehoben."
 }

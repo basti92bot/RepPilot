@@ -54,10 +54,10 @@ if (manifest) {
   }
 
   const sizes = new Set((manifest.icons || []).map(i => i.sizes));
-  if (sizes.has("192x192") && sizes.has("512x512")) {
-    pass("Manifest enthaelt 192x192 und 512x512 Icons");
+  if (sizes.has("192x192")) {
+    pass("Manifest enthaelt 192x192 Icon");
   } else {
-    fail("Manifest enthaelt 192x192 und 512x512 Icons");
+    fail("Manifest enthaelt 192x192 Icon");
   }
 
   for (const icon of manifest.icons || []) {
@@ -79,7 +79,7 @@ if (index) {
     pass("Apple-Touch-Icon vorhanden");
     try {
       const d = pngDimensions(stripQuery(appleIcon[1]));
-      if (d.width >= 180 && d.height >= 180 && d.width === d.height) {
+      if (d.width === 180 && d.height === 180) {
         pass("Apple-Touch-Icon hat brauchbare Abmessungen");
       } else {
         fail("Apple-Touch-Icon hat brauchbare Abmessungen", d.width + "x" + d.height);
@@ -118,7 +118,7 @@ if (index) {
 }
 
 if (sw) {
-  if (sw.includes("manifest.json") && sw.includes("icon-192.png") && sw.includes("icon-512.png")) {
+  if (sw.includes("manifest.json") && sw.includes("apple-touch-icon.png") && sw.includes("reppilot-icon-192.png")) {
     pass("Service Worker cached Manifest und PWA-Icons");
   } else {
     fail("Service Worker cached Manifest und PWA-Icons");
