@@ -1,5 +1,5 @@
 {
-  "version": "11.8.86",
+  "version": "11.8.87",
   "releasedAt": "2026-08-28",
-  "notes": "Profil kompakter: Körper & Training und Trainingsplan wählen sind jetzt aufklappbare Dropdown-Bereiche. Apple Health bleibt kompakt. Daten & Verlauf mit Zurücksetzen wird immer ganz unten im Profil einsortiert."
+  "notes": "Startansicht auf iPhone kompakter: Header, Logo und oberer Abstand reduziert, damit das heutige Workout beim Öffnen vollständig sichtbar ist."
 }
