@@ -1,5 +1,5 @@
 {
-  "version": "11.8.71",
+  "version": "11.8.72",
   "releasedAt": "2026-08-28",
-  "notes": "iPhone-Appsymbol robust korrigiert. Das bestehende RepPilot-Muskelmann-Logo wird unverändert verwendet, liegt für iOS aber unter dem neuen physischen Dateinamen reppilot-app-icon-v11.8.71.png. Dadurch kann iOS nicht mehr auf den alten Home-Screen-Icon-Cache zurückfallen. Apple-Touch-Icon, PNG-Favicon, Manifest und Service Worker verwenden ausschließlich dieses neue App-Icon. Vor Release wurden 25 Smoke-Checks inklusive PWA/Cache, Pause/Sticky-Aktionen, Navigation, Pushup-Logik, Progression, Krafttest, Home-Workout und 2–5-Tage-Pläne bestanden."
+  "notes": "PWA/Home-Screen-Fix. Fehlerhafte Service-Worker-Registrierung in index.html korrigiert. Manifest um 192x192- und 512x512-App-Icons ergänzt. Service-Worker-Cache auf v11.8.72 angehoben. Neuer Smoke-Test prüft künftig Manifest, Icons, Service Worker, lokale Script-Referenzen und die Syntax aller Inline-Skripte sowie des Service Workers."
 }
