@@ -1,5 +1,5 @@
 {
-  "version": "11.8.78",
+  "version": "11.8.79",
   "releasedAt": "2026-08-28",
-  "notes": "Scrollposition beim Reiterwechsel korrigiert. Jeder View-Wechsel startet jetzt oben, statt die Scrollposition eines langen vorherigen Screens zu uebernehmen. install.html prueft beim Home-Screen-Start ausserdem version.json ohne Cache und laedt bei Bedarf automatisch die aktuelle Version."
+  "notes": "Endloses Leer-Scrollen auf iPhone behoben. Der alte Visual-Viewport-Fallback hat die Bottom-Navigation beim Scrollen absolut immer weiter nach unten verschoben und damit die Dokumenthoehe vergroessert. Dieser Fallback wurde entfernt. Bottom-Navigation bleibt jetzt ausschliesslich fixed, View-Wechsel setzen die Scrollposition auf 0."
 }
