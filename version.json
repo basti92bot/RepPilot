@@ -1,5 +1,5 @@
 {
-  "version": "11.8.76",
+  "version": "11.8.77",
   "releasedAt": "2026-08-28",
-  "notes": "Neuer Reiter Training. Dehnen, Läufer-Stabi zuhause und Home Workout gebündelt. Home Workout aus der Trainingsplan-Auswahl entfernt. Läufer-Stabi mit 8 Übungen für Füße, Sprunggelenke, Waden, Knie und Hüfte, komplett zuhause machbar, Kettlebell optional."
+  "notes": "Unnoetigen Scrollraum am Seitenende reduziert. Der feste 92px-Body-Abstand wurde durch die reale Bottom-Navigation plus iPhone-Safe-Area ersetzt. Workout-Abstand ebenfalls angepasst."
 }

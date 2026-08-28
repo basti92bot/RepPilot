@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.60";
+  const VERSION = "11.8.77";
   let bar = null;
   let observer = null;
 
@@ -21,7 +21,7 @@
       #rpWorkoutActions.single{grid-template-columns:1fr}
       #rpWorkoutActions button{min-height:52px;padding:12px 10px;border-radius:13px;font-size:15px;line-height:1.15}
       #rpWorkoutActions[hidden]{display:none!important}
-      #workout.rp-sticky-actions-active{padding-bottom:92px}
+      #workout.rp-sticky-actions-active{padding-bottom:76px}
       body.rp-sticky-workout #completeSetBtn,
       body.rp-sticky-workout #deferExerciseBtn,
       body.rp-sticky-workout #restPanel .actions,
