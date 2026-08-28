@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.39";
+  const VERSION = "11.8.76";
 
   function hasActiveWorkout(){
     try{return typeof active !== "undefined" && !!active;}catch{return false;}
@@ -25,12 +25,10 @@
     return true;
   }
 
-  function openStretchingWithoutStopping(){
+  function openTrainingWithoutStopping(){
     if(!hasActiveWorkout())return false;
-    try{if(typeof renderStretchPreview === "function")renderStretchPreview();}catch{}
-    try{if(typeof showStretchScreen === "function")showStretchScreen("overview");}catch{}
-    try{if(typeof show === "function")show("stretching");}catch{return false;}
-    markNav("stretching");
+    try{if(typeof show === "function")show("trainingHub");}catch{return false;}
+    markNav("trainingHub");
     return true;
   }
 
@@ -41,7 +39,7 @@
     let handled=false;
     if(view==="home")handled=resumeWorkout();
     else if(view==="history")handled=openHistoryWithoutStopping();
-    else if(view==="stretching")handled=openStretchingWithoutStopping();
+    else if(view==="trainingHub")handled=openTrainingWithoutStopping();
     if(handled){
       event.preventDefault();
       event.stopImmediatePropagation();

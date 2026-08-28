@@ -1,5 +1,5 @@
 {
-  "version": "11.8.75",
+  "version": "11.8.76",
   "releasedAt": "2026-08-28",
-  "notes": "iOS-Web-App-Identitaet neu aufgebaut. Manifest-ID und Start-URL sind neu, damit iOS keinen alten RepPilot-Web-App-Eintrag wiederverwendet. Apple-Touch-Icon und Manifest zeigen wieder direkt auf das letzte bekannte stabile RepPilot-Muskelmann-PNG. Alte experimentelle Icon-Pfade sind aus der aktiven PWA-Konfiguration entfernt."
+  "notes": "Neuer Reiter Training. Dehnen, Läufer-Stabi zuhause und Home Workout gebündelt. Home Workout aus der Trainingsplan-Auswahl entfernt. Läufer-Stabi mit 8 Übungen für Füße, Sprunggelenke, Waden, Knie und Hüfte, komplett zuhause machbar, Kettlebell optional."
 }

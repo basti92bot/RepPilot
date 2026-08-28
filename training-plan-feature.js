@@ -1,5 +1,5 @@
 (() => {
-const VERSION="11.8.68";
+const VERSION="11.8.76";
 const KEY="reppilot-selected-training-plan";
 const PROFILE_KEY="reppilot-user-profile";
 const STRENGTH_KEY="reppilot-strength-tests-v1";
@@ -10,7 +10,6 @@ const VALID_FREQUENCIES=[2,3,4,5];
 
 const PLANS=[
 {id:"personalized",title:"Mein Trainingsplan",subtitle:"Automatisch aus deinen Trainingstagen und Zielen erstellt",icon:"🎯"},
-{id:"home",title:"Home Workout",subtitle:"Nur Körpergewicht und Bodenmatte",icon:"🏠"},
 {id:"muscle",title:"Muskelaufbau Trainingsplan",subtitle:"Krafttraining im Studio mit Fokus auf Muskelaufbau",icon:"🏋️"},
 {id:"weightloss",title:"Abnehmtrainingsplan",subtitle:"Kraft und Cardio mit Fokus auf höheren Kalorienverbrauch",icon:"🔥"}
 ];
@@ -129,9 +128,9 @@ function profile(){
   box.querySelectorAll('[data-plan-select]').forEach(b=>b.onclick=()=>{save(b.dataset.planSelect);profile();renderSelectedHome()});return true;
 }
 
-function selectedWeek(){const id=read();return id==="personalized"?personalizedWeek():id==="home"?HOME_WEEK:id==="weightloss"?WEIGHTLOSS_WEEK:MUSCLE_WEEK}
+function selectedWeek(){const id=read();return id==="personalized"?personalizedWeek():id==="weightloss"?WEIGHTLOSS_WEEK:MUSCLE_WEEK}
 function dayIcon(x){return x.type==="run"?"🏃":x.type==="stretch"?"🧘":x.type==="rest"?"😴":"🏋️"}
-function openStretching(){const b=document.querySelector('nav button[data-view="stretching"]');if(b)b.click()}
+function openStretching(){try{if(typeof renderStretchPreview==="function")renderStretchPreview();if(typeof showStretchScreen==="function")showStretchScreen("overview");if(typeof show==="function")show("stretching");document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.view==="trainingHub"))}catch(e){console.warn("Dehnen konnte nicht geöffnet werden",e)}}
 function renderCustomWeek(week){
   const t=week.find(x=>x.day===new Date().getDay())||week[0],icon=document.getElementById("todayIcon"),label=document.getElementById("todayLabel"),title=document.getElementById("nextTitle"),meta=document.getElementById("nextMeta"),hint=document.getElementById("todayHint"),btn=document.getElementById("startBtn"),plan=document.getElementById("plan");
   if(icon)icon.textContent=dayIcon(t);if(label)label.textContent=`Heute ist ${t.dayName}`;if(title)title.textContent=t.title;if(meta)meta.textContent=t.meta;if(hint)hint.textContent=t.type==="run"?"Dein Lauftraining für heute.":t.type==="stretch"?"Mobilität für Rücken, Beine und Füße.":t.type==="rest"?"Heute ist Regeneration eingeplant.":"Dein Krafttraining für heute.";
