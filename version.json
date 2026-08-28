@@ -1,5 +1,5 @@
 {
-  "version": "11.8.70",
+  "version": "11.8.71",
   "releasedAt": "2026-08-28",
-  "notes": "Oberkörper-Training erweitert: Bauch Rotation wurde nach der Crunch-Maschine mit 2 Sätzen bei 20 kg ergänzt. Technikvorgabe: 10 kontrollierte Wiederholungen je Seite, ohne Schwung und mit gleicher Belastung rechts/links. Der Oberkörper-Tag umfasst damit 24 Arbeitssätze und wird mit ca. 50–60 Minuten angegeben. Vor Release wurden Syntax, PWA/Cache, Übungszuordnung, Pause/Sticky-Aktionen, Navigation, Pushup-Logik, Progression, Krafttest, Home-Workout, 2–5-Tage-Pläne, 2-Tage-Laufplan und 5-Tage-Mix geprüft."
+  "notes": "iPhone-Appsymbol robust korrigiert. Das bestehende RepPilot-Muskelmann-Logo wird unverändert verwendet, liegt für iOS aber unter dem neuen physischen Dateinamen reppilot-app-icon-v11.8.71.png. Dadurch kann iOS nicht mehr auf den alten Home-Screen-Icon-Cache zurückfallen. Apple-Touch-Icon, PNG-Favicon, Manifest und Service Worker verwenden ausschließlich dieses neue App-Icon. Vor Release wurden 25 Smoke-Checks inklusive PWA/Cache, Pause/Sticky-Aktionen, Navigation, Pushup-Logik, Progression, Krafttest, Home-Workout und 2–5-Tage-Pläne bestanden."
 }
