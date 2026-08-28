@@ -1,5 +1,5 @@
 {
-  "version": "11.8.72",
+  "version": "11.8.73",
   "releasedAt": "2026-08-28",
-  "notes": "PWA/Home-Screen-Fix. Fehlerhafte Service-Worker-Registrierung in index.html korrigiert. Manifest um 192x192- und 512x512-App-Icons ergänzt. Service-Worker-Cache auf v11.8.72 angehoben. Neuer Smoke-Test prüft künftig Manifest, Icons, Service Worker, lokale Script-Referenzen und die Syntax aller Inline-Skripte sowie des Service Workers."
+  "notes": "iOS-Appsymbol repariert. Das fehlerhafte fast leere 192x192-PNG wurde ersetzt. Das echte RepPilot-Muskelmann-Logo aus dem Header wird jetzt als neues 192x192 Apple-Touch-Icon und PWA-Icon mit eigenem Dateinamen verwendet, damit iOS keinen alten Icon-Cache wiederverwendet. Smoke-Test erweitert um echte PNG-Abmessungspruefung."
 }

@@ -9,13 +9,7 @@
   "theme_color": "#111827",
   "icons": [
     {
-      "src": "reppilot-app-icon-v11.8.72.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icon-192.png",
+      "src": "reppilot-ios-icon-192-v11.8.73.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
