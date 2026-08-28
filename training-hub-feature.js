@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.76";
+  const VERSION = "11.8.78";
   const RUNNER_EXERCISES = [
     {
       icon:"🦶",
@@ -206,6 +206,7 @@
     document.getElementById("runnerStrengthSession").hidden=true;
     document.getElementById("trainingHubOverview").hidden=false;
     showTrainingNav();
+    requestAnimationFrame(()=>scrollTo({top:0,left:0,behavior:"auto"}));
   }
 
   function init(){

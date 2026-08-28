@@ -1,5 +1,5 @@
 {
-  "version": "11.8.77",
+  "version": "11.8.78",
   "releasedAt": "2026-08-28",
-  "notes": "Unnoetigen Scrollraum am Seitenende reduziert. Der feste 92px-Body-Abstand wurde durch die reale Bottom-Navigation plus iPhone-Safe-Area ersetzt. Workout-Abstand ebenfalls angepasst."
+  "notes": "Scrollposition beim Reiterwechsel korrigiert. Jeder View-Wechsel startet jetzt oben, statt die Scrollposition eines langen vorherigen Screens zu uebernehmen. install.html prueft beim Home-Screen-Start ausserdem version.json ohne Cache und laedt bei Bedarf automatisch die aktuelle Version."
 }

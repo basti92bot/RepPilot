@@ -1,15 +1,15 @@
-const CACHE="reppilot-v11-8-77";
-const VERSION="11.8.77";
+const CACHE="reppilot-v11-8-78";
+const VERSION="11.8.78";
 const ASSETS=[
   "./index.html",
-  "./styles.css?v=11.8.77",
+  "./styles.css?v=11.8.78",
   "./header-fix.css?v=11.8.27",
-  "./manifest.json?v=11.8.77",
-  "./reppilot-muscleman-logo-v11.8.26.png?v=11.8.77",
-  "./reppilot-app-icon-v11.8.77.png",
+  "./manifest.json?v=11.8.78",
+  "./reppilot-muscleman-logo-v11.8.26.png?v=11.8.78",
+  "./reppilot-app-icon-v11.8.78.png",
   "./auth.js?v=11.8.8",
   "./storage-bridge.js?v=11.8.69",
-  "./app.js?v=11.8.68",
+  "./app.js?v=11.8.78",
   "./cloud-history-feature.js?v=11.8.64",
   "./workout-fix.js?v=11.8.70",
   "./run-feature.js?v=11.8.8",
@@ -22,13 +22,13 @@ const ASSETS=[
   "./home-plan-card-hide.js?v=11.8.71",
   "./personal-records-feature.js?v=11.8.71",
   "./home-workout-feature.js?v=11.8.58",
-  "./training-hub-feature.js?v=11.8.77",
+  "./training-hub-feature.js?v=11.8.78",
   "./onboarding-feature.js?v=11.8.58",
   "./progression-feature.js?v=11.8.58",
   "./stretch-routine-feature.js?v=11.8.28",
   "./timer-sound-feature.js?v=11.8.58",
   "./navigation-fix.js?v=11.8.58",
-  "./workout-sticky-actions.js?v=11.8.77",
+  "./workout-sticky-actions.js?v=11.8.78",
   "./day-exercise-overview.js?v=11.8.58",
   "./pushup-feature.js?v=11.8.58",
   "./plan-title-fix.js?v=11.8.58",
