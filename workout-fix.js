@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.68";
+  const VERSION = "11.8.70";
 
   const replaceWorkout = (id,title,exercises) => {
     const workout = WORKOUTS.find(w => w.id === id);
@@ -40,15 +40,18 @@
     ["Reverse Butterfly am Kabelzug",2,10],
     ["Hammercurls",2,12],
     ["Einarmiger Trizeps am Kabelzug",2,10],
-    ["Crunch-Maschine",2,30]
+    ["Crunch-Maschine",2,30],
+    ["Bauch Rotation",2,20]
   ]);
+
+  try{if(typeof TIPS!=="undefined")TIPS["Bauch Rotation"]="Rumpf aufrecht und kontrolliert drehen, ohne Schwung. 10 Wiederholungen je Seite und beide Seiten gleich belasten.";}catch{}
 
   const dayData = {
     1:["Push","Brust, Schulter, Trizeps · ca. 45–55 Min."],
     2:["Intervalltraining","Schnelle Intervalle + lockere Pausen · ca. 37 Min."],
     3:["Pull + Beine","Rücken, Beine, Bizeps · ca. 60–70 Min."],
     4:["Lockerer Dauerlauf","Ruhiges Gesprächstempo · ca. 35–45 Min."],
-    5:["Oberkörper","Brust, Rücken, Schulter, Arme · ca. 45–55 Min."],
+    5:["Oberkörper","Brust, Rücken, Schulter, Arme, Core · ca. 50–60 Min."],
     6:["Ruhetag","Erholung oder lockere Bewegung"],
     0:["Ruhetag","Erholung · kein Training geplant"]
   };
