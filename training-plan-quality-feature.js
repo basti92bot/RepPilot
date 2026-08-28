@@ -1,11 +1,11 @@
 (() => {
-  const VERSION="11.8.68";
+  const VERSION="11.8.70";
   const PLAN_KEY="reppilot-selected-training-plan";
 
   const DEFINITIONS={
     push:[["Schrägbankdrücken",3,60],["Brustpresse",3,50],["Schulterpresse",3,35],["Kabel-Flys",2,20],["Seitheben Maschine",3,20],["Überkopf-Trizepsstrecken am Kabelzug",2,20],["Trizepsdrücken am Seilzug",2,25],["Crunch-Maschine",3,30]],
     "pull-legs":[["Beinpresse",3,120],["Brustgestütztes Rudern",3,50],["Beinstrecker",3,40],["Latzug neutral",3,55],["Beinbeuger",3,40],["Reverse Butterfly am Kabelzug",2,10],["Schrägbank-Curls",2,12],["Wadenheben",3,60],["Hängendes Beinheben",2,0]],
-    "upper-hypertrophy":[["Schrägbankdrücken leicht",3,50],["Brustgestütztes Rudern",3,45],["Latzug breit",3,50],["Liegestütze bis Maximum",2,0],["Seitheben",3,8],["Reverse Butterfly am Kabelzug",2,10],["Hammercurls",2,12],["Einarmiger Trizeps am Kabelzug",2,10],["Crunch-Maschine",2,30]],
+    "upper-hypertrophy":[["Schrägbankdrücken leicht",3,50],["Brustgestütztes Rudern",3,45],["Latzug breit",3,50],["Liegestütze bis Maximum",2,0],["Seitheben",3,8],["Reverse Butterfly am Kabelzug",2,10],["Hammercurls",2,12],["Einarmiger Trizeps am Kabelzug",2,10],["Crunch-Maschine",2,30],["Bauch Rotation",2,20]],
     "loss-a":[["Beinpresse",3,80],["Brustpresse",3,40],["Latzug neutral",3,45],["Beinstrecker",2,35],["Beinbeuger",2,35],["Schulterpresse",2,25],["Schrägbank-Curls",2,10],["Trizepsdrücken am Seilzug",2,20],["Crunch-Maschine",2,25]],
     "loss-b":[["Schrägbankdrücken leicht",3,40],["Brustgestütztes Rudern",3,40],["Beinpresse",3,80],["Beinbeuger",3,35],["Seitheben",2,6],["Hammercurls",2,10],["Einarmiger Trizeps am Kabelzug",2,8],["Wadenheben",3,50],["Crunch-Maschine",2,25]],
     "personal-upper-a":[["Schrägbankdrücken",3,60],["Brustgestütztes Rudern",3,50],["Latzug neutral",3,55],["Schulterpresse",3,35],["Seitheben am Kabelzug",2,7.5],["Trizepsdrücken am Seilzug",2,25],["Schrägbank-Curls",2,12],["Crunch-Maschine",2,30]],
@@ -30,7 +30,7 @@
       workout.title=TITLES[id]||workout.title;
       workout.exercises=clone(rows);
     });
-    try{if(typeof TIPS!=="undefined")TIPS["Seitheben Maschine"]="Ellenbogen führen, Schultern unten lassen und kontrolliert bis etwa Schulterhöhe heben.";}catch{}
+    try{if(typeof TIPS!=="undefined"){TIPS["Seitheben Maschine"]="Ellenbogen führen, Schultern unten lassen und kontrolliert bis etwa Schulterhöhe heben.";TIPS["Bauch Rotation"]="Rumpf aufrecht und kontrolliert drehen, ohne Schwung. 10 Wiederholungen je Seite und beide Seiten gleich belasten.";}}catch{}
     return true;
   }
 
@@ -48,7 +48,7 @@
     patch(2,{title:"Intervalltraining",type:"run",runId:"interval",meta:"Schnelle Intervalle + lockere Pausen · ca. 37 Min.",workoutId:undefined});
     patch(3,{title:"Pull + Beine",type:"strength",workoutId:"pull-legs",meta:"Rücken, Beine, Bizeps · ca. 60–70 Min.",runId:undefined});
     patch(4,{title:"Lockerer Dauerlauf",type:"run",runId:"easy",meta:"Ruhiges Gesprächstempo · ca. 35–45 Min.",workoutId:undefined});
-    patch(5,{title:"Oberkörper",type:"strength",workoutId:"upper-hypertrophy",meta:"Brust, Rücken, Schulter, Arme · ca. 45–55 Min.",runId:undefined});
+    patch(5,{title:"Oberkörper",type:"strength",workoutId:"upper-hypertrophy",meta:"Brust, Rücken, Schulter, Arme, Core · ca. 50–60 Min.",runId:undefined});
     patch(6,{title:"Ruhetag",type:"rest",meta:"Erholung oder lockere Bewegung",workoutId:undefined,runId:undefined});
     patch(0,{title:"Ruhetag",type:"rest",meta:"Erholung",workoutId:undefined,runId:undefined});
     return true;
@@ -70,7 +70,7 @@
       if(totalSets<13||totalSets>24)issues.push(`${id}: Satzvolumen ${totalSets} außerhalb Zielbereich 13–24`);
       result.workouts[id]={exercises:workout.exercises.length,sets:totalSets};
     });
-    ["Kabel-Flys","Crunch-Maschine","Seitheben Maschine"].forEach(name=>{if(!WORKOUTS.some(w=>(w.exercises||[]).some(e=>e[0]===name)))issues.push(`${name}: bevorzugter Name fehlt`);});
+    ["Kabel-Flys","Crunch-Maschine","Seitheben Maschine","Bauch Rotation"].forEach(name=>{if(!WORKOUTS.some(w=>(w.exercises||[]).some(e=>e[0]===name)))issues.push(`${name}: bevorzugter Name fehlt`);});
     if(WORKOUTS.some(w=>(w.exercises||[]).some(e=>e[0]==="Rumänisches Kreuzheben")))issues.push("Rumänisches Kreuzheben: darf in keinem aktiven Plan enthalten sein");
     const pullLegs=WORKOUTS.find(w=>w.id==="pull-legs");
     ["Beinstrecker","Beinbeuger"].forEach(name=>{if(pullLegs&&!pullLegs.exercises.some(e=>e[0]===name))issues.push(`Pull + Beine: ${name} fehlt`);});
