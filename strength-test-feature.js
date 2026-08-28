@@ -199,7 +199,7 @@
   function hideInline(){const panel=document.getElementById("strengthInlineTest");if(panel)panel.hidden=true;}
 
   function saveInline(){
-    const e=currentExercise(),x=currentPreview();if(!e||!tracked(e.name))return;
+    const e=currentExercise(),x=currentPreview();if(!e)return;
     const exerciseKey=recordKey(e.name,x.workoutId),date=new Date().toISOString();
     let record=null;
     if(x.body){
