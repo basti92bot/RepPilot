@@ -1,6 +1,7 @@
 (() => {
-  const VERSION="11.8.53";
+  const VERSION="11.8.69";
   const KEY="reppilot-strength-tests-v1";
+  const STATE_KEY="reppilot-strength-test-state-v2";
   const INTERVAL_DAYS=28;
   const DAY=86400000;
   const BODYWEIGHT=/liegestütz|liegestuetz|hanging leg raise|hängend.*bein|unterarmstütz|seitstütz|beinheben|bergsteiger|hüftheben|ausfallschritt|kniebeugen|rückenstrecker|schneeengel|arm-bein-strecken|y-t-heben/i;
@@ -9,7 +10,24 @@
   const roundHalf=v=>Math.round(Number(v||0)*2)/2;
   const currentWorkoutId=()=>{try{return typeof active!=="undefined"?active?.id||"":""}catch{return""}};
   const isHomeWorkoutId=id=>String(id||"").startsWith("home-");
-  const recordKey=(name,workoutId=currentWorkoutId())=>isHomeWorkoutId(workoutId)?`home::${name}`:String(name||"");
+  const NAME_ALIASES={
+    "Seitheben Kabel":"Seitheben am Kabelzug",
+    "Overhead Cable Extension":"Überkopf-Trizepsstrecken am Kabelzug",
+    "Seil-Pushdown":"Trizepsdrücken am Seilzug",
+    "Incline Curls":"Schrägbank-Curls",
+    "Reverse Butterfly am Kabel":"Reverse Butterfly am Kabelzug",
+    "Preacher Curls":"Scott-Curls",
+    "Hanging Leg Raises":"Hängendes Beinheben",
+    "Cross Body Cable Extension":"Einarmiger Trizeps am Kabelzug",
+    "Fliegende am Kabelzug":"Kabel-Flys",
+    "Bauchpresse an der Maschine":"Crunch-Maschine"
+  };
+  const normalizeName=name=>NAME_ALIASES[String(name||"")]||String(name||"");
+  const normalizeExerciseKey=value=>{
+    const raw=String(value||"");
+    return raw.startsWith("home::")?`home::${normalizeName(raw.slice(6))}`:normalizeName(raw);
+  };
+  const recordKey=(name,workoutId=currentWorkoutId())=>isHomeWorkoutId(workoutId)?`home::${normalizeName(name)}`:normalizeName(name);
   const isBodyweight=(name,workoutId=currentWorkoutId())=>isHomeWorkoutId(workoutId)||BODYWEIGHT.test(String(name||""));
 
   const estimate1RM=(weight,reps)=>{
@@ -40,23 +58,47 @@
   function tracked(name){return trackedNames().has(name);}
   function read(){try{const data=JSON.parse(localStorage.getItem(KEY)||"[]");return Array.isArray(data)?data:[]}catch{return []}}
   function write(data){localStorage.setItem(KEY,JSON.stringify(data));}
+  function readState(){try{const data=JSON.parse(localStorage.getItem(STATE_KEY)||"{}");return data&&typeof data==="object"&&!Array.isArray(data)?data:{}}catch{return{}}}
+  function writeState(data){localStorage.setItem(STATE_KEY,JSON.stringify(data));}
+  function stateRecord(name,workoutId=currentWorkoutId()){
+    const key=recordKey(name,workoutId),entry=readState()[key];
+    return entry?.record&&entry.record.date?entry.record:null;
+  }
+  function persistRecord(record){
+    const records=read();
+    records.push(record);
+    write(records);
+    const state=readState(),key=normalizeExerciseKey(record.exercise);
+    state[key]={date:record.date,record};
+    writeState(state);
+    window.RepPilotTrainingDataPersistence?.refreshBackup?.();
+    return record;
+  }
   function normalizedRecords(){
     const out=[];
     for(const item of read()){
-      if(item?.exercise){out.push(item);continue;}
+      if(item?.exercise){out.push({...item,exercise:normalizeExerciseKey(item.exercise)});continue;}
       if(item?.results&&item?.date){
         for(const [exercise,result] of Object.entries(item.results)){
-          if(result?.estimated1RM)out.push({date:item.date,exercise,mode:"weight",testWeight:result.weight,reps:result.reps,estimated1RM:result.estimated1RM,trainingWeight:result.trainingWeight||0,targetReps:result.targetReps||10});
+          if(result?.estimated1RM)out.push({date:item.date,exercise:normalizeExerciseKey(exercise),mode:"weight",testWeight:result.weight,reps:result.reps,estimated1RM:result.estimated1RM,trainingWeight:result.trainingWeight||0,targetReps:result.targetReps||10});
         }
       }
     }
-    return out.sort((a,b)=>new Date(a.date)-new Date(b.date));
+    for(const entry of Object.values(readState())){
+      const item=entry?.record;
+      if(item?.exercise&&item?.date)out.push({...item,exercise:normalizeExerciseKey(item.exercise)});
+    }
+    const dedupe=new Map();
+    out.forEach(item=>dedupe.set(`${item.date}|${item.exercise}|${item.mode||""}`,item));
+    return [...dedupe.values()].sort((a,b)=>(Date.parse(a.date)||0)-(Date.parse(b.date)||0));
   }
   function latestFor(name,workoutId=currentWorkoutId()){
     const rows=normalizedRecords(),key=recordKey(name,workoutId);
-    const scoped=rows.filter(x=>x.exercise===key).slice(-1)[0];
+    const scoped=rows.filter(x=>normalizeExerciseKey(x.exercise)===key).slice(-1)[0];
     if(scoped)return scoped;
-    if(isHomeWorkoutId(workoutId))return rows.filter(x=>x.exercise===name&&x.mode==="reps").slice(-1)[0]||null;
+    const state=stateRecord(name,workoutId);
+    if(state)return {...state,exercise:normalizeExerciseKey(state.exercise)};
+    if(isHomeWorkoutId(workoutId))return rows.filter(x=>normalizeExerciseKey(x.exercise)===normalizeName(name)&&x.mode==="reps").slice(-1)[0]||null;
     return null;
   }
   function due(name,workoutId=currentWorkoutId()){
@@ -158,17 +200,25 @@
 
   function saveInline(){
     const e=currentExercise(),x=currentPreview();if(!e||!tracked(e.name))return;
-    const records=read(),exerciseKey=recordKey(e.name,x.workoutId);
+    const exerciseKey=recordKey(e.name,x.workoutId),date=new Date().toISOString();
+    let record=null;
     if(x.body){
       if(x.reps<1){document.getElementById("strengthInlineReps")?.focus();return;}
-      records.push({date:new Date().toISOString(),exercise:exerciseKey,mode:"reps",reps:x.reps,formula:"Maximale saubere Wiederholungen"});
+      record={date,exercise:exerciseKey,mode:"reps",reps:x.reps,formula:"Maximale saubere Wiederholungen"};
       e.strengthTestApplied={mode:"reps",reps:x.reps};
     }else{
       if(!x.weight){document.getElementById("strengthInlineWeight")?.focus();return;}if(x.reps<1||x.reps>5){document.getElementById("strengthInlineReps")?.focus();return;}if(!x.one||!x.work)return;
-      records.push({date:new Date().toISOString(),exercise:exerciseKey,mode:"weight",testWeight:x.weight,reps:x.reps,estimated1RM:x.one,trainingWeight:x.work,targetReps:x.targetReps,formula:"Epley + Zielwiederholungen mit 2 RIR"});
+      record={date,exercise:exerciseKey,mode:"weight",testWeight:x.weight,reps:x.reps,estimated1RM:x.one,trainingWeight:x.work,targetReps:x.targetReps,formula:"Epley + Zielwiederholungen mit 2 RIR"};
       e.strengthTestApplied={mode:"weight",estimated1RM:x.one,trainingWeight:x.work,targetReps:x.targetReps};e.sets.forEach(set=>{if(!set.done)set.weight=x.work;});
     }
-    write(records);resetPanelState();hideInline();markPlanDue();if(typeof renderSet==="function")renderSet();window.RepPilotStickyActions?.refresh?.();
+    persistRecord(record);
+    const verified=latestFor(e.name,x.workoutId);
+    if(!verified||Math.abs((Date.parse(verified.date)||0)-(Date.parse(date)||0))>1000){
+      console.error("Kraftmessung konnte nicht verifiziert werden",record);
+      alert("Kraftmessung konnte nicht sicher gespeichert werden. Bitte erneut versuchen.");
+      return;
+    }
+    resetPanelState();hideInline();markPlanDue();if(typeof renderSet==="function")renderSet();window.RepPilotStickyActions?.refresh?.();
   }
 
   function skipInline(){
@@ -204,6 +254,6 @@
     const plan=document.getElementById("plan");if(plan)new MutationObserver(()=>queueMicrotask(markPlanDue)).observe(plan,{childList:true,subtree:true});markPlanDue();try{if(typeof active!=="undefined"&&active&&typeof phase!=="undefined"&&phase==="set")applyInline();}catch{}
   }
 
-  window.RepPilotStrengthTest={version:VERSION,intervalDays:INTERVAL_DAYS,estimate1RM,trainingWeight,due,nextDue,trackedNames,recordKey,refresh:()=>{applyInline();markPlanDue();}};
+  window.RepPilotStrengthTest={version:VERSION,intervalDays:INTERVAL_DAYS,estimate1RM,trainingWeight,due,nextDue,trackedNames,recordKey,latestFor,stateKey:STATE_KEY,refresh:()=>{applyInline();markPlanDue();}};
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",install,{once:true});else install();
 })();
