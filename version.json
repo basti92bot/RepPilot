@@ -1,5 +1,5 @@
 {
-  "version": "11.8.96",
+  "version": "11.8.97",
   "releasedAt": "2026-08-29",
-  "notes": "Fix fuer Watch-Ende-RPC: doppelte Supabase-Funktionsvarianten entfernt, eindeutige p_token-Endpunkte aktiv."
+  "notes": "Watch-Ende-RPCs akzeptieren jetzt den kompletten JSON-Body aus iOS Kurzbefehle, damit p_token auch bei abweichender Serialisierung erkannt wird."
 }
