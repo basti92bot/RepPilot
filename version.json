@@ -1,5 +1,5 @@
 {
-  "version": "11.8.95",
+  "version": "11.8.96",
   "releasedAt": "2026-08-29",
-  "notes": "Fix fuer Apple-Watch-Ende-Automation: Supabase-RPCs fuer mark_end/get_start explizit exponiert und Schema-Cache neu geladen."
+  "notes": "Fix fuer Watch-Ende-RPC: doppelte Supabase-Funktionsvarianten entfernt, eindeutige p_token-Endpunkte aktiv."
 }
