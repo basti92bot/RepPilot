@@ -1,5 +1,5 @@
 {
-  "version": "11.8.91",
+  "version": "11.8.92",
   "releasedAt": "2026-08-29",
-  "notes": "KPI-Zahlen im Start-Dashboard bleiben auf iPhone immer in einer Zeile; Labels duerfen weiterhin umbrechen. Sichtbarer Stand v11.8.91."
+  "notes": "KPI-Karten auf iPhone neu ausbalanciert: kleinere Icon-Fläche, mehr Platz fuer Zahlen, lange Werte bleiben einzeilig ohne rechts abgeschnitten zu werden."
 }

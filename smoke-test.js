@@ -137,6 +137,11 @@ if (index) {
 
 
 if (styles) {
+  if (/\.home-dashboard \.stat,#history \.stat\{[^}]*padding-left:68px/.test(styles) || /@media\(max-width:560px\)\{[\s\S]*?\.home-dashboard \.stat,#history \.stat\{[^}]*padding-left:68px/.test(styles)) {
+    pass("KPI-Zahlen haben auf iPhone genug Platz");
+  } else {
+    fail("KPI-Zahlen haben auf iPhone genug Platz");
+  }
   if (/\.home-dashboard \.stat strong,#history \.stat strong\{[^}]*white-space:nowrap[^}]*overflow-wrap:normal[^}]*font-variant-numeric:tabular-nums/.test(styles)) {
     pass("KPI-Zahlen bleiben einzeilig");
   } else {
