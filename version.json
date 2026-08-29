@@ -1,5 +1,6 @@
 {
-  "version": "11.8.88",
+  "version": "11.8.88.1",
+  "displayVersion": "11.8.88",
   "releasedAt": "2026-08-29",
-  "notes": "Start-Dashboard: Trainingsanzahl und Satzanzahl ersetzt durch beste 5-km-Pace und höchstes Gewicht/Volumen in einem einzelnen Krafttraining. Sichtbarer Stand bleibt v11.8.88."
+  "notes": "Interner Build für Dashboard-Rekorde. Sichtbarer App-Stand bleibt v11.8.88."
 }

@@ -68,11 +68,13 @@
     }
   };
 
+  const displayVersion = version => String(version || "").split(".").slice(0,3).join(".");
   const applyVisibleVersion = version => {
-    if (!version || version === "0.0.0") return;
+    const visible = displayVersion(version);
+    if (!visible || visible === "0.0.0") return;
     const el = document.querySelector("header h1 span");
-    if (el) el.textContent = `v${version}`;
-    document.title = `RepPilot v${version}`;
+    if (el) el.textContent = `v${visible}`;
+    document.title = `RepPilot v${visible}`;
   };
 
   const injectStyles = () => {
@@ -116,7 +118,7 @@
     latestVersion = version;
     const banner = ensureBanner();
     const text = document.getElementById("repPilotUpdateText");
-    if (text) text.textContent = `v${version} ist bereit.`;
+    if (text) text.textContent = "Neue RepPilot-Aktualisierung ist bereit.";
     banner.hidden = false;
   };
 

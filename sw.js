@@ -1,8 +1,8 @@
-const CACHE="reppilot-v11-8-88-stats";
-const VERSION="11.8.88";
+const CACHE="reppilot-v11-8-88-build1";
+const VERSION="11.8.88.1";
 const ASSETS=[
   "./index.html",
-  "./styles.css?v=11.8.88-stats",
+  "./styles.css?v=11.8.88.1",
   "./header-fix.css?v=11.8.88",
   "./manifest.json?v=11.8.88",
   "./reppilot-muscleman-logo-v11.8.26.png?v=11.8.88",
@@ -12,7 +12,7 @@ const ASSETS=[
   "./app.js?v=11.8.88",
   "./cloud-history-feature.js?v=11.8.64",
   "./workout-fix.js?v=11.8.70",
-  "./run-feature.js?v=11.8.88-stats",
+  "./run-feature.js?v=11.8.88.1",
   "./run-dashboard-feature.js?v=11.8.34",
   "./profile-feature.js?v=11.8.88",
   "./apple-health-feature.js?v=11.8.88",
@@ -35,7 +35,7 @@ const ASSETS=[
   "./strength-test-feature.js?v=11.8.88",
   "./reset-feature.js?v=11.8.88",
   "./training-plan-quality-feature.js?v=11.8.70",
-  "./update-feature.js?v=11.8.66"
+  "./update-feature.js?v=11.8.88.1"
 ];
 
 self.addEventListener("install",event=>{
