@@ -1,5 +1,5 @@
 {
-  "version": "11.8.92",
+  "version": "11.8.93",
   "releasedAt": "2026-08-29",
-  "notes": "KPI-Karten auf iPhone neu ausbalanciert: kleinere Icon-Fläche, mehr Platz fuer Zahlen, lange Werte bleiben einzeilig ohne rechts abgeschnitten zu werden."
+  "notes": "Mobile KPI-Zahlen kleiner gesetzt und etwas weiter nach links verschoben, damit lange Werte sauber in einer Zeile bleiben."
 }

@@ -137,7 +137,7 @@ if (index) {
 
 
 if (styles) {
-  if (/\.home-dashboard \.stat,#history \.stat\{[^}]*padding-left:68px/.test(styles) || /@media\(max-width:560px\)\{[\s\S]*?\.home-dashboard \.stat,#history \.stat\{[^}]*padding-left:68px/.test(styles)) {
+  if (/\.home-dashboard \.stat,#history \.stat\{[^}]*padding-left:60px/.test(styles) || /@media\(max-width:560px\)\{[\s\S]*?\.home-dashboard \.stat,#history \.stat\{[^}]*padding-left:60px/.test(styles)) {
     pass("KPI-Zahlen haben auf iPhone genug Platz");
   } else {
     fail("KPI-Zahlen haben auf iPhone genug Platz");
