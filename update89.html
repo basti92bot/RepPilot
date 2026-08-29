@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<title>RepPilot Update</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100dvh;display:grid;place-items:center;padding:24px;background:#f3f4f6;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  main{width:min(100%,420px);background:#fff;border:1px solid #e5e7eb;border-radius:22px;padding:24px;text-align:center}
+  h1{margin:0 0 8px;font-size:28px}
+  p{margin:8px 0;color:#6b7280;line-height:1.45}
+  strong{display:block;margin-top:16px}
+  button{width:100%;margin-top:18px;border:0;border-radius:14px;padding:14px 16px;background:#111827;color:#fff;font:inherit;font-weight:800}
+</style>
+</head>
+<body>
+<main>
+  <h1>RepPilot v11.8.89</h1>
+  <p id="status">Alter 88er App-Cache wird entfernt. Deine Trainingsdaten bleiben erhalten.</p>
+  <strong id="step">Update wird vorbereitet…</strong>
+  <button id="retry" type="button" hidden>Erneut versuchen</button>
+</main>
+<script>
+(()=>{
+  const status=document.getElementById("status");
+  const step=document.getElementById("step");
+  const retry=document.getElementById("retry");
+  const BUILD="11.8.89.2";
+
+  async function rescue(){
+    retry.hidden=true;
+    try{
+      step.textContent="Service Worker wird zurückgesetzt…";
+      if("serviceWorker" in navigator){
+        const regs=await navigator.serviceWorker.getRegistrations();
+        await Promise.allSettled(regs.filter(reg=>{
+          try{return new URL(reg.scope).pathname.startsWith("/RepPilot/")}catch{return false}
+        }).map(reg=>reg.unregister()));
+      }
+
+      step.textContent="RepPilot-Cache wird geleert…";
+      if("caches" in window){
+        const keys=await caches.keys();
+        await Promise.allSettled(keys.filter(k=>k.startsWith("reppilot-")).map(k=>caches.delete(k)));
+      }
+
+      step.textContent="v11.8.89 wird frisch geladen…";
+      const u=new URL("./install.html",location.href);
+      u.searchParams.set("rpv",BUILD);
+      u.searchParams.set("rescue",String(Date.now()));
+      setTimeout(()=>location.replace(u.toString()),250);
+    }catch(error){
+      status.textContent="Der automatische Reset konnte nicht abgeschlossen werden.";
+      step.textContent="Bitte erneut versuchen.";
+      retry.hidden=false;
+    }
+  }
+  retry.addEventListener("click",rescue);
+  rescue();
+})();
+</script>
+</body>
+</html>
