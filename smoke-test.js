@@ -136,6 +136,19 @@ if (index) {
 }
 
 
+if (styles) {
+  if (/\.home-dashboard \.stat strong,#history \.stat strong\{[^}]*white-space:nowrap[^}]*overflow-wrap:normal[^}]*font-variant-numeric:tabular-nums/.test(styles)) {
+    pass("KPI-Zahlen bleiben einzeilig");
+  } else {
+    fail("KPI-Zahlen bleiben einzeilig");
+  }
+  if (/\.home-dashboard \.stat small,#history \.stat small\{[^}]*overflow-wrap:anywhere/.test(styles)) {
+    pass("KPI-Beschriftungen duerfen umbrechen");
+  } else {
+    fail("KPI-Beschriftungen duerfen umbrechen");
+  }
+}
+
 if (styles && navFix && index) {
   const navButtons = [...index.matchAll(/<nav[^>]*>([\s\S]*?)<\/nav>/gi)]
     .flatMap(m => [...m[1].matchAll(/<button\b/gi)]);
