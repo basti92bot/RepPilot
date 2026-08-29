@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.79";
+  const VERSION="11.8.89-navfix";
   const CARD_ID="selectedTrainingPlanHome";
   const KEYBOARD_CLASS="rp-keyboard-open";
   let keyboardTimer=0;
@@ -32,11 +32,17 @@
         top:auto!important;
         bottom:0!important;
         width:100%!important;
+        height:auto!important;
+        min-height:64px!important;
+        max-height:calc(64px + env(safe-area-inset-bottom,0px))!important;
+        grid-template-columns:repeat(4,minmax(0,1fr))!important;
+        align-items:center!important;
         z-index:10000!important;
         transform:none!important;
         -webkit-transform:none!important;
-        padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))!important
+        padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px))!important
       }
+      body>nav button{min-width:0!important;margin:0!important;padding:10px 4px!important}
       body.${KEYBOARD_CLASS}>nav,
       body.${KEYBOARD_CLASS} #rpWorkoutActions{display:none!important}
     `;
