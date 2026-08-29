@@ -1,5 +1,5 @@
 {
-  "version": "11.8.97",
+  "version": "11.8.98",
   "releasedAt": "2026-08-29",
-  "notes": "Watch-Ende-RPCs akzeptieren jetzt den kompletten JSON-Body aus iOS Kurzbefehle, damit p_token auch bei abweichender Serialisierung erkannt wird."
+  "notes": "Fix fuer Apple-Watch-Laufende: shortcut_run_end akzeptiert jetzt den kompletten JSON-Body aus iOS Kurzbefehle."
 }
