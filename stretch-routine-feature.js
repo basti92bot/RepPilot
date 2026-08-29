@@ -230,9 +230,6 @@
     bind();
     const completeText = document.querySelector("#stretchComplete .muted");
     if (completeText) completeText.textContent = `Alle ${STRETCHES.length} Übungen sind erledigt.`;
-    const v = document.querySelector("header h1 span");
-    if (v) v.textContent = "v11.8.28";
-    document.title = "RepPilot v11.8.28";
   };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
