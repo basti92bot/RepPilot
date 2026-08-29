@@ -1,6 +1,5 @@
 {
-  "version": "11.8.88.1",
-  "displayVersion": "11.8.88",
+  "version": "11.8.89",
   "releasedAt": "2026-08-29",
-  "notes": "Interner Build für Dashboard-Rekorde. Sichtbarer App-Stand bleibt v11.8.88."
+  "notes": "Dashboard-Rekorde mit bester 5-km-Pace und höchstem Trainingsvolumen sowie aktuelle Apple-Watch/Health-Integration. Vollständiger Versionssprung auf v11.8.89."
 }
