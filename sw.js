@@ -1,8 +1,8 @@
-const CACHE="reppilot-v11-8-88";
+const CACHE="reppilot-v11-8-88-stats";
 const VERSION="11.8.88";
 const ASSETS=[
   "./index.html",
-  "./styles.css?v=11.8.88",
+  "./styles.css?v=11.8.88-stats",
   "./header-fix.css?v=11.8.88",
   "./manifest.json?v=11.8.88",
   "./reppilot-muscleman-logo-v11.8.26.png?v=11.8.88",
@@ -12,7 +12,7 @@ const ASSETS=[
   "./app.js?v=11.8.88",
   "./cloud-history-feature.js?v=11.8.64",
   "./workout-fix.js?v=11.8.70",
-  "./run-feature.js?v=11.8.8",
+  "./run-feature.js?v=11.8.88-stats",
   "./run-dashboard-feature.js?v=11.8.34",
   "./profile-feature.js?v=11.8.88",
   "./apple-health-feature.js?v=11.8.88",

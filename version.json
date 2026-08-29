@@ -1,5 +1,5 @@
 {
   "version": "11.8.88",
-  "releasedAt": "2026-08-28",
-  "notes": "Startansicht weiter optimiert: Abstand unter dem heutigen Workout reduziert, damit die Überschrift Wochenplan auf dem iPhone vollständig oberhalb der Navigation sichtbar ist."
+  "releasedAt": "2026-08-29",
+  "notes": "Start-Dashboard: Trainingsanzahl und Satzanzahl ersetzt durch beste 5-km-Pace und höchstes Gewicht/Volumen in einem einzelnen Krafttraining. Sichtbarer Stand bleibt v11.8.88."
 }
