@@ -1,9 +1,8 @@
 (() => {
   if (window.RepPilotUpdate) return;
 
-  const VERSION = "11.8.66";
+  const VERSION = "11.8.89-updatefix";
   const CHECK_INTERVAL = 5 * 60 * 1000;
-  const ACTION_TIMEOUT = 3500;
   const STRENGTH_KEY = "reppilot-strength-tests-v1";
   const UPDATE_STRENGTH_BACKUP_KEY = "reppilot-strength-tests-update-backup-v1";
   let lastCheck = 0;
@@ -147,34 +146,15 @@
     } catch {}
   };
 
-  const withTimeout = promise => Promise.race([
-    promise,
-    new Promise(resolve => setTimeout(resolve, ACTION_TIMEOUT))
-  ]);
-
   const cleanRepPilotRuntime = async () => {
-    if ("serviceWorker" in navigator) {
-      await withTimeout((async () => {
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        const appPath = new URL("./", location.href).pathname;
-        const own = registrations.filter(reg => {
-          try { return new URL(reg.scope).pathname.startsWith(appPath); }
-          catch { return false; }
-        });
-        await Promise.allSettled(own.map(reg => reg.unregister()));
-      })());
-    }
-
-    if ("caches" in window) {
-      await withTimeout((async () => {
-        const keys = await caches.keys();
-        await Promise.allSettled(keys.filter(key => key.startsWith("reppilot-")).map(key => caches.delete(key)));
-      })());
-    }
+    try {
+      const registration = await navigator.serviceWorker?.getRegistration?.();
+      registration?.update?.().catch?.(()=>{});
+    } catch {}
   };
 
   const networkReloadUrl = version => {
-    const url = new URL("./", location.href);
+    const url = new URL(location.href);
     url.searchParams.set("rpv", version || String(Date.now()));
     url.searchParams.set("refresh", String(Date.now()));
     return url.toString();
@@ -190,19 +170,19 @@
       button.disabled = true;
       button.textContent = "Aktualisiere…";
     }
-    if (text) text.textContent = "Kraftmessungen werden gesichert, Cache bereinigt und RepPilot neu geladen…";
+    if (text) text.textContent = "Daten werden gesichert und RepPilot neu geladen…";
 
     let target = String(version || latestVersion || "").trim();
     try {
       backupStrengthMeasurements();
       if (!target) target = await fetchLatestVersion();
       if (target) sessionStorage.setItem("reppilot-update-target", target);
-      await cleanRepPilotRuntime();
+      cleanRepPilotRuntime();
     } catch {}
 
     const next = networkReloadUrl(target);
-    location.replace(next);
-    setTimeout(() => { location.href = next; }, 900);
+    setTimeout(() => location.replace(next), 80);
+    setTimeout(() => { location.href = next; }, 1200);
   }
 
   const init = () => {

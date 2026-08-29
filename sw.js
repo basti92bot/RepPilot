@@ -1,4 +1,4 @@
-const CACHE="reppilot-v11-8-89";
+const CACHE="reppilot-v11-8-89-updatefix";
 const VERSION="11.8.89";
 const ASSETS=[
   "./index.html",
@@ -35,7 +35,7 @@ const ASSETS=[
   "./strength-test-feature.js?v=11.8.89",
   "./reset-feature.js?v=11.8.89",
   "./training-plan-quality-feature.js?v=11.8.70",
-  "./update-feature.js?v=11.8.89"
+  "./update-feature.js?v=11.8.89-updatefix"
 ];
 
 self.addEventListener("install",event=>{
