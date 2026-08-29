@@ -1,9 +1,9 @@
-const CACHE="reppilot-v11-8-89-fix2";
+const CACHE="reppilot-v11-8-89-layoutfix";
 const VERSION="11.8.89";
 const ASSETS=[
   "./index.html",
-  "./styles.css?v=11.8.89",
-  "./header-fix.css?v=11.8.89",
+  "./styles.css?v=11.8.89-layoutfix",
+  "./header-fix.css?v=11.8.89-layoutfix",
   "./manifest.json?v=11.8.89",
   "./reppilot-muscleman-logo-v11.8.26.png?v=11.8.89",
   "./reppilot-app-icon-v11.8.88.png",

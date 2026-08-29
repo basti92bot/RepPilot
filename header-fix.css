@@ -1,12 +1,12 @@
 /* RepPilot compact mobile header v11.8.87 */
-header{overflow:visible;padding-left:22px;padding-right:22px;padding-bottom:16px}
-.brand{display:grid;grid-template-columns:88px minmax(0,1fr);align-items:center;column-gap:22px;overflow:visible;min-height:88px}
+header{overflow:hidden;max-width:100%;padding-left:22px;padding-right:22px;padding-bottom:16px}
+.brand{display:grid;max-width:100%;min-width:0;grid-template-columns:88px minmax(0,1fr);align-items:center;column-gap:22px;overflow:visible;min-height:88px}
 .brand-logo{display:block!important;width:88px!important;height:88px!important;max-width:none!important;min-width:88px!important;min-height:88px!important;object-fit:contain!important;object-position:center!important;overflow:visible!important;border:0!important;border-radius:0!important;background:transparent!important;transform:none!important}
 .brand>div{min-width:0;padding-left:2px}
 header p{font-size:12px;letter-spacing:.15em;margin:0 0 3px}
 header h1{font-size:31px;line-height:1.04;margin:0;white-space:nowrap}
 header h1 span{font-size:14px;margin-left:4px;white-space:nowrap}
-header .auth-user{display:flex;align-items:center;gap:10px;margin:8px 0 0 112px;font-size:12px;min-width:0;flex-wrap:nowrap;color:#cbd5e1}
+header .auth-user{display:flex;max-width:100%;min-width:0;align-items:center;gap:10px;margin:8px 0 0 112px;font-size:12px;min-width:0;flex-wrap:nowrap;color:#cbd5e1}
 header .auth-user span{display:block;min-width:0;max-width:calc(100vw - 245px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 header .auth-user .auth-logout{flex:0 0 auto;padding:6px 11px;font-size:11px}
 @media(max-width:560px){
