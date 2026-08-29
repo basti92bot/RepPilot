@@ -1,5 +1,5 @@
 {
-  "version": "11.8.93",
+  "version": "11.8.94",
   "releasedAt": "2026-08-29",
-  "notes": "Mobile KPI-Zahlen kleiner gesetzt und etwas weiter nach links verschoben, damit lange Werte sauber in einer Zeile bleiben."
+  "notes": "Apple-Watch-Laufende robuster: Endzeit wird sofort gespeichert, bevor Health synchronisiert wird. Spaetere Finalisierung nutzt die echte Endzeit."
 }
