@@ -1,5 +1,5 @@
-const CACHE="reppilot-v11-8-89-build2";
-const VERSION="11.8.89.2";
+const CACHE="reppilot-v11-8-89-fix2";
+const VERSION="11.8.89";
 const ASSETS=[
   "./index.html",
   "./styles.css?v=11.8.89",
@@ -35,7 +35,7 @@ const ASSETS=[
   "./strength-test-feature.js?v=11.8.89",
   "./reset-feature.js?v=11.8.89",
   "./training-plan-quality-feature.js?v=11.8.70",
-  "./update-feature.js?v=11.8.89.2"
+  "./update-feature.js?v=11.8.89-fix2"
 ];
 
 self.addEventListener("install",event=>{
@@ -51,16 +51,6 @@ self.addEventListener("activate",event=>{
     const keys=await caches.keys();
     await Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)));
     await self.clients.claim();
-    const clients=await self.clients.matchAll({type:"window",includeUncontrolled:true});
-    await Promise.allSettled(clients.map(client=>{
-      try{
-        const u=new URL(client.url);
-        if(u.searchParams.get("rpv")===VERSION)return Promise.resolve();
-        u.searchParams.set("rpv",VERSION);
-        u.searchParams.set("swrefresh",Date.now());
-        return client.navigate(u.toString());
-      }catch{return Promise.resolve()}
-    }));
   })());
 });
 

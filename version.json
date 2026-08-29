@@ -1,6 +1,5 @@
 {
-  "version": "11.8.89.2",
-  "displayVersion": "11.8.89",
+  "version": "11.8.89",
   "releasedAt": "2026-08-29",
-  "notes": "Selbstheilender iOS/PWA-Update-Fix. Sichtbar bleibt v11.8.89; interner Build erzwingt einen frischen Reload bei alten oder festhängenden Ständen."
+  "notes": "Fix: alter v11.8.88-Hardcode entfernt. Kein automatischer Reload-Loop mehr. RepPilot bleibt stabil auf v11.8.89."
 }
