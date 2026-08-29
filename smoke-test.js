@@ -23,6 +23,8 @@ const pngDimensions = rel => {
 let index = "";
 let manifest = null;
 let sw = "";
+let styles = "";
+let navFix = "";
 
 try {
   index = read("index.html");
@@ -36,6 +38,22 @@ try {
   pass("manifest.json ist gueltiges JSON");
 } catch (e) {
   fail("manifest.json ist gueltiges JSON", e.message);
+}
+
+
+try {
+  styles = read("styles.css");
+  pass("styles.css vorhanden");
+} catch (e) {
+  fail("styles.css vorhanden", e.message);
+}
+
+try {
+  navFix = read("home-plan-card-hide.js");
+  new Function(navFix);
+  pass("home-plan-card-hide.js hat gueltige JavaScript-Syntax");
+} catch (e) {
+  fail("home-plan-card-hide.js hat gueltige JavaScript-Syntax", e.message);
 }
 
 try {
@@ -114,6 +132,48 @@ if (index) {
     const file = stripQuery(src);
     if (exists(file)) pass("Lokales Script vorhanden: " + file);
     else fail("Lokales Script vorhanden: " + file);
+  }
+}
+
+
+if (styles && navFix && index) {
+  const navButtons = [...index.matchAll(/<nav[^>]*>([\s\S]*?)<\/nav>/gi)]
+    .flatMap(m => [...m[1].matchAll(/<button\b/gi)]);
+
+  if (navButtons.length === 4) {
+    pass("Bottom-Navigation hat genau 4 Reiter");
+  } else {
+    fail("Bottom-Navigation hat genau 4 Reiter", String(navButtons.length));
+  }
+
+  if (/nav\{[^}]*position:fixed[^}]*bottom:0[^}]*grid-template-columns:repeat\(4,minmax\(0,1fr\)\)/.test(styles)) {
+    pass("Bottom-Navigation ist fest unten und 4-spaltig");
+  } else {
+    fail("Bottom-Navigation ist fest unten und 4-spaltig");
+  }
+
+  if (/body>nav\{[\s\S]*?position:fixed!important;[\s\S]*?bottom:0!important;[\s\S]*?grid-template-columns:repeat\(4,minmax\(0,1fr\)\)!important;/.test(navFix)) {
+    pass("iPhone-Nav-Fix erzwingt feste Bottom-Navigation");
+  } else {
+    fail("iPhone-Nav-Fix erzwingt feste Bottom-Navigation");
+  }
+
+  if (/body>nav\{[\s\S]*?max-height:calc\(64px \+ env\(safe-area-inset-bottom,0px\)\)!important;/.test(navFix)) {
+    pass("Bottom-Navigation bleibt kompakt inkl. Safe-Area");
+  } else {
+    fail("Bottom-Navigation bleibt kompakt inkl. Safe-Area");
+  }
+
+  if (/html\{[^}]*overflow-x:hidden/.test(styles) || /body\{[^}]*overflow-x:hidden/.test(styles)) {
+    fail("Root-Scrollcontainer darf fixed Navigation nicht beeinflussen", "overflow-x:hidden auf html/body gefunden");
+  } else {
+    pass("Root-Scrollcontainer beeinflusst fixed Navigation nicht");
+  }
+
+  if (/main\{[^}]*overflow-x:clip/.test(styles)) {
+    pass("Horizontaler Overflow wird im Inhalt statt am Root begrenzt");
+  } else {
+    fail("Horizontaler Overflow wird im Inhalt statt am Root begrenzt");
   }
 }
 
