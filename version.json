@@ -1,5 +1,6 @@
 {
-  "version": "11.8.89",
+  "version": "11.8.89.2",
+  "displayVersion": "11.8.89",
   "releasedAt": "2026-08-29",
-  "notes": "v11.8.89 mit iOS-Update-Fix: Update lädt jetzt die aktuelle Seite direkt neu, ohne Service-Worker-Abmeldung oder blockierendes Cache-Löschen."
+  "notes": "Selbstheilender iOS/PWA-Update-Fix. Sichtbar bleibt v11.8.89; interner Build erzwingt einen frischen Reload bei alten oder festhängenden Ständen."
 }
