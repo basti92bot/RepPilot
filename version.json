@@ -1,5 +1,5 @@
 {
-  "version": "11.8.89",
+  "version": "11.8.90",
   "releasedAt": "2026-08-29",
-  "notes": "Fix: alter v11.8.88-Hardcode entfernt. Kein automatischer Reload-Loop mehr. RepPilot bleibt stabil auf v11.8.89."
+  "notes": "UI-Fix für feste iPhone-Bottom-Navigation und sicheren mobilen Seitenbreiten-Layout. Ab diesem Stand erhält jeder Fix eine neue sichtbare RepPilot-Version."
 }
