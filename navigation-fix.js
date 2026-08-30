@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.110";
+  const VERSION = "11.8.76";
 
   function hasActiveWorkout(){
     try{return typeof active !== "undefined" && !!active;}catch{return false;}
@@ -11,23 +11,23 @@
 
   function resumeWorkout(){
     if(!hasActiveWorkout())return false;
-    try{if(typeof renderWorkout==="function")renderWorkout();}catch{}
-    try{if(typeof show==="function")show("workout");}catch{return false;}
+    try{if(typeof renderWorkout === "function")renderWorkout();}catch{}
+    try{if(typeof show === "function")show("workout");}catch{return false;}
     markNav("home");
     return true;
   }
 
   function openHistoryWithoutStopping(){
     if(!hasActiveWorkout())return false;
-    try{if(typeof show==="function")show("history");}catch{return false;}
+    try{if(typeof renderHistory === "function")renderHistory();}catch{}
+    try{if(typeof show === "function")show("history");}catch{return false;}
     markNav("history");
-    try{if(typeof renderHistory==="function")renderHistory();}catch(error){console.error("Verlauf konnte nicht gerendert werden",error);}
     return true;
   }
 
   function openTrainingWithoutStopping(){
     if(!hasActiveWorkout())return false;
-    try{if(typeof show==="function")show("trainingHub");}catch{return false;}
+    try{if(typeof show === "function")show("trainingHub");}catch{return false;}
     markNav("trainingHub");
     return true;
   }
@@ -46,5 +46,5 @@
     }
   },true);
 
-  window.RepPilotNavigationFix={version:VERSION,resumeWorkout,openHistoryWithoutStopping,openTrainingWithoutStopping};
+  window.RepPilotNavigationFix={version:VERSION,resumeWorkout};
 })();
