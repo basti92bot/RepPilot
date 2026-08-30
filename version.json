@@ -1,5 +1,5 @@
 {
-  "version": "11.8.108",
+  "version": "11.8.109",
   "releasedAt": "2026-08-30",
-  "notes": "Kraft-Verlauf erweitert: Unter jedem Training sind die einzelnen Übungen als aufklappbare Dropdowns dargestellt. Zugeklappt sieht man Übungsname und Gesamtgewicht, aufgeklappt die einzelnen Sätze mit Gewicht und Wiederholungen."
+  "notes": "Kraft-Verlauf vereinfacht: Pro Training gibt es direkt unter dem Trainingsnamen genau ein Dropdown 'Übungen'. Darin stehen die einzelnen Übungen jeweils mit ihrem Gesamtgewicht. Satzdetails werden nicht mehr angezeigt."
 }
