@@ -151,14 +151,23 @@
       return;
     }
 
-    detail.innerHTML = list.map(row => `
-      <article class="history-simple-card">
-        <div class="history-simple-head">
-          <div><small>${esc(date(row.finishedAt || row.startedAt))}</small><h3>${esc(row.title || "Krafttraining")}</h3></div>
-          <div class="history-simple-total">${weight(totalVolume(row))} kg</div>
-        </div>
-      </article>`
-    ).join("");
+    detail.innerHTML = list.map(row => {
+      const exercises = (row.exercises || []).map(exercise => {
+        const exerciseVolume = (exercise.sets || []).reduce((sum,set) =>
+          sum + (set?.done === false ? 0 : (Number(set?.weight)||0) * (Number(set?.reps)||0)), 0);
+        if (exerciseVolume <= 0) return "";
+        return `<li><span>${esc(exercise.name || "Übung")}</span><strong>${weight(exerciseVolume)} kg</strong></li>`;
+      }).join("");
+
+      return `
+        <article class="history-simple-card">
+          <div class="history-simple-head">
+            <div><small>${esc(date(row.finishedAt || row.startedAt))}</small><h3>${esc(row.title || "Krafttraining")}</h3></div>
+            <div class="history-simple-total">${weight(totalVolume(row))} kg</div>
+          </div>
+          <ul class="history-simple-list">${exercises}</ul>
+        </article>`;
+    }).join("");
   }
 
   function render() {
