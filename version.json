@@ -1,5 +1,5 @@
 {
-  "version": "11.8.99",
+  "version": "11.8.100",
   "releasedAt": "2026-08-30",
-  "notes": "Install-Seite zeigt jetzt eine kurze iPhone-Anleitung: Safari öffnen, Teilen, Zum Home-Bildschirm und Hinzufügen."
+  "notes": "Installationslink zeigt jetzt nur die Installationsanleitung ohne Login. Beim Start vom Home-Bildschirm öffnet sich die normale RepPilot-App."
 }
