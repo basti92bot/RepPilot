@@ -209,7 +209,25 @@ try {
   check(await workoutStart.count()===1,"Mindestens ein Krafttraining ist im Wochenplan startbar");
   await workoutStart.click();
   check((await activeView())==="workout","Krafttraining startet");
-  check(await page.locator("#weightInput").isVisible(),"Gewichtseingabe sichtbar");
+
+  const strengthInline = page.locator("#strengthInlineTest");
+  if (await strengthInline.isVisible().catch(()=>false)) {
+    pass("Fällige Kraftmessung erscheint vor den Arbeitssätzen");
+    check(await page.locator("#strengthInlineWeight").isVisible(),"Kraftmessung zeigt Testgewicht");
+    check(await page.locator("#strengthInlineReps").isVisible(),"Kraftmessung zeigt Wiederholungen");
+    await page.locator("#strengthInlineWeight").fill("70");
+    await page.locator("#strengthInlineReps").fill("3");
+    await page.waitForTimeout(30);
+    const oneRm=await page.locator("#strengthInline1RM").innerText();
+    const workWeight=await page.locator("#strengthInlineTraining").innerText();
+    check(oneRm!=="–"&&oneRm.includes("kg"),"Kraftmessung berechnet e1RM",oneRm);
+    check(workWeight!=="–"&&workWeight.includes("kg"),"Kraftmessung berechnet neues Arbeitsgewicht",workWeight);
+    await page.locator("#strengthInlineSkip").click();
+    await page.waitForTimeout(30);
+    check(await page.locator("#setPanel").isVisible(),"Kraftmessung kann übersprungen werden");
+  }
+
+  check(await page.locator("#weightInput").isVisible(),"Gewichtseingabe nach Kraftmessung sichtbar");
   await page.locator("#weightInput").fill("61");
   await page.locator("#completeSetBtn").click();
   check(await page.locator("#restPanel").isVisible(),"Pausenansicht nach Satz");
