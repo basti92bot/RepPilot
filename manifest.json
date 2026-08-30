@@ -2,7 +2,7 @@
   "id": "/RepPilot/",
   "name": "RepPilot",
   "short_name": "RepPilot",
-  "start_url": "/RepPilot/?launch=v11.8.109",
+  "start_url": "/RepPilot/?launch=v11.8.110",
   "scope": "/RepPilot/",
   "display": "standalone",
   "background_color": "#f3f4f6",
