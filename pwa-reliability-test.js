@@ -19,6 +19,14 @@ const pngDimensions=rel=>{
 };
 
 const version=JSON.parse(read("version.json")).version;
+for(const candidate of ["reppilot-logo-old-stable.png","reppilot-muscleman-logo-v11.8.26.png"]){
+  if(exists(candidate)){
+    try{
+      const d=pngDimensions(candidate);
+      console.log("INFO: Asset-Groesse",candidate,d.width+"x"+d.height);
+    }catch(e){console.log("INFO: Asset-Groesse",candidate,e.message);}
+  }
+}
 const index=read("index.html");
 const install=read("install.html");
 const manifest=JSON.parse(read("manifest.json"));
