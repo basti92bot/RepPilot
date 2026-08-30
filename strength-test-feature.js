@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.80";
+  const VERSION="11.8.104";
   const KEY="reppilot-strength-tests-v1";
   const STATE_KEY="reppilot-strength-test-state-v2";
   const INTERVAL_DAYS=28;
@@ -60,6 +60,109 @@
   function write(data){localStorage.setItem(KEY,JSON.stringify(data));}
   function readState(){try{const data=JSON.parse(localStorage.getItem(STATE_KEY)||"{}");return data&&typeof data==="object"&&!Array.isArray(data)?data:{}}catch{return{}}}
   function writeState(data){localStorage.setItem(STATE_KEY,JSON.stringify(data));}
+  let cloudSyncPromise=null;
+  async function cloudUser(){
+    const client=window.repPilotSupabase;
+    if(!client)return null;
+    const{data}=await client.auth.getUser();
+    return data?.user||null;
+  }
+  function mergeRecords(base,incoming){
+    const map=new Map();
+    [...(Array.isArray(base)?base:[]),...(Array.isArray(incoming)?incoming:[])].forEach(item=>{
+      if(!item?.exercise||!item?.date)return;
+      const normalized={...item,exercise:normalizeExerciseKey(item.exercise)};
+      map.set(`${normalized.date}|${normalized.exercise}|${normalized.mode||""}`,normalized);
+    });
+    return [...map.values()].sort((a,b)=>(Date.parse(a.date)||0)-(Date.parse(b.date)||0));
+  }
+  function rebuildState(records){
+    const state=readState();
+    (Array.isArray(records)?records:[]).forEach(record=>{
+      if(!record?.exercise||!record?.date)return;
+      const key=normalizeExerciseKey(record.exercise);
+      const previous=state[key]?.record;
+      if(!previous||((Date.parse(record.date)||0)>=(Date.parse(previous.date)||0))){
+        state[key]={date:record.date,record};
+      }
+    });
+    writeState(state);
+  }
+  function cloudRowFromRecord(userId,record){
+    return {
+      user_id:userId,
+      exercise:normalizeExerciseKey(record.exercise),
+      measured_at:record.date,
+      mode:record.mode||"weight",
+      reps:Number.isFinite(Number(record.reps))?Number(record.reps):null,
+      test_weight:Number.isFinite(Number(record.testWeight))?Number(record.testWeight):null,
+      estimated_1rm:Number.isFinite(Number(record.estimated1RM))?Number(record.estimated1RM):null,
+      training_weight:Number.isFinite(Number(record.trainingWeight))?Number(record.trainingWeight):null,
+      target_reps:Number.isFinite(Number(record.targetReps))?Number(record.targetReps):null,
+      formula:record.formula||null
+    };
+  }
+  function recordFromCloudRow(row){
+    return {
+      date:row.measured_at,
+      exercise:normalizeExerciseKey(row.exercise),
+      mode:row.mode||"weight",
+      reps:row.reps,
+      testWeight:row.test_weight,
+      estimated1RM:row.estimated_1rm,
+      trainingWeight:row.training_weight,
+      targetReps:row.target_reps,
+      formula:row.formula||null
+    };
+  }
+  async function saveRecordCloud(record){
+    try{
+      const client=window.repPilotSupabase,user=await cloudUser();
+      if(!client||!user||!record?.exercise||!record?.date)return false;
+      const row=cloudRowFromRecord(user.id,record);
+      const{error}=await client.from("strength_measurements").upsert(row,{onConflict:"user_id,exercise,measured_at,mode"});
+      if(error){console.warn("Kraftmessung Cloud-Speicherung fehlgeschlagen",error);return false;}
+      return true;
+    }catch(error){
+      console.warn("Kraftmessung Cloud-Speicherung fehlgeschlagen",error);
+      return false;
+    }
+  }
+  async function syncStrengthCloud(){
+    if(cloudSyncPromise)return cloudSyncPromise;
+    cloudSyncPromise=(async()=>{
+      try{
+        const client=window.repPilotSupabase,user=await cloudUser();
+        if(!client||!user)return false;
+
+        const local=normalizedRecords();
+        if(local.length){
+          const rows=local.map(record=>cloudRowFromRecord(user.id,record));
+          const{error:upErr}=await client.from("strength_measurements").upsert(rows,{onConflict:"user_id,exercise,measured_at,mode"});
+          if(upErr)console.warn("Lokale Kraftmessungen konnten nicht in die Cloud übernommen werden",upErr);
+        }
+
+        const{data,error}=await client.from("strength_measurements")
+          .select("exercise,measured_at,mode,reps,test_weight,estimated_1rm,training_weight,target_reps,formula")
+          .eq("user_id",user.id)
+          .order("measured_at",{ascending:true});
+        if(error){console.warn("Cloud-Kraftmessungen konnten nicht geladen werden",error);return false;}
+
+        const merged=mergeRecords(read(),(data||[]).map(recordFromCloudRow));
+        if(merged.length){
+          write(merged);
+          rebuildState(merged);
+          window.RepPilotTrainingDataPersistence?.refreshBackup?.();
+        }
+        markPlanDue();
+        try{applyInline();}catch{}
+        return true;
+      }finally{
+        cloudSyncPromise=null;
+      }
+    })();
+    return cloudSyncPromise;
+  }
   function stateRecord(name,workoutId=currentWorkoutId()){
     const key=recordKey(name,workoutId),entry=readState()[key];
     return entry?.record&&entry.record.date?entry.record:null;
@@ -72,6 +175,7 @@
     state[key]={date:record.date,record};
     writeState(state);
     window.RepPilotTrainingDataPersistence?.refreshBackup?.();
+    saveRecordCloud(record);
     return record;
   }
   function normalizedRecords(){
@@ -260,8 +364,10 @@
     ensureStyles();removeStandalone();ensureInlinePanel();ensureAppliedHint();
     if(typeof renderSet==="function"&&!window.__repPilotInlineStrengthInstalled){window.__repPilotInlineStrengthInstalled=true;const baseRenderSet=renderSet;renderSet=function(){const result=baseRenderSet.apply(this,arguments);try{applyInline();}catch(error){console.warn("Kraftmessung konnte nicht gerendert werden",error)}return result;};}
     const plan=document.getElementById("plan");if(plan)new MutationObserver(()=>queueMicrotask(markPlanDue)).observe(plan,{childList:true,subtree:true});markPlanDue();try{if(typeof active!=="undefined"&&active&&typeof phase!=="undefined"&&phase==="set")applyInline();}catch{}
+    setTimeout(()=>syncStrengthCloud(),150);
+    window.repPilotSupabase?.auth?.onAuthStateChange(()=>setTimeout(()=>syncStrengthCloud(),100));
   }
 
-  window.RepPilotStrengthTest={version:VERSION,intervalDays:INTERVAL_DAYS,estimate1RM,trainingWeight,due,nextDue,trackedNames,recordKey,latestFor,stateKey:STATE_KEY,refresh:()=>{applyInline();markPlanDue();}};
+  window.RepPilotStrengthTest={version:VERSION,intervalDays:INTERVAL_DAYS,estimate1RM,trainingWeight,due,nextDue,trackedNames,recordKey,latestFor,stateKey:STATE_KEY,syncCloud:syncStrengthCloud,refresh:()=>{applyInline();markPlanDue();}};
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",install,{once:true});else install();
 })();
