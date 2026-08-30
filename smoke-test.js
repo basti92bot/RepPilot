@@ -379,14 +379,14 @@ try {
 
   const simpleTabs = (simpleHistory.match(/data-history-simple-mode=/g) || []).length;
   const simpleSelects = (simpleHistory.match(/id="historySimpleSelect"/g) || []).length;
-  if (simpleTabs === 2 && simpleSelects === 1) {
-    pass("Verlauf nutzt Kraft/Laufen plus genau ein Dropdown");
+  if (simpleTabs === 2 && simpleSelects === 0) {
+    pass("Verlauf nutzt Kraft/Laufen ohne Dropdown");
   } else {
-    fail("Verlauf nutzt Kraft/Laufen plus genau ein Dropdown", "Reiter=" + simpleTabs + ", Dropdown=" + simpleSelects);
+    fail("Verlauf nutzt Kraft/Laufen ohne Dropdown", "Reiter=" + simpleTabs + ", Dropdown=" + simpleSelects);
   }
 
-  if (index.includes('history-simple-feature.js?v=11.8.105-history1') &&
-      sw.includes('history-simple-feature.js?v=11.8.105-history1')) {
+  if (index.includes('history-simple-feature.js?v=11.8.105-history2') &&
+      sw.includes('history-simple-feature.js?v=11.8.105-history2')) {
     pass("PWA laedt den einfachen Verlauf");
   } else {
     fail("PWA laedt den einfachen Verlauf");
