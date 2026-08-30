@@ -1,5 +1,5 @@
 {
-  "version": "11.8.107",
+  "version": "11.8.108",
   "releasedAt": "2026-08-30",
-  "notes": "Fix: Der Unterreiter Laufen im Verlauf ist auf iPhone/PWA wieder anklickbar. Die Umschaltung wird bei jedem Render robust neu gebunden."
+  "notes": "PWA-Update-Fix: neuer Cache pro Release, alte Service-Worker-Caches werden entfernt und installierte Home-Screen-App lädt nach einem Update automatisch die aktuelle Version."
 }
