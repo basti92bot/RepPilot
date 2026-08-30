@@ -205,7 +205,9 @@ try {
 
   // Workout runtime and navigation while workout active
   await page.getByRole("button",{name:"Heute",exact:true}).click();
-  await page.locator("[data-workout]").first().click();
+  const workoutStart = page.locator("[data-selected-workout],[data-workout]").first();
+  check(await workoutStart.count()===1,"Mindestens ein Krafttraining ist im Wochenplan startbar");
+  await workoutStart.click();
   check((await activeView())==="workout","Krafttraining startet");
   check(await page.locator("#weightInput").isVisible(),"Gewichtseingabe sichtbar");
   await page.locator("#weightInput").fill("61");
