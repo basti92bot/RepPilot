@@ -1,5 +1,5 @@
 {
-  "version": "11.8.105",
+  "version": "11.8.106",
   "releasedAt": "2026-08-30",
-  "notes": "Kraftmessung folgt jetzt einem globalen 28-Tage-Zyklus. Nach abgeschlossener Messung bleibt sie fuer alle Krafttrainings bis zum naechsten Zyklus aus."
+  "notes": "Verlauf vereinfacht: Kraft und Laufen als zwei Reiter. Krafttrainings zeigen Trainingsgesamtgewicht und je Übung nur das Gesamtgewicht, ohne Satz-/Wiederholungs-Aufzählung."
 }
