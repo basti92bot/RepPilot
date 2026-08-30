@@ -201,13 +201,13 @@ if (install) {
 
   if (/display-mode:\s*standalone/.test(install) &&
       /navigator\.standalone/.test(install) &&
-      /location\.replace\(['"]\.\/\?launch=v11\.8\.106['"]\)/.test(install)) {
+      /location\.replace\(['"]\.\/\?launch=v11\.8\.105['"]\)/.test(install)) {
     pass("Installierte Install-Seite leitet zur RepPilot-App weiter");
   } else {
     fail("Installierte Install-Seite leitet zur RepPilot-App weiter");
   }
 
-  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.106['"]/.test(install)) {
+  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.105['"]/.test(install)) {
     pass("Install-Seite registriert Service Worker");
   } else {
     fail("Install-Seite registriert Service Worker");
@@ -240,41 +240,11 @@ if (auth) {
     fail("Login erklaert den Testzugang");
   }
 
-  if (/auth\.js\?v=11\.8\.106/.test(index) && /auth\.js\?v=11\.8\.106/.test(sw)) {
+  if (/auth\.js\?v=11\.8\.105/.test(index) && /auth\.js\?v=11\.8\.105/.test(sw)) {
     pass("Aktuelle auth.js wird von App und Service Worker geladen");
   } else {
     fail("Aktuelle auth.js wird von App und Service Worker geladen");
   }
-}
-
-try {
-  const runFeature = read("run-feature.js");
-  const runDashboard = read("run-dashboard-feature.js");
-  new Function(runFeature);
-  new Function(runDashboard);
-  pass("Verlauf-Reiter JavaScript hat gueltige Syntax");
-  if (runFeature.includes('data-history-view="strength"') &&
-      runFeature.includes('data-history-view="run"') &&
-      runFeature.includes('reppilot-history-view-v1') &&
-      runFeature.includes('historyRoot.dataset.historyView=view')) {
-    pass("Verlauf ist in Kraft und Laufen getrennt");
-  } else {
-    fail("Verlauf ist in Kraft und Laufen getrennt");
-  }
-  if (runDashboard.includes('reppilot-history-view-v1') &&
-      runDashboard.includes('!== "run"')) {
-    pass("Lauf-Dashboard erscheint nur im Lauf-Reiter");
-  } else {
-    fail("Lauf-Dashboard erscheint nur im Lauf-Reiter");
-  }
-  if (/run-dashboard-feature\.js\?v=11\.8\.106/.test(index) &&
-      /run-dashboard-feature\.js\?v=11\.8\.106/.test(sw)) {
-    pass("Aktuelles Lauf-Dashboard wird von App und Service Worker geladen");
-  } else {
-    fail("Aktuelles Lauf-Dashboard wird von App und Service Worker geladen");
-  }
-} catch (e) {
-  fail("Verlauf-Reiter JavaScript hat gueltige Syntax", e.message);
 }
 
 if (auth && index && sw) {
@@ -304,8 +274,8 @@ if (auth && index && sw) {
     fail("Kraftmessung nutzt einen globalen 28-Tage-Zyklus");
   }
 
-  if (/strength-test-feature\.js\?v=11\.8\.106/.test(index) &&
-      /strength-test-feature\.js\?v=11\.8\.106/.test(sw)) {
+  if (/strength-test-feature\.js\?v=11\.8\.105/.test(index) &&
+      /strength-test-feature\.js\?v=11\.8\.105/.test(sw)) {
     pass("Aktuelle Kraftmessungslogik wird von App und Service Worker geladen");
   } else {
     fail("Aktuelle Kraftmessungslogik wird von App und Service Worker geladen");
@@ -334,8 +304,8 @@ if (tour) {
     fail("App-Fuehrung kann im Profil erneut gestartet werden");
   }
 
-  if (/app-tour-feature\.js\?v=11\.8\.106/.test(index) &&
-      /app-tour-feature\.js\?v=11\.8\.106/.test(sw)) {
+  if (/app-tour-feature\.js\?v=11\.8\.105/.test(index) &&
+      /app-tour-feature\.js\?v=11\.8\.105/.test(sw)) {
     pass("App-Fuehrung wird von App und Service Worker geladen");
   } else {
     fail("App-Fuehrung wird von App und Service Worker geladen");
