@@ -201,13 +201,13 @@ if (install) {
 
   if (/display-mode:\s*standalone/.test(install) &&
       /navigator\.standalone/.test(install) &&
-      /location\.replace\(['"]\.\/\?launch=v11\.8\.108['"]\)/.test(install)) {
+      /location\.replace\(['"]\.\/\?launch=v11\.8\.109['"]\)/.test(install)) {
     pass("Installierte Install-Seite leitet zur RepPilot-App weiter");
   } else {
     fail("Installierte Install-Seite leitet zur RepPilot-App weiter");
   }
 
-  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.108['"]/.test(install)) {
+  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.109['"]/.test(install)) {
     pass("Install-Seite registriert Service Worker");
   } else {
     fail("Install-Seite registriert Service Worker");
@@ -240,7 +240,7 @@ if (auth) {
     fail("Login erklaert den Testzugang");
   }
 
-  if (/auth\.js\?v=11\.8\.108/.test(index) && /auth\.js\?v=11\.8\.108/.test(sw)) {
+  if (/auth\.js\?v=11\.8\.109/.test(index) && /auth\.js\?v=11\.8\.109/.test(sw)) {
     pass("Aktuelle auth.js wird von App und Service Worker geladen");
   } else {
     fail("Aktuelle auth.js wird von App und Service Worker geladen");
@@ -276,8 +276,8 @@ try {
   } else {
     fail("Lauf-Dashboard erscheint nur im Lauf-Reiter");
   }
-  if (/run-dashboard-feature\.js\?v=11\.8\.108/.test(index) &&
-      /run-dashboard-feature\.js\?v=11\.8\.108/.test(sw)) {
+  if (/run-dashboard-feature\.js\?v=11\.8\.109/.test(index) &&
+      /run-dashboard-feature\.js\?v=11\.8\.109/.test(sw)) {
     pass("Aktuelles Lauf-Dashboard wird von App und Service Worker geladen");
   } else {
     fail("Aktuelles Lauf-Dashboard wird von App und Service Worker geladen");
@@ -313,8 +313,8 @@ if (auth && index && sw) {
     fail("Kraftmessung nutzt einen globalen 28-Tage-Zyklus");
   }
 
-  if (/strength-test-feature\.js\?v=11\.8\.108/.test(index) &&
-      /strength-test-feature\.js\?v=11\.8\.108/.test(sw)) {
+  if (/strength-test-feature\.js\?v=11\.8\.109/.test(index) &&
+      /strength-test-feature\.js\?v=11\.8\.109/.test(sw)) {
     pass("Aktuelle Kraftmessungslogik wird von App und Service Worker geladen");
   } else {
     fail("Aktuelle Kraftmessungslogik wird von App und Service Worker geladen");
@@ -343,8 +343,8 @@ if (tour) {
     fail("App-Fuehrung kann im Profil erneut gestartet werden");
   }
 
-  if (/app-tour-feature\.js\?v=11\.8\.108/.test(index) &&
-      /app-tour-feature\.js\?v=11\.8\.108/.test(sw)) {
+  if (/app-tour-feature\.js\?v=11\.8\.109/.test(index) &&
+      /app-tour-feature\.js\?v=11\.8\.109/.test(sw)) {
     pass("App-Fuehrung wird von App und Service Worker geladen");
   } else {
     fail("App-Fuehrung wird von App und Service Worker geladen");
@@ -425,6 +425,28 @@ if (sw) {
   } else {
     fail("PWA erzwingt bei Release einen frischen Cache");
   }
+}
+
+try {
+  const navigationFix = read("navigation-fix.js");
+  new Function(navigationFix);
+  pass("navigation-fix.js hat gueltige JavaScript-Syntax");
+  if (navigationFix.includes('safeShow("history")') &&
+      navigationFix.includes('if(typeof renderHistory==="function")renderHistory()') &&
+      navigationFix.indexOf('safeShow("history")') < navigationFix.indexOf('if(typeof renderHistory==="function")renderHistory()') &&
+      navigationFix.includes('event.stopImmediatePropagation()')) {
+    pass("Haupt-Tab Verlauf wird vor dem Rendern geoeffnet");
+  } else {
+    fail("Haupt-Tab Verlauf wird vor dem Rendern geoeffnet");
+  }
+  if (/navigation-fix\.js\?v=11\.8\.109/.test(index) &&
+      /navigation-fix\.js\?v=11\.8\.109/.test(sw)) {
+    pass("Aktueller Navigation-Fix wird von App und Service Worker geladen");
+  } else {
+    fail("Aktueller Navigation-Fix wird von App und Service Worker geladen");
+  }
+} catch (e) {
+  fail("navigation-fix.js hat gueltige JavaScript-Syntax", e.message);
 }
 
 try {
