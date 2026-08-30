@@ -1,9 +1,11 @@
 (() => {
-  const VERSION="11.8.104";
+  const VERSION="11.8.105";
   const KEY="reppilot-strength-tests-v1";
   const STATE_KEY="reppilot-strength-test-state-v2";
   const INTERVAL_DAYS=28;
   const DAY=86400000;
+  const CYCLE_EXERCISE="__strength_cycle__";
+  const CYCLE_MODE="cycle";
   const BODYWEIGHT=/liegestütz|liegestuetz|hanging leg raise|hängend.*bein|unterarmstütz|seitstütz|beinheben|bergsteiger|hüftheben|ausfallschritt|kniebeugen|rückenstrecker|schneeengel|arm-bein-strecken|y-t-heben/i;
 
   const fmt=v=>Number(v||0).toLocaleString("de-DE",{maximumFractionDigits:1});
@@ -205,16 +207,33 @@
     if(isHomeWorkoutId(workoutId))return rows.filter(x=>normalizeExerciseKey(x.exercise)===normalizeName(name)&&x.mode==="reps").slice(-1)[0]||null;
     return null;
   }
-  function due(name,workoutId=currentWorkoutId()){
-    if(isHomeWorkoutId(workoutId))return false;
-    if(!tracked(name))return false;
-    const last=latestFor(name,workoutId);
+  function latestCycle(){
+    return normalizedRecords().filter(x=>x?.mode===CYCLE_MODE&&normalizeExerciseKey(x.exercise)===CYCLE_EXERCISE).slice(-1)[0]||null;
+  }
+  function cycleDue(){
+    const last=latestCycle();
     if(!last)return true;
     return Date.now()-new Date(last.date).getTime()>=INTERVAL_DAYS*DAY;
   }
-  function nextDue(name,workoutId=currentWorkoutId()){
-    const last=latestFor(name,workoutId);
+  function due(name,workoutId=currentWorkoutId()){
+    if(isHomeWorkoutId(workoutId))return false;
+    if(!tracked(name))return false;
+    return cycleDue();
+  }
+  function nextDue(){
+    const last=latestCycle();
     return last?new Date(new Date(last.date).getTime()+INTERVAL_DAYS*DAY):null;
+  }
+  function cycleCompleteForWorkout(workout){
+    if(!workout||isHomeWorkoutId(workout.id))return false;
+    const exercises=(workout.exercises||[]).filter(e=>tracked(e?.name));
+    return exercises.length>0&&exercises.every(e=>e?.strengthTestApplied);
+  }
+  function markCycleComplete(date=new Date().toISOString()){
+    const record={date,exercise:CYCLE_EXERCISE,mode:CYCLE_MODE,formula:"28-Tage-Kraftmessungszyklus abgeschlossen"};
+    persistRecord(record);
+    markPlanDue();
+    return record;
   }
 
   function ensureStyles(){
@@ -363,11 +382,12 @@
   function install(){
     ensureStyles();removeStandalone();ensureInlinePanel();ensureAppliedHint();
     if(typeof renderSet==="function"&&!window.__repPilotInlineStrengthInstalled){window.__repPilotInlineStrengthInstalled=true;const baseRenderSet=renderSet;renderSet=function(){const result=baseRenderSet.apply(this,arguments);try{applyInline();}catch(error){console.warn("Kraftmessung konnte nicht gerendert werden",error)}return result;};}
+    if(typeof finish==="function"&&!window.__repPilotStrengthFinishInstalled){window.__repPilotStrengthFinishInstalled=true;const baseFinish=finish;finish=function(){const workout=typeof active!=="undefined"?active:null,completeCycle=cycleCompleteForWorkout(workout),completedAt=new Date().toISOString();const result=baseFinish.apply(this,arguments);if(completeCycle)markCycleComplete(completedAt);return result;};}
     const plan=document.getElementById("plan");if(plan)new MutationObserver(()=>queueMicrotask(markPlanDue)).observe(plan,{childList:true,subtree:true});markPlanDue();try{if(typeof active!=="undefined"&&active&&typeof phase!=="undefined"&&phase==="set")applyInline();}catch{}
     setTimeout(()=>syncStrengthCloud(),150);
     window.repPilotSupabase?.auth?.onAuthStateChange(()=>setTimeout(()=>syncStrengthCloud(),100));
   }
 
-  window.RepPilotStrengthTest={version:VERSION,intervalDays:INTERVAL_DAYS,estimate1RM,trainingWeight,due,nextDue,trackedNames,recordKey,latestFor,stateKey:STATE_KEY,syncCloud:syncStrengthCloud,refresh:()=>{applyInline();markPlanDue();}};
+  window.RepPilotStrengthTest={version:VERSION,intervalDays:INTERVAL_DAYS,estimate1RM,trainingWeight,due,nextDue,cycleDue,latestCycle,trackedNames,recordKey,latestFor,stateKey:STATE_KEY,syncCloud:syncStrengthCloud,refresh:()=>{applyInline();markPlanDue();}};
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",install,{once:true});else install();
 })();
