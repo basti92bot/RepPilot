@@ -1,5 +1,5 @@
 {
-  "version": "11.8.104",
+  "version": "11.8.105",
   "releasedAt": "2026-08-30",
-  "notes": "Kraftmessungen werden jetzt kontoweit in Supabase synchronisiert, damit Krafttest-faellig nicht mehr zwischen Safari, PWA oder Neuinstallation auseinanderlaeuft."
+  "notes": "Kraftmessung folgt jetzt einem globalen 28-Tage-Zyklus. Nach abgeschlossener Messung bleibt sie fuer alle Krafttrainings bis zum naechsten Zyklus aus."
 }
