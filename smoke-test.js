@@ -21,6 +21,7 @@ const pngDimensions = rel => {
 };
 
 let index = "";
+let install = "";
 let manifest = null;
 let sw = "";
 let styles = "";
@@ -31,6 +32,13 @@ try {
   pass("index.html vorhanden");
 } catch (e) {
   fail("index.html vorhanden", e.message);
+}
+
+try {
+  install = read("install.html");
+  pass("install.html vorhanden");
+} catch (e) {
+  fail("install.html vorhanden", e.message);
 }
 
 try {
@@ -135,6 +143,53 @@ if (index) {
   }
 }
 
+
+
+if (install) {
+  if (/rel=["']manifest["'][^>]+href=["'][^"']*manifest\.json/i.test(install)) {
+    pass("Install-Seite bindet manifest.json ein");
+  } else {
+    fail("Install-Seite bindet manifest.json ein");
+  }
+
+  if (install.includes("RepPilot als App installieren") &&
+      install.includes("Zum Home-Bildschirm") &&
+      install.includes("Hinzufügen")) {
+    pass("Install-Seite zeigt Home-Bildschirm-Anleitung");
+  } else {
+    fail("Install-Seite zeigt Home-Bildschirm-Anleitung");
+  }
+
+  if (!/auth\.js|onboarding-feature\.js|supabase-js/i.test(install)) {
+    pass("Install-Seite laedt keine Login- oder App-Logik");
+  } else {
+    fail("Install-Seite laedt keine Login- oder App-Logik");
+  }
+
+  if (/display-mode:\s*standalone/.test(install) &&
+      /navigator\.standalone/.test(install) &&
+      /location\.replace\(['"]\.\/\?launch=v11\.8\.100['"]\)/.test(install)) {
+    pass("Installierte Install-Seite leitet zur RepPilot-App weiter");
+  } else {
+    fail("Installierte Install-Seite leitet zur RepPilot-App weiter");
+  }
+
+  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.100['"]/.test(install)) {
+    pass("Install-Seite registriert Service Worker");
+  } else {
+    fail("Install-Seite registriert Service Worker");
+  }
+
+  const installInlineScripts = [...install.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi)].map(m => m[1]).filter(Boolean);
+  installInlineScripts.forEach((code, i) => {
+    try {
+      new Function(code);
+      pass("Install-Inline-Script " + (i + 1) + " hat gueltige Syntax");
+    } catch (e) {
+      fail("Install-Inline-Script " + (i + 1) + " hat gueltige Syntax", e.message);
+    }
+  });
+}
 
 if (styles) {
   if (/\.home-dashboard \.stat,#history \.stat\{[^}]*padding-left:60px/.test(styles) || /@media\(max-width:560px\)\{[\s\S]*?\.home-dashboard \.stat,#history \.stat\{[^}]*padding-left:60px/.test(styles)) {
