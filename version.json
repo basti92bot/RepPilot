@@ -1,5 +1,5 @@
 {
-  "version": "11.8.112",
+  "version": "11.8.113",
   "releasedAt": "2026-08-30",
-  "notes": "PWA-Runtime-Fix: Basis-Verlauf toleriert gespeicherte Laufdaten bereits beim App-Bootstrap und verursacht beim Neustart keine reduce-Exception mehr. Keyboard-/Sticky-Actions-Verhalten wird im Browser-E2E explizit getestet."
+  "notes": "iPhone-Keyboard-Fix: Sticky-Workout-Aktionen werden nach dem Schliessen der Bildschirmtastatur neu positioniert und liegen nicht mehr hinter der Bottom-Navigation."
 }
