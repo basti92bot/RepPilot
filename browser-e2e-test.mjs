@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 
 const BASE = process.env.REPPILOT_BASE_URL || "http://127.0.0.1:4173";
-const VERSION = "11.8.110";
+const VERSION = "11.8.111";
 const failures = [];
 const pass = label => console.log("PASS:", label);
 const fail = (label, detail="") => {
@@ -244,14 +244,14 @@ try {
   });
   check(swState.supported,"Service Worker API verfügbar");
   check(swState.registrations===1,"Genau eine Service-Worker-Registrierung aktiv",JSON.stringify(swState));
-  check(swState.script.includes("sw.js?v=11.8.110"),"Aktiver Service Worker hat aktuelle Version",swState.script);
+  check(swState.script.includes("sw.js?v=11.8.111"),"Aktiver Service Worker hat aktuelle Version",swState.script);
   check(swState.keys.includes("reppilot-v11-8-110"),"Aktueller PWA-Cache vorhanden",swState.keys.join(","));
-  check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.110")),"192er Icon im Runtime-Cache");
-  check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.110")),"512er Icon im Runtime-Cache");
+  check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.111")),"192er Icon im Runtime-Cache");
+  check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.111")),"512er Icon im Runtime-Cache");
 
   // Manifest runtime fetch
   const manifestRuntime=await page.evaluate(async()=>{
-    const r=await fetch("./manifest.json?v=11.8.110",{cache:"no-store"});
+    const r=await fetch("./manifest.json?v=11.8.111",{cache:"no-store"});
     return {status:r.status,json:await r.json()};
   });
   check(manifestRuntime.status===200,"Manifest wird zur Laufzeit ausgeliefert");
@@ -274,7 +274,7 @@ try {
     await caches.open("reppilot-old-test-cache");
     const regs=await navigator.serviceWorker.getRegistrations();
     await Promise.all(regs.map(r=>r.unregister()));
-    const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.110&reinstall=1",{updateViaCache:"none"});
+    const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.111&reinstall=1",{updateViaCache:"none"});
     const worker=reg.installing||reg.waiting||reg.active;
     if(worker&&worker.state!=="activated"){
       await new Promise(resolve=>worker.addEventListener("statechange",()=>{if(worker.state==="activated")resolve();}));
