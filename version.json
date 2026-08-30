@@ -1,5 +1,5 @@
 {
-  "version": "11.8.110",
+  "version": "11.8.106",
   "releasedAt": "2026-08-30",
-  "notes": "Bottom-Navigation repariert: globaler Klick-Interceptor greift nur noch bei aktivem Workout. Verlauf öffnet vor dem Rendern. Alte doppelte Service-Worker-Registrierung aus app.js entfernt."
+  "notes": "Verlauf hat jetzt zwei Unterreiter: Kraft und Laufen. Kennzahlen und Verlauf werden je Bereich getrennt angezeigt; das Laufdashboard erscheint nur unter Laufen."
 }
