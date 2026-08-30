@@ -399,5 +399,4 @@ $("skipStretchBtn").onclick=skipStretchPhase;
 $("startStretchNowBtn").onclick=startNextStretchNow;
 $("endStretchBtn").onclick=()=>{if(confirm("Dehnroutine wirklich beenden?"))endStretchRoutine()};
 $("restartStretchBtn").onclick=startStretchRoutine;
-if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js?v=11.7.2"));
 renderHome();renderHistory();renderStretchPreview();showStretchScreen("overview");
