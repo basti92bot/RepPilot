@@ -1,5 +1,5 @@
 {
-  "version": "11.8.102",
+  "version": "11.8.103",
   "releasedAt": "2026-08-30",
-  "notes": "Neue Erststart-Führung erklärt kurz die wichtigsten Bereiche Heute, Training, Verlauf und Profil. Die Führung kann im Profil erneut gestartet werden."
+  "notes": "Mobile App-Führung repariert: keine CSS-Kollision mehr, Text und Buttons bleiben sauber innerhalb der Tourkarte."
 }
