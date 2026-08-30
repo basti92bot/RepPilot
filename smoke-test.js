@@ -201,13 +201,13 @@ if (install) {
 
   if (/display-mode:\s*standalone/.test(install) &&
       /navigator\.standalone/.test(install) &&
-      /location\.replace\(['"]\.\/\?launch=v11\.8\.107['"]\)/.test(install)) {
+      /location\.replace\(['"]\.\/\?launch=v11\.8\.108['"]\)/.test(install)) {
     pass("Installierte Install-Seite leitet zur RepPilot-App weiter");
   } else {
     fail("Installierte Install-Seite leitet zur RepPilot-App weiter");
   }
 
-  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.107['"]/.test(install)) {
+  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.108['"]/.test(install)) {
     pass("Install-Seite registriert Service Worker");
   } else {
     fail("Install-Seite registriert Service Worker");
@@ -240,7 +240,7 @@ if (auth) {
     fail("Login erklaert den Testzugang");
   }
 
-  if (/auth\.js\?v=11\.8\.107/.test(index) && /auth\.js\?v=11\.8\.107/.test(sw)) {
+  if (/auth\.js\?v=11\.8\.108/.test(index) && /auth\.js\?v=11\.8\.108/.test(sw)) {
     pass("Aktuelle auth.js wird von App und Service Worker geladen");
   } else {
     fail("Aktuelle auth.js wird von App und Service Worker geladen");
@@ -274,8 +274,8 @@ if (auth && index && sw) {
     fail("Kraftmessung nutzt einen globalen 28-Tage-Zyklus");
   }
 
-  if (/strength-test-feature\.js\?v=11\.8\.107/.test(index) &&
-      /strength-test-feature\.js\?v=11\.8\.107/.test(sw)) {
+  if (/strength-test-feature\.js\?v=11\.8\.108/.test(index) &&
+      /strength-test-feature\.js\?v=11\.8\.108/.test(sw)) {
     pass("Aktuelle Kraftmessungslogik wird von App und Service Worker geladen");
   } else {
     fail("Aktuelle Kraftmessungslogik wird von App und Service Worker geladen");
@@ -304,8 +304,8 @@ if (tour) {
     fail("App-Fuehrung kann im Profil erneut gestartet werden");
   }
 
-  if (/app-tour-feature\.js\?v=11\.8\.107/.test(index) &&
-      /app-tour-feature\.js\?v=11\.8\.107/.test(sw)) {
+  if (/app-tour-feature\.js\?v=11\.8\.108/.test(index) &&
+      /app-tour-feature\.js\?v=11\.8\.108/.test(sw)) {
     pass("App-Fuehrung wird von App und Service Worker geladen");
   } else {
     fail("App-Fuehrung wird von App und Service Worker geladen");
@@ -395,8 +395,18 @@ try {
     fail("Lauf-Verlauf zeigt Pace-Linie und Distanz-Balken");
   }
 
-  if (index.includes('history-simple-feature.js?v=11.8.107') &&
-      sw.includes('history-simple-feature.js?v=11.8.107')) {
+  if (simpleHistory.includes('class="history-exercise-dropdown"') &&
+      simpleHistory.includes("<details") &&
+      simpleHistory.includes("<summary>") &&
+      simpleHistory.includes("history-exercise-set") &&
+      simpleHistory.includes("Satz ${index+1}")) {
+    pass("Kraft-Verlauf hat aufklappbare Uebungsdetails");
+  } else {
+    fail("Kraft-Verlauf hat aufklappbare Uebungsdetails");
+  }
+
+  if (index.includes('history-simple-feature.js?v=11.8.108') &&
+      sw.includes('history-simple-feature.js?v=11.8.108')) {
     pass("PWA laedt den einfachen Verlauf");
   } else {
     fail("PWA laedt den einfachen Verlauf");
