@@ -1,5 +1,5 @@
 {
-  "version": "11.8.103",
+  "version": "11.8.104",
   "releasedAt": "2026-08-30",
-  "notes": "Mobile App-Führung repariert: keine CSS-Kollision mehr, Text und Buttons bleiben sauber innerhalb der Tourkarte."
+  "notes": "Kraftmessungen werden jetzt kontoweit in Supabase synchronisiert, damit Krafttest-faellig nicht mehr zwischen Safari, PWA oder Neuinstallation auseinanderlaeuft."
 }
