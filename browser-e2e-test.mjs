@@ -60,7 +60,7 @@ const page = await context.newPage();
 const pageErrors = [];
 const consoleErrors = [];
 const local404s = [];
-page.on("pageerror", err => pageErrors.push(err.message));
+page.on("pageerror", err => pageErrors.push(err.stack||err.message));
 page.on("console", msg => { if(msg.type()==="error") consoleErrors.push(msg.text()); });
 page.on("response", res => {
   if(res.url().startsWith(BASE) && res.status() >= 400) local404s.push(res.status()+" "+res.url());
