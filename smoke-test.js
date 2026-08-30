@@ -264,6 +264,16 @@ if (auth && index && sw) {
     fail("Kraftmessungen sind cloud-synchronisiert");
   }
 
+  if (strength.includes('CYCLE_EXERCISE="__strength_cycle__"') &&
+      strength.includes('CYCLE_MODE="cycle"') &&
+      strength.includes("cycleDue") &&
+      strength.includes("markCycleComplete") &&
+      strength.includes("__repPilotStrengthFinishInstalled")) {
+    pass("Kraftmessung nutzt einen globalen 28-Tage-Zyklus");
+  } else {
+    fail("Kraftmessung nutzt einen globalen 28-Tage-Zyklus");
+  }
+
   if (/strength-test-feature\.js\?v=11\.8\.104/.test(index) &&
       /strength-test-feature\.js\?v=11\.8\.104/.test(sw)) {
     pass("Aktuelle Kraftmessungslogik wird von App und Service Worker geladen");
