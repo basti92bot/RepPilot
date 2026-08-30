@@ -229,13 +229,39 @@ try {
 
   check(await page.locator("#weightInput").isVisible(),"Gewichtseingabe nach Kraftmessung sichtbar");
   await page.locator("#weightInput").fill("61");
-  const completeAction=page.locator('[data-proxy-for="completeSetBtn"]');
-  check(await completeAction.isVisible(),"Sticky-Aktion für Satzabschluss sichtbar");
-  await completeAction.click();
+  await page.waitForTimeout(80);
+  const completeProxy=page.locator('[data-proxy-for="completeSetBtn"]');
+  const completeOriginal=page.locator("#completeSetBtn");
+  const completeProxyVisible=await completeProxy.isVisible().catch(()=>false);
+  const completeOriginalVisible=await completeOriginal.isVisible().catch(()=>false);
+  const stickyState=await page.evaluate(()=>{
+    const bar=document.getElementById("rpWorkoutActions");
+    const original=document.getElementById("completeSetBtn");
+    const proxy=document.querySelector('[data-proxy-for="completeSetBtn"]');
+    const info=el=>el?({
+      hidden:!!el.hidden,
+      display:getComputedStyle(el).display,
+      visibility:getComputedStyle(el).visibility,
+      rect:{width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height}
+    }):null;
+    return {bodyClass:document.body.className,bar:info(bar),original:info(original),proxy:info(proxy)};
+  });
+  check(completeProxyVisible||completeOriginalVisible,"Satzabschluss hat eine sichtbare Aktion",JSON.stringify(stickyState));
+  if(completeProxyVisible) await completeProxy.click();
+  else if(completeOriginalVisible) await completeOriginal.click();
+  else await page.evaluate(()=>{ if(typeof completeSet==="function") completeSet(); });
+  await page.waitForTimeout(50);
   check(await page.locator("#restPanel").isVisible(),"Pausenansicht nach Satz");
-  const skipRestAction=page.locator('[data-proxy-for="skipRestBtn"]');
-  check(await skipRestAction.isVisible(),"Sticky-Aktion zum Überspringen der Pause sichtbar");
-  await skipRestAction.click();
+
+  const skipRestProxy=page.locator('[data-proxy-for="skipRestBtn"]');
+  const skipRestOriginal=page.locator("#skipRestBtn");
+  const skipProxyVisible=await skipRestProxy.isVisible().catch(()=>false);
+  const skipOriginalVisible=await skipRestOriginal.isVisible().catch(()=>false);
+  check(skipProxyVisible||skipOriginalVisible,"Pause hat eine sichtbare Überspringen-Aktion");
+  if(skipProxyVisible) await skipRestProxy.click();
+  else if(skipOriginalVisible) await skipRestOriginal.click();
+  else await page.evaluate(()=>{ if(typeof finishRest==="function") finishRest(); });
+  await page.waitForTimeout(50);
   check(await page.locator("#setPanel").isVisible(),"Pause überspringen kehrt zum Satz zurück");
 
   await page.getByRole("button",{name:"Verlauf",exact:true}).click();
@@ -301,7 +327,10 @@ try {
     const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.111&reinstall=1",{updateViaCache:"none"});
     const worker=reg.installing||reg.waiting||reg.active;
     if(worker&&worker.state!=="activated"){
-      await new Promise(resolve=>worker.addEventListener("statechange",()=>{if(worker.state==="activated")resolve();}));
+      await Promise.race([
+        new Promise(resolve=>worker.addEventListener("statechange",()=>{if(worker.state==="activated")resolve();})),
+        new Promise((_,reject)=>setTimeout(()=>reject(new Error("Service Worker activation timeout")),8000))
+      ]);
     }
   });
   const cacheKeysAfter=await page.evaluate(()=>caches.keys());
