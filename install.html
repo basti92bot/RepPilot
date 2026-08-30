@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de" data-app-version="11.8.101">
+<html lang="de" data-app-version="11.8.102">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -8,9 +8,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="RepPilot">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="manifest" href="manifest.json?v=11.8.101">
-  <link rel="apple-touch-icon" href="reppilot-muscleman-logo-v11.8.26.png?v=11.8.101">
-  <link rel="icon" type="image/png" sizes="128x128" href="reppilot-muscleman-logo-v11.8.26.png?v=11.8.101">
+  <link rel="manifest" href="manifest.json?v=11.8.102">
+  <link rel="apple-touch-icon" href="reppilot-muscleman-logo-v11.8.26.png?v=11.8.102">
+  <link rel="icon" type="image/png" sizes="128x128" href="reppilot-muscleman-logo-v11.8.26.png?v=11.8.102">
   <title>RepPilot installieren</title>
   <style>
     :root{color-scheme:light;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -39,8 +39,8 @@
 <body>
   <header>
     <div class="brand">
-      <img src="reppilot-logo-old-stable.png?v=11.8.101" alt="RepPilot Logo">
-      <div><small>TRAINING</small><h1>RepPilot <span>v11.8.101</span></h1></div>
+      <img src="reppilot-logo-old-stable.png?v=11.8.102" alt="RepPilot Logo">
+      <div><small>TRAINING</small><h1>RepPilot <span>v11.8.102</span></h1></div>
     </div>
   </header>
   <main>
@@ -53,8 +53,8 @@
         <div class="step"><div class="num">3</div><div><strong>„Zum Home-Bildschirm“</strong><span>Im Teilen-Menü nach unten scrollen.</span></div></div>
         <div class="step"><div class="num">4</div><div><strong>„Hinzufügen“</strong><span>Danach erscheint RepPilot wie eine normale App auf dem Home-Bildschirm.</span></div></div>
       </div>
-      <p class="note">Wichtig: Die Anmeldung kommt erst, wenn du RepPilot anschließend über das neue Home-Bildschirm-Symbol startest.</p><p class="note"><strong>Testzugang:</strong> Bei der Anmeldung einfach <strong>Test</strong> eingeben. Kein Passwort nötig.</p>
-      <a class="open" href="./?launch=v11.8.101">RepPilot im Browser öffnen</a>
+      <p class="note">Wichtig: Die Anmeldung kommt erst, wenn du RepPilot anschließend über das neue Home-Bildschirm-Symbol startest.</p><p class="note"><strong>Testzugang:</strong> Bei der Anmeldung einfach <strong>Test</strong> eingeben. Kein Passwort nötig.</p><p class="note">Beim ersten Start vom Home-Bildschirm führt dich eine kurze App-Führung durch Heute, Training, Verlauf und Profil.</p>
+      <a class="open" href="./?launch=v11.8.102">RepPilot im Browser öffnen</a>
       <p class="hint">Diese Installationsseite selbst verlangt keine Anmeldung.</p>
     </section>
   </main>
@@ -63,11 +63,11 @@
       const standalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
       const iosStandalone = window.navigator.standalone === true;
       if (standalone || iosStandalone) {
-        window.location.replace('./?launch=v11.8.101');
+        window.location.replace('./?launch=v11.8.102');
         return;
       }
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js?v=11.8.101').catch(() => {});
+        navigator.serviceWorker.register('./sw.js?v=11.8.102').catch(() => {});
       }
     })();
   </script>
