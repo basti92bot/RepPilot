@@ -1,5 +1,5 @@
 {
-  "version": "11.8.106",
+  "version": "11.8.107",
   "releasedAt": "2026-08-30",
-  "notes": "Verlauf hat jetzt zwei Unterreiter: Kraft und Laufen. Kennzahlen und Verlauf werden je Bereich getrennt angezeigt; das Laufdashboard erscheint nur unter Laufen."
+  "notes": "Fix: Der Unterreiter Laufen im Verlauf ist auf iPhone/PWA wieder anklickbar. Die Umschaltung wird bei jedem Render robust neu gebunden."
 }
