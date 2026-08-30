@@ -1,5 +1,5 @@
 {
-  "version": "11.8.108",
+  "version": "11.8.109",
   "releasedAt": "2026-08-30",
-  "notes": "PWA-Update-Fix: neuer Cache pro Release, alte Service-Worker-Caches werden entfernt und installierte Home-Screen-App lädt nach einem Update automatisch die aktuelle Version."
+  "notes": "Fix: Der Haupt-Tab Verlauf öffnet jetzt immer zuerst die Ansicht und rendert Inhalte erst danach. Renderfehler können die Navigation nicht mehr blockieren. Navigation-Fix wird in der PWA mit aktueller Versions-URL geladen."
 }
