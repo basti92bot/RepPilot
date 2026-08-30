@@ -1,5 +1,5 @@
 {
-  "version": "11.8.109",
+  "version": "11.8.110",
   "releasedAt": "2026-08-30",
-  "notes": "Kraft-Verlauf vereinfacht: Pro Training gibt es direkt unter dem Trainingsnamen genau ein Dropdown 'Übungen'. Darin stehen die einzelnen Übungen jeweils mit ihrem Gesamtgewicht. Satzdetails werden nicht mehr angezeigt."
+  "notes": "PWA-Zuverlaessigkeit gehaertet: stabile Manifest-ID, echte 192/512-PWA-Icons, 192px Apple-Touch-Icon, doppelte alte Service-Worker-Registrierung entfernt, vollstaendiger Offline-Cache und strikte Cache-Installation."
 }
