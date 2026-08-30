@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.112";
+  const VERSION = "11.8.113";
   let mode = "strength";
 
   const esc = value => String(value ?? "").replace(/[&<>"']/g, ch => ({
