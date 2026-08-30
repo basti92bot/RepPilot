@@ -27,6 +27,8 @@ let sw = "";
 let styles = "";
 let navFix = "";
 let auth = "";
+let tour = "";
+let profileFeature = "";
 
 try {
   index = read("index.html");
@@ -71,6 +73,22 @@ try {
   pass("auth.js hat gueltige JavaScript-Syntax");
 } catch (e) {
   fail("auth.js hat gueltige JavaScript-Syntax", e.message);
+}
+
+try {
+  tour = read("app-tour-feature.js");
+  new Function(tour);
+  pass("app-tour-feature.js hat gueltige JavaScript-Syntax");
+} catch (e) {
+  fail("app-tour-feature.js hat gueltige JavaScript-Syntax", e.message);
+}
+
+try {
+  profileFeature = read("profile-feature.js");
+  new Function(profileFeature);
+  pass("profile-feature.js hat gueltige JavaScript-Syntax");
+} catch (e) {
+  fail("profile-feature.js hat gueltige JavaScript-Syntax", e.message);
 }
 
 try {
@@ -183,13 +201,13 @@ if (install) {
 
   if (/display-mode:\s*standalone/.test(install) &&
       /navigator\.standalone/.test(install) &&
-      /location\.replace\(['"]\.\/\?launch=v11\.8\.101['"]\)/.test(install)) {
+      /location\.replace\(['"]\.\/\?launch=v11\.8\.102['"]\)/.test(install)) {
     pass("Installierte Install-Seite leitet zur RepPilot-App weiter");
   } else {
     fail("Installierte Install-Seite leitet zur RepPilot-App weiter");
   }
 
-  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.101['"]/.test(install)) {
+  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.102['"]/.test(install)) {
     pass("Install-Seite registriert Service Worker");
   } else {
     fail("Install-Seite registriert Service Worker");
@@ -222,10 +240,40 @@ if (auth) {
     fail("Login erklaert den Testzugang");
   }
 
-  if (/auth\.js\?v=11\.8\.101/.test(index) && /auth\.js\?v=11\.8\.101/.test(sw)) {
+  if (/auth\.js\?v=11\.8\.102/.test(index) && /auth\.js\?v=11\.8\.102/.test(sw)) {
     pass("Aktuelle auth.js wird von App und Service Worker geladen");
   } else {
     fail("Aktuelle auth.js wird von App und Service Worker geladen");
+  }
+}
+
+if (tour) {
+  const menuTargets = ["home","trainingHub","history","profile"];
+  if (menuTargets.every(view => tour.includes('data-view="' + view + '"'))) {
+    pass("Erststart-Fuehrung deckt alle Hauptmenues ab");
+  } else {
+    fail("Erststart-Fuehrung deckt alle Hauptmenues ab");
+  }
+
+  if (tour.includes("display-mode: standalone") &&
+      tour.includes("navigator.standalone") &&
+      tour.includes("reppilot-app-tour-v1")) {
+    pass("Erststart-Fuehrung startet nur einmal in der installierten App");
+  } else {
+    fail("Erststart-Fuehrung startet nur einmal in der installierten App");
+  }
+
+  if (tour.includes("App-Führung starten") && tour.includes("RepPilotAppTour")) {
+    pass("App-Fuehrung kann im Profil erneut gestartet werden");
+  } else {
+    fail("App-Fuehrung kann im Profil erneut gestartet werden");
+  }
+
+  if (/app-tour-feature\.js\?v=11\.8\.102/.test(index) &&
+      /app-tour-feature\.js\?v=11\.8\.102/.test(sw)) {
+    pass("App-Fuehrung wird von App und Service Worker geladen");
+  } else {
+    fail("App-Fuehrung wird von App und Service Worker geladen");
   }
 }
 
@@ -251,10 +299,11 @@ if (styles && navFix && index) {
   const navButtons = [...index.matchAll(/<nav[^>]*>([\s\S]*?)<\/nav>/gi)]
     .flatMap(m => [...m[1].matchAll(/<button\b/gi)]);
 
-  if (navButtons.length === 4) {
-    pass("Bottom-Navigation hat genau 4 Reiter");
+  const profileNavInjected = /btn\.dataset\.view="profile"/.test(profileFeature) && /nav\.appendChild\(btn\)/.test(profileFeature);
+  if (navButtons.length === 3 && profileNavInjected) {
+    pass("Bottom-Navigation hat effektiv genau 4 Reiter");
   } else {
-    fail("Bottom-Navigation hat genau 4 Reiter", String(navButtons.length));
+    fail("Bottom-Navigation hat effektiv genau 4 Reiter", "Basis=" + navButtons.length + ", Profil=" + profileNavInjected);
   }
 
   if (/nav\{[^}]*position:fixed[^}]*bottom:0[^}]*grid-template-columns:repeat\(4,minmax\(0,1fr\)\)/.test(styles)) {
