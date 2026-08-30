@@ -1,5 +1,5 @@
 {
-  "version": "11.8.100",
+  "version": "11.8.101",
   "releasedAt": "2026-08-30",
-  "notes": "Installationslink zeigt jetzt nur die Installationsanleitung ohne Login. Beim Start vom Home-Bildschirm öffnet sich die normale RepPilot-App."
+  "notes": "Neuer passwortloser Testzugang: Bei der Anmeldung Test eingeben. Der Testaccount ist per Supabase/RLS vom normalen Account getrennt."
 }
