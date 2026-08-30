@@ -372,6 +372,29 @@ if (styles && navFix && index) {
   }
 }
 
+try {
+  const simpleHistory = read("history-simple-feature.js");
+  new Function(simpleHistory);
+  pass("Einfacher Verlauf hat gueltige JavaScript-Syntax");
+
+  const simpleTabs = (simpleHistory.match(/data-history-simple-mode=/g) || []).length;
+  const simpleSelects = (simpleHistory.match(/id="historySimpleSelect"/g) || []).length;
+  if (simpleTabs === 2 && simpleSelects === 1) {
+    pass("Verlauf nutzt Kraft/Laufen plus genau ein Dropdown");
+  } else {
+    fail("Verlauf nutzt Kraft/Laufen plus genau ein Dropdown", "Reiter=" + simpleTabs + ", Dropdown=" + simpleSelects);
+  }
+
+  if (index.includes('history-simple-feature.js?v=11.8.105-history1') &&
+      sw.includes('history-simple-feature.js?v=11.8.105-history1')) {
+    pass("PWA laedt den einfachen Verlauf");
+  } else {
+    fail("PWA laedt den einfachen Verlauf");
+  }
+} catch (e) {
+  fail("Einfacher Verlauf hat gueltige JavaScript-Syntax", e.message);
+}
+
 if (sw) {
   if (sw.includes("manifest.json") && sw.includes("reppilot-muscleman-logo-v11.8.26.png")) {
     pass("Service Worker cached Manifest und stabiles App-Icon");
