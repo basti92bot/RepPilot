@@ -11,7 +11,7 @@ const fail = (label, detail) => {
 };
 const exists = rel => fs.existsSync(path.join(root, rel));
 const read = rel => fs.readFileSync(path.join(root, rel), "utf8");
-const stripQuery = value => value.split("?")[0].replace(/^\.\//, "");
+const stripQuery = value => value.split("?")[0].replace(/^\/RepPilot\//, "").replace(/^\.\//, "").replace(/^\//, "");
 const pngDimensions = rel => {
   const buf = fs.readFileSync(path.join(root, rel));
   if (buf.length < 24 || buf[0] !== 0x89 || buf.toString("ascii", 1, 4) !== "PNG") {
