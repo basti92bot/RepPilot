@@ -17,3 +17,5 @@ jobs:
           node-version: 20
       - name: Run smoke test
         run: node smoke-test.js
+      - name: Run PWA reliability test
+        run: node pwa-reliability-test.js
