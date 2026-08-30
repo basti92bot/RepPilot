@@ -1,18 +1,75 @@
-<!doctype html><html lang="de" data-app-version="11.8.99"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#111827"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="RepPilot"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="apple-touch-icon" href="/RepPilot/reppilot-muscleman-logo-v11.8.26.png?v=11.8.99"><link rel="icon" type="image/png" sizes="128x128" href="/RepPilot/reppilot-muscleman-logo-v11.8.26.png?v=11.8.99"><link rel="stylesheet" href="styles.css?v=11.8.99"><link rel="stylesheet" href="header-fix.css?v=11.8.99"><title>RepPilot</title><style id="installGuideStyle">
-.install-guide{margin:14px auto 18px;max-width:760px;padding:0 16px}
-.install-guide-card{background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:18px;box-shadow:0 8px 24px rgba(17,24,39,.08)}
-.install-guide-card h2{margin:0 0 6px;font-size:22px}
-.install-guide-card>p{margin:0 0 14px;color:#6b7280}
-.install-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-.install-step{background:#f8fafc;border-radius:14px;padding:12px 10px;text-align:center;font-weight:700;line-height:1.25}
-.install-step span{display:block;font-size:20px;margin-bottom:6px}
-.install-note{margin:12px 0 0!important;font-size:13px;color:#6b7280!important}
-@media(max-width:640px){.install-steps{grid-template-columns:repeat(2,minmax(0,1fr))}.install-guide-card{padding:16px}.install-guide-card h2{font-size:20px}}
-@media(display-mode:standalone){.install-guide{display:none}}
-</style></head><body><header><div class="brand"><img class="brand-logo" src="reppilot-logo-old-stable.png?v=11.8.27" alt="RepPilot Logo"><div><p>TRAINING</p><h1>RepPilot <span>v11.8.99</span></h1></div></div></header><section class="install-guide" aria-label="RepPilot installieren"><div class="install-guide-card"><h2>RepPilot als App installieren</h2><p>Öffne diese Seite in Safari und füge RepPilot anschließend zum Home-Bildschirm hinzu.</p><div class="install-steps"><div class="install-step"><span>1️⃣</span>In Safari öffnen</div><div class="install-step"><span>2️⃣</span>Teilen ⬆️</div><div class="install-step"><span>3️⃣</span>„Zum Home-Bildschirm“</div><div class="install-step"><span>4️⃣</span>„Hinzufügen“</div></div><p class="install-note">Falls „Zum Home-Bildschirm“ nicht angezeigt wird, den Link zuerst direkt in Safari öffnen.</p></div></section><main><section id="home" class="view active"><div class="home-dashboard"><h2>Verlauf & Rekorde</h2><div id="homeStats" class="stats"></div></div><article class="card hero"><div class="hero-icon" id="todayIcon">🏋️</div><div class="grow"><small id="todayLabel">Heute</small><h2 id="nextTitle"></h2><p id="nextMeta"></p><p id="todayHint"></p></div><button id="startBtn">Training starten</button></article><h2>Wochenplan</h2><div id="plan" class="stack"></div></section><section id="workout" class="view"><div class="top"><div><small id="counter"></small><h2 id="workoutTitle"></h2></div><button id="cancelBtn" class="secondary">Abbrechen</button></div><div class="track"><div id="bar"></div></div><article id="setPanel" class="card"><small>AKTUELLE ÜBUNG</small><div class="exercise-title"><div id="exerciseIcon" class="exercise-icon"></div><h2 id="exerciseName"></h2></div><div class="tip">💡 <span id="exerciseTip"></span></div><div class="set-heading"><strong id="setCounter"></strong><strong id="fixedReps"></strong></div><p id="previousSet" class="muted" hidden></p><div id="lastTraining" class="last-training" hidden><div><small>LETZTES TRAINING</small><strong id="lastWeightValue"></strong></div><span id="lastWeightDate"></span></div><label for="weightInput">Gewicht</label><div class="weight"><input id="weightInput" type="number" min="0" step="0.5" inputmode="decimal"><span>kg</span></div><button id="completeSetBtn" class="wide">Satz abschließen</button><button id="deferExerciseBtn" class="secondary wide defer-button">Gerät besetzt, später machen</button></article><article id="restPanel" class="card center" hidden><small>PAUSE</small><h2>Durchatmen</h2><div id="restClock" class="clock"><strong id="restTime">02:00</strong><span>Minuten</span></div><p id="restSetSummary"></p><p id="restNext" class="muted"></p><div class="actions"><button id="addRestBtn" class="secondary">+30 Sekunden</button><button id="skipRestBtn">Pause überspringen</button></div></article><article id="completePanel" class="card center" hidden><div class="check">✓</div><div id="completedExerciseIcon" class="exercise-icon center-icon"></div><small>ÜBUNG ABGESCHLOSSEN</small><h2 id="completedExercise"></h2><p id="exerciseSummary" class="muted"></p><div id="nextExerciseBlock"><div class="next-box"><small>NÄCHSTE ÜBUNG</small><h3 id="nextExerciseName"></h3><p id="nextExerciseMeta"></p><div class="tip">💡 <span id="nextExerciseTip"></span></div></div><button id="startNextBtn" class="wide">Nächste Übung starten</button><button id="skipNextBtn" class="secondary wide">Gerät besetzt – überspringen</button></div><div id="finishWorkoutBlock" hidden><div class="total"><small>TRAINING ERLEDIGT</small><strong id="workoutVolumePreview"></strong></div><button id="finishWorkoutBtn" class="wide">Training speichern</button></div></article></section><section id="run" class="view"><div class="top"><div><small>LAUFTRAINING</small><h2 id="runTitle"></h2></div><button id="closeRunBtn" class="secondary">Zurück</button></div><article class="card"><p id="runMeta" class="muted"></p><p id="runIntro"></p><div id="runSteps" class="stack"></div><p id="runNote" class="note"></p></article></section><section id="history" class="view"><h2>Verlauf & Rekorde</h2><div id="stats" class="stats"></div><div id="historyList" class="stack"></div></section><section id="trainingHub" class="view">
-  <div id="trainingHubOverview">
-    <div class="top"><div><small>TRAINING</small><h2>Training zuhause</h2></div></div>
-    <div id="trainingHubCards" class="stack"></div>
-  </div>
-  <div id="runnerStrengthSession" hidden></div>
-</section><section id="stretching" class="view"><div id="stretchOverview"><div class="top"><div><small>GEFÜHRTE ROUTINE</small><h2>Dehnen</h2></div></div><article class="card stretch-intro"><div class="stretch-intro-icon">🧘</div><h3>10 Dehnübungen</h3><p>Einmal starten. Die App führt dich automatisch durch alle Übungen.</p><div class="routine-facts"><span>⏱ 30 Sek. je Seite</span><span>🔄 5 Sek. Wechselzeit</span></div><button id="startStretchRoutineBtn" class="wide">Dehnroutine starten</button></article><div id="stretchPreview" class="stack"></div></div><div id="stretchRoutine" hidden><div class="top"><div><small id="stretchProgressLabel">Übung 1 von 10</small><h2 id="stretchPhaseTitle">Dehnen</h2></div><button id="endStretchBtn" class="secondary">Beenden</button></div><div class="track"><div id="stretchProgressBar"></div></div><article class="card center stretch-session-card"><div id="stretchArt" class="stretch-art"></div><small id="stretchPhaseLabel">DEHNEN</small><h2 id="stretchName"></h2><p id="stretchInstruction" class="stretch-instruction"></p><p id="stretchSide" class="stretch-side"></p><div id="stretchClock" class="clock stretch-clock"><strong id="stretchTime">00:30</strong><span id="stretchClockLabel">Sekunden</span></div><div id="stretchNextBox" class="next-box" hidden><small>ALS NÄCHSTES</small><h3 id="stretchNextName"></h3><p>Du hast 5 Sekunden zum Umpositionieren.</p></div><div class="stretch-controls"><button id="pauseStretchBtn" class="secondary">Pause</button><button id="skipStretchBtn" class="secondary">Überspringen</button><button id="startStretchNowBtn" hidden>Jetzt starten</button></div></article></div><div id="stretchComplete" hidden><article class="card center"><div class="check">✓</div><h2>Dehnroutine abgeschlossen</h2><p class="muted">Alle 10 Übungen sind erledigt.</p><button id="restartStretchBtn" class="wide">Noch einmal starten</button></article></div></section></main><nav><button data-view="home" class="active">Heute</button><button data-view="trainingHub">Training</button><button data-view="history">Verlauf</button></nav><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js?v=11.8.8"></script><script src="storage-bridge.js?v=11.8.69"></script><script src="app.js?v=11.8.99"></script><script src="workout-fix.js?v=11.8.70"></script><script src="run-feature.js?v=11.8.99"></script><script src="cloud-history-feature.js?v=11.8.64"></script><script src="run-dashboard-feature.js?v=11.8.34"></script><script src="profile-feature.js?v=11.8.99"></script><script src="apple-health-feature.js?v=11.8.99"></script><script src="shortcut-health-feature.js?v=11.8.99"></script><script src="bodyweight-auto.js?v=11.8.58"></script><script src="training-plan-feature.js?v=11.8.99"></script><script src="home-plan-card-hide.js?v=11.8.99"></script><script src="home-workout-feature.js?v=11.8.58"></script><script src="training-hub-feature.js?v=11.8.99"></script><script src="onboarding-feature.js?v=11.8.58"></script><script src="progression-feature.js?v=11.8.58"></script><script src="stretch-routine-feature.js?v=11.8.99"></script><script src="timer-sound-feature.js?v=11.8.58"></script><script src="navigation-fix.js?v=11.8.58"></script><script src="workout-sticky-actions.js?v=11.8.99"></script><script src="day-exercise-overview.js?v=11.8.58"></script><script src="pushup-feature.js?v=11.8.58"></script><script src="plan-title-fix.js?v=11.8.58"></script><script src="strength-test-feature.js?v=11.8.99"></script><script src="reset-feature.js?v=11.8.99"></script><script src="training-plan-quality-feature.js?v=11.8.70"></script><script id="repPilotUpdateFeature" src="update-feature.js?v=11.8.99"></script></body></html>
+<!doctype html>
+<html lang="de" data-app-version="11.8.100">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="RepPilot">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="manifest.json?v=11.8.100">
+  <link rel="apple-touch-icon" href="reppilot-muscleman-logo-v11.8.26.png?v=11.8.100">
+  <link rel="icon" type="image/png" sizes="128x128" href="reppilot-muscleman-logo-v11.8.26.png?v=11.8.100">
+  <title>RepPilot installieren</title>
+  <style>
+    :root{color-scheme:light;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    *{box-sizing:border-box}
+    body{margin:0;background:#f4f6f8;color:#111827;min-height:100vh}
+    header{padding:22px 18px 10px;max-width:760px;margin:0 auto}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{width:52px;height:52px;object-fit:contain}
+    .brand small{display:block;color:#6b7280;font-weight:700;letter-spacing:.08em}
+    .brand h1{font-size:24px;margin:2px 0 0}
+    .brand h1 span{font-size:14px;color:#6b7280;font-weight:700}
+    main{max-width:760px;margin:0 auto;padding:10px 16px 32px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:22px;padding:20px;box-shadow:0 10px 28px rgba(17,24,39,.08)}
+    h2{font-size:24px;margin:0 0 8px}
+    .intro{margin:0 0 18px;color:#6b7280;line-height:1.45}
+    .steps{display:grid;gap:10px}
+    .step{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center;background:#f8fafc;border-radius:16px;padding:13px}
+    .num{width:44px;height:44px;border-radius:14px;background:#111827;color:#fff;display:grid;place-items:center;font-weight:800;font-size:18px}
+    .step strong{display:block;font-size:16px}
+    .step span{display:block;color:#6b7280;font-size:14px;margin-top:3px}
+    .note{margin:16px 0 0;padding:13px 14px;background:#fff7ed;border-radius:14px;color:#9a3412;font-size:14px;line-height:1.4}
+    .open{display:block;margin-top:16px;width:100%;border:0;border-radius:14px;background:#111827;color:#fff;text-align:center;text-decoration:none;font-weight:800;padding:14px 16px}
+    .hint{text-align:center;color:#6b7280;font-size:12px;margin:14px 0 0}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img src="reppilot-logo-old-stable.png?v=11.8.100" alt="RepPilot Logo">
+      <div><small>TRAINING</small><h1>RepPilot <span>v11.8.100</span></h1></div>
+    </div>
+  </header>
+  <main>
+    <section class="card" aria-label="RepPilot installieren">
+      <h2>RepPilot als App installieren</h2>
+      <p class="intro">Öffne diesen Link in Safari und füge RepPilot anschließend zum Home-Bildschirm hinzu.</p>
+      <div class="steps">
+        <div class="step"><div class="num">1</div><div><strong>In Safari öffnen</strong><span>Falls der Link in einer anderen App geöffnet wurde.</span></div></div>
+        <div class="step"><div class="num">2</div><div><strong>Teilen ⬆️</strong><span>Unten in Safari auf das Teilen-Symbol tippen.</span></div></div>
+        <div class="step"><div class="num">3</div><div><strong>„Zum Home-Bildschirm“</strong><span>Im Teilen-Menü nach unten scrollen.</span></div></div>
+        <div class="step"><div class="num">4</div><div><strong>„Hinzufügen“</strong><span>Danach erscheint RepPilot wie eine normale App auf dem Home-Bildschirm.</span></div></div>
+      </div>
+      <p class="note">Wichtig: Die Anmeldung kommt erst, wenn du RepPilot anschließend über das neue Home-Bildschirm-Symbol startest.</p>
+      <a class="open" href="./?launch=v11.8.100">RepPilot im Browser öffnen</a>
+      <p class="hint">Diese Installationsseite selbst verlangt keine Anmeldung.</p>
+    </section>
+  </main>
+  <script>
+    (() => {
+      const standalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
+      const iosStandalone = window.navigator.standalone === true;
+      if (standalone || iosStandalone) {
+        window.location.replace('./?launch=v11.8.100');
+        return;
+      }
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js?v=11.8.100').catch(() => {});
+      }
+    })();
+  </script>
+</body>
+</html>
