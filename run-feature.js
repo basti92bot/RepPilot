@@ -17,8 +17,8 @@
       const style=document.createElement("style");
       style.id="historyTabsStyles";
       style.textContent=`
-        .history-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:-8px 0 20px;padding:5px;background:#f3f4f6;border-radius:16px}
-        .history-tab{border:0;border-radius:12px;background:transparent;color:var(--muted);padding:12px 10px;font-weight:900}
+        .history-tabs{position:relative;z-index:3;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:-8px 0 20px;padding:5px;background:#f3f4f6;border-radius:16px;pointer-events:auto}
+        .history-tab{position:relative;z-index:4;border:0;border-radius:12px;background:transparent;color:var(--muted);padding:12px 10px;font-weight:900;cursor:pointer;touch-action:manipulation;pointer-events:auto}
         .history-tab.active{background:#fff;color:var(--text);box-shadow:0 2px 8px rgba(17,24,39,.08)}
       `;
       document.head.appendChild(style);
@@ -27,11 +27,16 @@
       tabs.className="history-tabs";
       tabs.innerHTML='<button type="button" class="history-tab" data-history-view="strength">🏋️ Kraft</button><button type="button" class="history-tab" data-history-view="run">🏃 Laufen</button>';
       title.insertAdjacentElement("afterend",tabs);
-      tabs.querySelectorAll("[data-history-view]").forEach(btn=>btn.onclick=()=>{
-        localStorage.setItem(HISTORY_VIEW_KEY,btn.dataset.historyView);
-        renderHistory();
-      });
     }
+    tabs.onclick=event=>{
+      const btn=event.target.closest?.("[data-history-view]");
+      if(!btn||!tabs.contains(btn))return;
+      event.preventDefault();
+      event.stopPropagation();
+      const next=btn.dataset.historyView==="run"?"run":"strength";
+      localStorage.setItem(HISTORY_VIEW_KEY,next);
+      renderHistory();
+    };
     const view=historyView();
     tabs.querySelectorAll("[data-history-view]").forEach(btn=>btn.classList.toggle("active",btn.dataset.historyView===view));
     return view;
