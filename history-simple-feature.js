@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.106";
+  const VERSION = "11.8.107";
   let mode = "strength";
 
   const esc = value => String(value ?? "").replace(/[&<>"']/g, ch => ({
@@ -31,6 +31,90 @@
   };
 
   const weight = value => Number(value || 0).toLocaleString("de-DE",{maximumFractionDigits:1});
+  const runPaceSeconds = row => {
+    const distance = Number(row?.distanceKm || 0);
+    const durationSeconds = Number(row?.durationSeconds || 0);
+    const stored = Number(row?.paceSecondsPerKm || 0);
+    return stored > 0 ? stored : (distance > 0 && durationSeconds > 0 ? durationSeconds / distance : NaN);
+  };
+
+  const validChartRun = row => {
+    const distance = Number(row?.distanceKm || 0);
+    const durationSeconds = Number(row?.durationSeconds || 0);
+    const paceSeconds = runPaceSeconds(row);
+    return distance > 0 && distance <= 200 &&
+      durationSeconds >= 30 && durationSeconds <= 86400 &&
+      Number.isFinite(paceSeconds) && paceSeconds >= 90 && paceSeconds <= 3600;
+  };
+
+  const chartDate = row => {
+    const d = new Date(row?.finishedAt || row?.startedAt || 0);
+    return Number.isFinite(d.getTime())
+      ? d.toLocaleDateString("de-DE",{day:"2-digit",month:"2-digit"})
+      : "–";
+  };
+
+  const runChart = list => {
+    const runs = list.filter(validChartRun).slice(0,8).reverse();
+    if (!runs.length) return "";
+
+    const W=360,H=220,left=34,right=46,top=28,bottom=42;
+    const plotW=W-left-right,plotH=H-top-bottom;
+    const kmValues=runs.map(row=>Number(row.distanceKm||0));
+    const paceValues=runs.map(runPaceSeconds);
+    const kmMax=Math.max(2,Math.ceil(Math.max(...kmValues)/2)*2);
+    let paceMin=Math.min(...paceValues),paceMax=Math.max(...paceValues);
+    if(paceMax-paceMin<30){paceMin-=15;paceMax+=15}else{paceMin-=10;paceMax+=10}
+    paceMin=Math.max(60,paceMin);
+    const step=plotW/runs.length;
+    const barW=Math.min(28,Math.max(12,step*.46));
+    const x=i=>left+step*(i+.5);
+    const yKm=value=>top+plotH-(value/kmMax)*plotH;
+    const yPace=value=>top+((value-paceMin)/(paceMax-paceMin||1))*plotH;
+
+    const gridLevels=[0,.5,1];
+    const grid=gridLevels.map(f=>{
+      const y=top+plotH-(f*plotH);
+      const km=(kmMax*f).toLocaleString("de-DE",{maximumFractionDigits:1});
+      return `<line class="history-run-grid" x1="${left}" x2="${W-right}" y1="${y}" y2="${y}"/><text class="history-run-axis" x="2" y="${y+4}">${km}</text>`;
+    }).join("");
+
+    const paceAxis=[paceMin,(paceMin+paceMax)/2,paceMax].map(value=>{
+      const y=yPace(value);
+      return `<text class="history-run-axis" text-anchor="start" x="${W-right+7}" y="${y+4}">${esc(pace(value).replace(" min/km",""))}</text>`;
+    }).join("");
+
+    const bars=runs.map((row,i)=>{
+      const km=Number(row.distanceKm||0);
+      const y=yKm(km),height=top+plotH-y;
+      return `<rect class="history-run-bar" x="${(x(i)-barW/2).toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${Math.max(2,height).toFixed(1)}" rx="5"/><text class="history-run-value" text-anchor="middle" x="${x(i).toFixed(1)}" y="${Math.max(top+10,y-7).toFixed(1)}">${esc(km.toLocaleString("de-DE",{maximumFractionDigits:1}))}</text>`;
+    }).join("");
+
+    const points=runs.map((row,i)=>`${x(i).toFixed(1)},${yPace(runPaceSeconds(row)).toFixed(1)}`).join(" ");
+    const line=runs.length>1?`<polyline class="history-run-line" points="${points}"/>`:"";
+    const dots=runs.map((row,i)=>`<circle class="history-run-dot" cx="${x(i).toFixed(1)}" cy="${yPace(runPaceSeconds(row)).toFixed(1)}" r="4"/>`).join("");
+    const labels=runs.map((row,i)=>{
+      if(runs.length>6 && i%2===1 && i!==runs.length-1)return "";
+      return `<text class="history-run-axis" text-anchor="middle" x="${x(i).toFixed(1)}" y="${H-10}">${esc(chartDate(row))}</text>`;
+    }).join("");
+
+    return `
+      <article class="history-run-chart-card">
+        <div class="history-run-chart-head">
+          <div><small>LETZTE LÄUFE</small><h3>Pace & Distanz</h3></div>
+          <div class="history-run-chart-count">${runs.length} Läufe</div>
+        </div>
+        <svg class="history-run-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Diagramm für Laufdistanz und Pace">
+          <text class="history-run-axis-title" x="2" y="16">km</text>
+          <text class="history-run-axis-title" text-anchor="end" x="${W-2}" y="16">Pace</text>
+          ${grid}${paceAxis}${bars}${line}${dots}${labels}
+        </svg>
+        <div class="history-run-legend">
+          <span><i class="history-run-legend-bar"></i>Distanz (km)</span>
+          <span><i class="history-run-legend-line"></i>Pace (min/km)</span>
+        </div>
+      </article>`;
+  };
 
   const rows = () => {
     if (typeof history !== "function") return [];
@@ -75,7 +159,25 @@
       .history-simple-metric{padding:12px;border:1px solid var(--line);border-radius:14px;background:#f9fafb}
       .history-simple-metric small{display:block;color:var(--muted);font-size:10px;font-weight:900}
       .history-simple-metric strong{display:block;margin-top:4px;font-size:16px}
-      @media(max-width:560px){.history-simple-metrics{grid-template-columns:1fr}}
+      .history-run-chart-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 5px 16px rgba(17,24,39,.05);overflow:hidden}
+      .history-run-chart-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:4px}
+      .history-run-chart-head small{display:block;color:var(--muted);font-size:10px;font-weight:900;letter-spacing:.05em}
+      .history-run-chart-head h3{margin:3px 0 0;font-size:20px}
+      .history-run-chart-count{color:var(--muted);font-size:12px;font-weight:800;padding-top:3px}
+      .history-run-chart{display:block;width:100%;height:auto;overflow:visible}
+      .history-run-grid{stroke:#e5e7eb;stroke-width:1}
+      .history-run-axis{fill:#6b7280;font-size:10px;font-weight:700}
+      .history-run-axis-title{fill:#2563eb;font-size:11px;font-weight:900}
+      .history-run-bar{fill:#93c5fd}
+      .history-run-value{fill:#2563eb;font-size:10px;font-weight:900}
+      .history-run-line{fill:none;stroke:#2563eb;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .history-run-dot{fill:#fff;stroke:#2563eb;stroke-width:3}
+      .history-run-legend{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;color:#4b5563;font-size:12px;font-weight:700;margin-top:-2px}
+      .history-run-legend span{display:flex;align-items:center;gap:6px}
+      .history-run-legend-bar{display:inline-block;width:14px;height:10px;border-radius:3px;background:#93c5fd}
+      .history-run-legend-line{display:inline-block;width:18px;height:3px;border-radius:999px;background:#2563eb;position:relative}
+      .history-run-legend-line:after{content:"";position:absolute;width:7px;height:7px;border-radius:50%;background:#2563eb;left:6px;top:-2px}
+      @media(max-width:560px){.history-simple-metrics{grid-template-columns:1fr}.history-run-chart-card{padding:14px 10px}.history-run-legend{gap:12px;font-size:11px}}
     `;
     document.head.appendChild(style);
   }
@@ -133,7 +235,8 @@
     }
 
     if (mode === "run") {
-      detail.innerHTML = list.map(row => {
+      detail.innerHTML = runChart(list) + list.map(row => {
+
         const distanceKm = Number(row.distanceKm || 0);
         const paceSeconds = Number(row.paceSecondsPerKm || 0) || (Number(row.durationSeconds || 0) / Number(row.distanceKm || 1));
         return `
