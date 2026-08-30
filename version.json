@@ -1,5 +1,5 @@
 {
-  "version": "11.8.107",
+  "version": "11.8.108",
   "releasedAt": "2026-08-30",
-  "notes": "Lauf-Verlauf erweitert: kombiniertes Diagramm mit Distanz als Balken und Pace als Linie fuer die letzten 8 gueltigen Laeufe. Pace-Achse zeigt schnellere Werte oben."
+  "notes": "Kraft-Verlauf erweitert: Unter jedem Training sind die einzelnen Übungen als aufklappbare Dropdowns dargestellt. Zugeklappt sieht man Übungsname und Gesamtgewicht, aufgeklappt die einzelnen Sätze mit Gewicht und Wiederholungen."
 }
