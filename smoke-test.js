@@ -26,6 +26,7 @@ let manifest = null;
 let sw = "";
 let styles = "";
 let navFix = "";
+let auth = "";
 
 try {
   index = read("index.html");
@@ -62,6 +63,14 @@ try {
   pass("home-plan-card-hide.js hat gueltige JavaScript-Syntax");
 } catch (e) {
   fail("home-plan-card-hide.js hat gueltige JavaScript-Syntax", e.message);
+}
+
+try {
+  auth = read("auth.js");
+  new Function(auth);
+  pass("auth.js hat gueltige JavaScript-Syntax");
+} catch (e) {
+  fail("auth.js hat gueltige JavaScript-Syntax", e.message);
 }
 
 try {
@@ -166,15 +175,21 @@ if (install) {
     fail("Install-Seite laedt keine Login- oder App-Logik");
   }
 
+  if (install.includes("Testzugang:") && install.includes("Kein Passwort nötig")) {
+    pass("Install-Seite nennt den Testzugang");
+  } else {
+    fail("Install-Seite nennt den Testzugang");
+  }
+
   if (/display-mode:\s*standalone/.test(install) &&
       /navigator\.standalone/.test(install) &&
-      /location\.replace\(['"]\.\/\?launch=v11\.8\.100['"]\)/.test(install)) {
+      /location\.replace\(['"]\.\/\?launch=v11\.8\.101['"]\)/.test(install)) {
     pass("Installierte Install-Seite leitet zur RepPilot-App weiter");
   } else {
     fail("Installierte Install-Seite leitet zur RepPilot-App weiter");
   }
 
-  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.100['"]/.test(install)) {
+  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.101['"]/.test(install)) {
     pass("Install-Seite registriert Service Worker");
   } else {
     fail("Install-Seite registriert Service Worker");
@@ -189,6 +204,29 @@ if (install) {
       fail("Install-Inline-Script " + (i + 1) + " hat gueltige Syntax", e.message);
     }
   });
+}
+
+if (auth) {
+  if (auth.includes('mail.toLowerCase()==="test"') &&
+      auth.includes("reppilot-test-login") &&
+      auth.includes("verifyOtp") &&
+      auth.includes('type:"magiclink"')) {
+    pass("Passwortloser Testzugang ist verdrahtet");
+  } else {
+    fail("Passwortloser Testzugang ist verdrahtet");
+  }
+
+  if (auth.includes("Testzugang:") && auth.includes("Passwort leer lassen")) {
+    pass("Login erklaert den Testzugang");
+  } else {
+    fail("Login erklaert den Testzugang");
+  }
+
+  if (/auth\.js\?v=11\.8\.101/.test(index) && /auth\.js\?v=11\.8\.101/.test(sw)) {
+    pass("Aktuelle auth.js wird von App und Service Worker geladen");
+  } else {
+    fail("Aktuelle auth.js wird von App und Service Worker geladen");
+  }
 }
 
 if (styles) {
