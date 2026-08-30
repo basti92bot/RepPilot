@@ -1,5 +1,5 @@
 {
-  "version": "11.8.106",
+  "version": "11.8.107",
   "releasedAt": "2026-08-30",
-  "notes": "Verlauf vereinfacht: Kraft und Laufen als zwei Reiter. Krafttrainings zeigen Trainingsgesamtgewicht und je Übung nur das Gesamtgewicht, ohne Satz-/Wiederholungs-Aufzählung."
+  "notes": "Lauf-Verlauf erweitert: kombiniertes Diagramm mit Distanz als Balken und Pace als Linie fuer die letzten 8 gueltigen Laeufe. Pace-Achse zeigt schnellere Werte oben."
 }
