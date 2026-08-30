@@ -1,5 +1,5 @@
 {
-  "version": "11.8.111",
+  "version": "11.8.112",
   "releasedAt": "2026-08-30",
-  "notes": "PWA-Browsertests erweitert: iPhone-ähnlicher E2E mit Onboarding, Navigation, aktivem Training, Kraft/Lauf-Verlauf, Offline-Reload und Cache-Bereinigung. Bottom-Navigation auf mindestens 44 px Touchhöhe erhöht."
+  "notes": "PWA-Runtime-Fix: Basis-Verlauf toleriert gespeicherte Laufdaten bereits beim App-Bootstrap und verursacht beim Neustart keine reduce-Exception mehr. Keyboard-/Sticky-Actions-Verhalten wird im Browser-E2E explizit getestet."
 }
