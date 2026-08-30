@@ -229,9 +229,13 @@ try {
 
   check(await page.locator("#weightInput").isVisible(),"Gewichtseingabe nach Kraftmessung sichtbar");
   await page.locator("#weightInput").fill("61");
-  await page.locator("#completeSetBtn").click();
+  const completeAction=page.locator('[data-proxy-for="completeSetBtn"]');
+  check(await completeAction.isVisible(),"Sticky-Aktion für Satzabschluss sichtbar");
+  await completeAction.click();
   check(await page.locator("#restPanel").isVisible(),"Pausenansicht nach Satz");
-  await page.locator("#skipRestBtn").click();
+  const skipRestAction=page.locator('[data-proxy-for="skipRestBtn"]');
+  check(await skipRestAction.isVisible(),"Sticky-Aktion zum Überspringen der Pause sichtbar");
+  await skipRestAction.click();
   check(await page.locator("#setPanel").isVisible(),"Pause überspringen kehrt zum Satz zurück");
 
   await page.getByRole("button",{name:"Verlauf",exact:true}).click();
@@ -258,14 +262,14 @@ try {
     const reg=await navigator.serviceWorker.ready;
     const regs=await navigator.serviceWorker.getRegistrations();
     const keys=await caches.keys();
-    const current=await caches.open("reppilot-v11-8-110");
+    const current=await caches.open("reppilot-v11-8-111");
     const requests=(await current.keys()).map(r=>r.url);
     return {supported:true,script:reg.active?.scriptURL||"",registrations:regs.length,keys,requests};
   });
   check(swState.supported,"Service Worker API verfügbar");
   check(swState.registrations===1,"Genau eine Service-Worker-Registrierung aktiv",JSON.stringify(swState));
   check(swState.script.includes("sw.js?v=11.8.111"),"Aktiver Service Worker hat aktuelle Version",swState.script);
-  check(swState.keys.includes("reppilot-v11-8-110"),"Aktueller PWA-Cache vorhanden",swState.keys.join(","));
+  check(swState.keys.includes("reppilot-v11-8-111"),"Aktueller PWA-Cache vorhanden",swState.keys.join(","));
   check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.111")),"192er Icon im Runtime-Cache");
   check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.111")),"512er Icon im Runtime-Cache");
 
@@ -302,7 +306,7 @@ try {
   });
   const cacheKeysAfter=await page.evaluate(()=>caches.keys());
   check(!cacheKeysAfter.includes("reppilot-old-test-cache"),"Aktivierung löscht alte PWA-Caches",cacheKeysAfter.join(","));
-  check(cacheKeysAfter.includes("reppilot-v11-8-110"),"Aktueller Cache bleibt nach Bereinigung erhalten");
+  check(cacheKeysAfter.includes("reppilot-v11-8-111"),"Aktueller Cache bleibt nach Bereinigung erhalten");
 
   // General browser errors
   check(pageErrors.length===0,"Keine unbehandelten JavaScript-Fehler",pageErrors.join(" | "));
