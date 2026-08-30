@@ -201,13 +201,13 @@ if (install) {
 
   if (/display-mode:\s*standalone/.test(install) &&
       /navigator\.standalone/.test(install) &&
-      /location\.replace\(['"]\.\/\?launch=v11\.8\.109['"]\)/.test(install)) {
+      /location\.replace\(['"]\.\/\?launch=v11\.8\.110['"]\)/.test(install)) {
     pass("Installierte Install-Seite leitet zur RepPilot-App weiter");
   } else {
     fail("Installierte Install-Seite leitet zur RepPilot-App weiter");
   }
 
-  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.109['"]/.test(install)) {
+  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.110['"]/.test(install)) {
     pass("Install-Seite registriert Service Worker");
   } else {
     fail("Install-Seite registriert Service Worker");
@@ -240,7 +240,7 @@ if (auth) {
     fail("Login erklaert den Testzugang");
   }
 
-  if (/auth\.js\?v=11\.8\.109/.test(index) && /auth\.js\?v=11\.8\.109/.test(sw)) {
+  if (/auth\.js\?v=11\.8\.110/.test(index) && /auth\.js\?v=11\.8\.110/.test(sw)) {
     pass("Aktuelle auth.js wird von App und Service Worker geladen");
   } else {
     fail("Aktuelle auth.js wird von App und Service Worker geladen");
@@ -276,8 +276,8 @@ try {
   } else {
     fail("Lauf-Dashboard erscheint nur im Lauf-Reiter");
   }
-  if (/run-dashboard-feature\.js\?v=11\.8\.109/.test(index) &&
-      /run-dashboard-feature\.js\?v=11\.8\.109/.test(sw)) {
+  if (/run-dashboard-feature\.js\?v=11\.8\.110/.test(index) &&
+      /run-dashboard-feature\.js\?v=11\.8\.110/.test(sw)) {
     pass("Aktuelles Lauf-Dashboard wird von App und Service Worker geladen");
   } else {
     fail("Aktuelles Lauf-Dashboard wird von App und Service Worker geladen");
@@ -313,8 +313,8 @@ if (auth && index && sw) {
     fail("Kraftmessung nutzt einen globalen 28-Tage-Zyklus");
   }
 
-  if (/strength-test-feature\.js\?v=11\.8\.109/.test(index) &&
-      /strength-test-feature\.js\?v=11\.8\.109/.test(sw)) {
+  if (/strength-test-feature\.js\?v=11\.8\.110/.test(index) &&
+      /strength-test-feature\.js\?v=11\.8\.110/.test(sw)) {
     pass("Aktuelle Kraftmessungslogik wird von App und Service Worker geladen");
   } else {
     fail("Aktuelle Kraftmessungslogik wird von App und Service Worker geladen");
@@ -343,8 +343,8 @@ if (tour) {
     fail("App-Fuehrung kann im Profil erneut gestartet werden");
   }
 
-  if (/app-tour-feature\.js\?v=11\.8\.109/.test(index) &&
-      /app-tour-feature\.js\?v=11\.8\.109/.test(sw)) {
+  if (/app-tour-feature\.js\?v=11\.8\.110/.test(index) &&
+      /app-tour-feature\.js\?v=11\.8\.110/.test(sw)) {
     pass("App-Fuehrung wird von App und Service Worker geladen");
   } else {
     fail("App-Fuehrung wird von App und Service Worker geladen");
@@ -431,22 +431,41 @@ try {
   const navigationFix = read("navigation-fix.js");
   new Function(navigationFix);
   pass("navigation-fix.js hat gueltige JavaScript-Syntax");
-  if (navigationFix.includes('safeShow("history")') &&
-      navigationFix.includes('if(typeof renderHistory==="function")renderHistory()') &&
-      navigationFix.indexOf('safeShow("history")') < navigationFix.indexOf('if(typeof renderHistory==="function")renderHistory()') &&
-      navigationFix.includes('event.stopImmediatePropagation()')) {
-    pass("Haupt-Tab Verlauf wird vor dem Rendern geoeffnet");
+  if (navigationFix.includes('if(!btn||!hasActiveWorkout())return;') &&
+      navigationFix.includes('if(typeof show==="function")show("history")') &&
+      navigationFix.includes('if(typeof renderHistory==="function")renderHistory()')) {
+    pass("Navigation-Fix greift nur bei aktivem Workout");
   } else {
-    fail("Haupt-Tab Verlauf wird vor dem Rendern geoeffnet");
+    fail("Navigation-Fix greift nur bei aktivem Workout");
   }
-  if (/navigation-fix\.js\?v=11\.8\.109/.test(index) &&
-      /navigation-fix\.js\?v=11\.8\.109/.test(sw)) {
+  if (/navigation-fix\.js\?v=11\.8\.110/.test(index) &&
+      /navigation-fix\.js\?v=11\.8\.110/.test(sw)) {
     pass("Aktueller Navigation-Fix wird von App und Service Worker geladen");
   } else {
     fail("Aktueller Navigation-Fix wird von App und Service Worker geladen");
   }
 } catch (e) {
   fail("navigation-fix.js hat gueltige JavaScript-Syntax", e.message);
+}
+
+try {
+  const app = read("app.js");
+  new Function(app);
+  pass("app.js hat gueltige JavaScript-Syntax");
+  if (!app.includes('navigator.serviceWorker.register("sw.js?v=11.7.2")') &&
+      !app.includes("serviceWorker.register")) {
+    pass("app.js registriert keinen zweiten Service Worker");
+  } else {
+    fail("app.js registriert keinen zweiten Service Worker");
+  }
+  if (app.includes('if(view==="history"){show("history");try{renderHistory()}') &&
+      app.includes('if(view==="home"){show("home");try{renderHome()}')) {
+    pass("Bottom-Navigation oeffnet Ansichten vor dem Rendern");
+  } else {
+    fail("Bottom-Navigation oeffnet Ansichten vor dem Rendern");
+  }
+} catch (e) {
+  fail("app.js hat gueltige JavaScript-Syntax", e.message);
 }
 
 try {
