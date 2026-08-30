@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.34";
+  const VERSION = "11.8.106";
 
   const formatPaceShort = seconds => {
     if (!Number.isFinite(seconds) || seconds <= 0) return "–";
@@ -130,6 +130,10 @@
   const renderRunDashboard = () => {
     const dashboard = ensureDashboard();
     if (!dashboard) return;
+    if ((localStorage.getItem("reppilot-history-view-v1") || "strength") !== "run") {
+      dashboard.hidden = true;
+      return;
+    }
     const runs = runItems();
     if (!runs.length) {
       dashboard.hidden = true;
