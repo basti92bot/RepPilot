@@ -35,7 +35,8 @@
     const operations=[
       ["workouts",client.from("workouts").delete().eq("user_id",user.id)],
       ["runs",client.from("runs").delete().eq("user_id",user.id)],
-      ["apple_workouts",client.from("apple_workouts").delete().eq("user_id",user.id)]
+      ["apple_workouts",client.from("apple_workouts").delete().eq("user_id",user.id)],
+      ["strength_measurements",client.from("strength_measurements").delete().eq("user_id",user.id)]
     ];
 
     for(const [name,promise] of operations){
