@@ -105,7 +105,7 @@ try {
   await page.locator('[data-rp-day="3"]').click();
   await page.locator('[data-rp-day="5"]').click();
   await page.locator("#rpOnboardingSave").click();
-  await page.waitForSelector("#rpOnboarding[hidden]",{timeout:10000});
+  await page.locator("#rpOnboarding").waitFor({state:"hidden",timeout:10000});
   check(!(await page.locator("#rpOnboarding").isVisible()),"Onboarding lässt sich vollständig abschließen");
   const onboardingState=await page.evaluate(()=>({
     profile:JSON.parse(localStorage.getItem("reppilot-user-profile")||"{}"),
