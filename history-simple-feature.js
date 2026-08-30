@@ -151,23 +151,14 @@
       return;
     }
 
-    detail.innerHTML = list.map(row => {
-      const exercises = (row.exercises || []).map(exercise => {
-        const done = (exercise.sets || []).filter(set => set?.done !== false && Number(set?.reps || 0) > 0);
-        if (!done.length) return "";
-        const setText = done.map(set => `${weight(set.weight)} kg × ${Number(set.reps || 0)}`).join(" · ");
-        return `<li><span>${esc(exercise.name || "Übung")}</span><strong>${esc(setText)}</strong></li>`;
-      }).join("");
-
-      return `
-        <article class="history-simple-card">
-          <div class="history-simple-head">
-            <div><small>${esc(date(row.finishedAt || row.startedAt))}</small><h3>${esc(row.title || "Krafttraining")}</h3></div>
-            <div class="history-simple-total">${weight(totalVolume(row))} kg</div>
-          </div>
-          <ul class="history-simple-list">${exercises || "<li><span>Keine abgeschlossenen Sätze</span></li>"}</ul>
-        </article>`;
-    }).join("");
+    detail.innerHTML = list.map(row => `
+      <article class="history-simple-card">
+        <div class="history-simple-head">
+          <div><small>${esc(date(row.finishedAt || row.startedAt))}</small><h3>${esc(row.title || "Krafttraining")}</h3></div>
+          <div class="history-simple-total">${weight(totalVolume(row))} kg</div>
+        </div>
+      </article>`
+    ).join("");
   }
 
   function render() {
