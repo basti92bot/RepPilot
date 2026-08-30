@@ -229,7 +229,13 @@ try {
 
   check(await page.locator("#weightInput").isVisible(),"Gewichtseingabe nach Kraftmessung sichtbar");
   await page.locator("#weightInput").fill("61");
-  await page.waitForTimeout(80);
+  await page.waitForTimeout(30);
+  check(await page.locator("body").evaluate(el=>el.classList.contains("rp-keyboard-open")),"Keyboard-State wird bei Gewichtseingabe aktiviert");
+  check(!(await page.locator("nav").isVisible()),"Bottom-Navigation wird bei offener Tastatur ausgeblendet");
+  await page.locator("#weightInput").blur();
+  await page.waitForTimeout(320);
+  check(!(await page.locator("body").evaluate(el=>el.classList.contains("rp-keyboard-open"))),"Keyboard-State wird nach Eingabe beendet");
+  check(await page.locator("nav").isVisible(),"Bottom-Navigation erscheint nach Tastatur wieder");
   const completeProxy=page.locator('[data-proxy-for="completeSetBtn"]');
   const completeOriginal=page.locator("#completeSetBtn");
   const completeProxyVisible=await completeProxy.isVisible().catch(()=>false);
