@@ -7,7 +7,7 @@ const ASSETS=[
   "./header-fix.css?v=11.8.109",
   "./manifest.json?v=11.8.109",
   "./reppilot-muscleman-logo-v11.8.26.png?v=11.8.109",
-  "./reppilot-app-icon-v11.8.88.png",
+  "./reppilot-logo-old-stable.png?v=11.8.27",
   "./auth.js?v=11.8.109",
   "./storage-bridge.js?v=11.8.69",
   "./app.js?v=11.8.109",
@@ -45,7 +45,7 @@ self.addEventListener("install",event=>{
   self.skipWaiting();
   event.waitUntil((async()=>{
     const cache=await caches.open(CACHE);
-    await Promise.allSettled(ASSETS.map(asset=>cache.add(asset)));
+    await Promise.all(ASSETS.map(asset=>cache.add(asset)));
   })());
 });
 
