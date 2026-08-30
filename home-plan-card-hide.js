@@ -60,6 +60,7 @@
   function syncKeyboardState(){
     clearTimeout(keyboardTimer);
     document.body.classList.toggle(KEYBOARD_CLASS,isTextInput(document.activeElement));
+    requestAnimationFrame(()=>window.RepPilotStickyActions?.refresh?.());
   }
 
   function scheduleKeyboardCloseCheck(){
