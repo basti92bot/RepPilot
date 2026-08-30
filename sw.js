@@ -1,43 +1,43 @@
-const CACHE="reppilot-v11-8-109";
-const VERSION="11.8.109";
+const CACHE="reppilot-v11-8-110";
+const VERSION="11.8.110";
 const ASSETS=[
   "./install.html",
   "./index.html",
-  "./styles.css?v=11.8.109",
-  "./header-fix.css?v=11.8.109",
-  "./manifest.json?v=11.8.109",
-  "./reppilot-muscleman-logo-v11.8.26.png?v=11.8.109",
+  "./styles.css?v=11.8.110",
+  "./header-fix.css?v=11.8.110",
+  "./manifest.json?v=11.8.110",
+  "./reppilot-muscleman-logo-v11.8.26.png?v=11.8.110",
   "./reppilot-app-icon-v11.8.88.png",
-  "./auth.js?v=11.8.109",
+  "./auth.js?v=11.8.110",
   "./storage-bridge.js?v=11.8.69",
-  "./app.js?v=11.8.109",
+  "./app.js?v=11.8.110",
   "./cloud-history-feature.js?v=11.8.64",
   "./workout-fix.js?v=11.8.70",
-  "./run-feature.js?v=11.8.109",
-  "./run-dashboard-feature.js?v=11.8.109",
-  "./profile-feature.js?v=11.8.109",
-  "./app-tour-feature.js?v=11.8.109",
-  "./apple-health-feature.js?v=11.8.109",
-  "./shortcut-health-feature.js?v=11.8.109",
+  "./run-feature.js?v=11.8.110",
+  "./run-dashboard-feature.js?v=11.8.110",
+  "./profile-feature.js?v=11.8.110",
+  "./app-tour-feature.js?v=11.8.110",
+  "./apple-health-feature.js?v=11.8.110",
+  "./shortcut-health-feature.js?v=11.8.110",
   "./bodyweight-auto.js?v=11.8.58",
-  "./training-plan-feature.js?v=11.8.109",
-  "./home-plan-card-hide.js?v=11.8.109",
+  "./training-plan-feature.js?v=11.8.110",
+  "./home-plan-card-hide.js?v=11.8.110",
   "./personal-records-feature.js?v=11.8.71",
   "./home-workout-feature.js?v=11.8.58",
-  "./training-hub-feature.js?v=11.8.109",
+  "./training-hub-feature.js?v=11.8.110",
   "./onboarding-feature.js?v=11.8.58",
   "./progression-feature.js?v=11.8.58",
-  "./stretch-routine-feature.js?v=11.8.109",
+  "./stretch-routine-feature.js?v=11.8.110",
   "./timer-sound-feature.js?v=11.8.58",
-  "./navigation-fix.js?v=11.8.109",
-  "./workout-sticky-actions.js?v=11.8.109",
+  "./navigation-fix.js?v=11.8.110",
+  "./workout-sticky-actions.js?v=11.8.110",
   "./day-exercise-overview.js?v=11.8.58",
   "./pushup-feature.js?v=11.8.58",
   "./plan-title-fix.js?v=11.8.58",
-  "./strength-test-feature.js?v=11.8.109",
-  "./reset-feature.js?v=11.8.109",
+  "./strength-test-feature.js?v=11.8.110",
+  "./reset-feature.js?v=11.8.110",
   "./training-plan-quality-feature.js?v=11.8.70",
-  "./update-feature.js?v=11.8.109"
+  "./update-feature.js?v=11.8.110"
 ];
 
 self.addEventListener("install",event=>{
@@ -53,7 +53,7 @@ self.addEventListener("activate",event=>{
     const keys=await caches.keys();
     await Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)));
     await self.clients.claim();
-    const appUrl=new URL("./?launch=v11.8.109&pwa_update=1",self.registration.scope).href;
+    const appUrl=new URL("./?launch=v11.8.110&pwa_update=1",self.registration.scope).href;
     const scopePath=new URL(self.registration.scope).pathname;
     const windows=await self.clients.matchAll({type:"window",includeUncontrolled:true});
     await Promise.all(windows.map(async client=>{
