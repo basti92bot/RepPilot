@@ -1,5 +1,5 @@
 {
-  "version": "11.8.109",
+  "version": "11.8.110",
   "releasedAt": "2026-08-30",
-  "notes": "Fix: Der Haupt-Tab Verlauf öffnet jetzt immer zuerst die Ansicht und rendert Inhalte erst danach. Renderfehler können die Navigation nicht mehr blockieren. Navigation-Fix wird in der PWA mit aktueller Versions-URL geladen."
+  "notes": "Bottom-Navigation repariert: globaler Klick-Interceptor greift nur noch bei aktivem Workout. Verlauf öffnet vor dem Rendern. Alte doppelte Service-Worker-Registrierung aus app.js entfernt."
 }
