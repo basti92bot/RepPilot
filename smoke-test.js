@@ -207,13 +207,13 @@ if (install) {
 
   if (/display-mode:\s*standalone/.test(install) &&
       /navigator\.standalone/.test(install) &&
-      /location\.replace\(['"]\.\/\?launch=v11\.8\.110['"]\)/.test(install)) {
+      /location\.replace\(['"]\.\/\?launch=v11\.8\.111['"]\)/.test(install)) {
     pass("Installierte Install-Seite leitet zur RepPilot-App weiter");
   } else {
     fail("Installierte Install-Seite leitet zur RepPilot-App weiter");
   }
 
-  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.110['"]/.test(install)) {
+  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.111['"]/.test(install)) {
     pass("Install-Seite registriert Service Worker");
   } else {
     fail("Install-Seite registriert Service Worker");
@@ -246,7 +246,7 @@ if (auth) {
     fail("Login erklaert den Testzugang");
   }
 
-  if (/auth\.js\?v=11\.8\.110/.test(index) && /auth\.js\?v=11\.8\.110/.test(sw)) {
+  if (/auth\.js\?v=11\.8\.111/.test(index) && /auth\.js\?v=11\.8\.111/.test(sw)) {
     pass("Aktuelle auth.js wird von App und Service Worker geladen");
   } else {
     fail("Aktuelle auth.js wird von App und Service Worker geladen");
@@ -280,8 +280,8 @@ if (auth && index && sw) {
     fail("Kraftmessung nutzt einen globalen 28-Tage-Zyklus");
   }
 
-  if (/strength-test-feature\.js\?v=11\.8\.110/.test(index) &&
-      /strength-test-feature\.js\?v=11\.8\.110/.test(sw)) {
+  if (/strength-test-feature\.js\?v=11\.8\.111/.test(index) &&
+      /strength-test-feature\.js\?v=11\.8\.111/.test(sw)) {
     pass("Aktuelle Kraftmessungslogik wird von App und Service Worker geladen");
   } else {
     fail("Aktuelle Kraftmessungslogik wird von App und Service Worker geladen");
@@ -310,8 +310,8 @@ if (tour) {
     fail("App-Fuehrung kann im Profil erneut gestartet werden");
   }
 
-  if (/app-tour-feature\.js\?v=11\.8\.110/.test(index) &&
-      /app-tour-feature\.js\?v=11\.8\.110/.test(sw)) {
+  if (/app-tour-feature\.js\?v=11\.8\.111/.test(index) &&
+      /app-tour-feature\.js\?v=11\.8\.111/.test(sw)) {
     pass("App-Fuehrung wird von App und Service Worker geladen");
   } else {
     fail("App-Fuehrung wird von App und Service Worker geladen");
@@ -412,8 +412,8 @@ try {
     fail("Kraft-Verlauf hat genau ein Uebungs-Dropdown pro Training");
   }
 
-  if (index.includes('history-simple-feature.js?v=11.8.110') &&
-      sw.includes('history-simple-feature.js?v=11.8.110')) {
+  if (index.includes('history-simple-feature.js?v=11.8.111') &&
+      sw.includes('history-simple-feature.js?v=11.8.111')) {
     pass("PWA laedt den einfachen Verlauf");
   } else {
     fail("PWA laedt den einfachen Verlauf");
@@ -423,7 +423,7 @@ try {
 }
 
 if (sw) {
-  if (sw.includes("manifest.json") && sw.includes("icon-192.png?v=11.8.110") && sw.includes("icon-512.png?v=11.8.110")) {
+  if (sw.includes("manifest.json") && sw.includes("icon-192.png?v=11.8.111") && sw.includes("icon-512.png?v=11.8.111")) {
     pass("Service Worker cached Manifest und beide PWA-Icons");
   } else {
     fail("Service Worker cached Manifest und beide PWA-Icons");
