@@ -50,6 +50,8 @@
     const strength=h.filter(w=>w?.type!=="run"&&Array.isArray(w?.exercises));
     const runs=h.filter(w=>w?.type==="run");
     const view=ensureHistoryTabs()||historyView();
+    const historyRoot=document.getElementById("history");
+    if(historyRoot)historyRoot.dataset.historyView=view;
     const bests={};
     for(const w of strength)for(const e of w.exercises||[])for(const s of e.sets||[])if(s.done)bests[e.name]=Math.max(bests[e.name]||0,n(s.weight));
 
