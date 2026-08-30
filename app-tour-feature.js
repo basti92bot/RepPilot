@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.102";
+  const VERSION = "11.8.103";
   const SEEN_KEY = "reppilot-app-tour-v1";
   const ROOT_ID = "rpAppTour";
   let index = 0;
@@ -58,14 +58,14 @@
       #${ROOT_ID}[hidden]{display:none!important}
       .rp-tour-backdrop{position:absolute;inset:0;background:rgba(2,6,23,.74);pointer-events:auto}
       .rp-tour-spotlight{position:fixed;border:3px solid #fff;border-radius:16px;box-shadow:0 0 0 9999px rgba(2,6,23,.74);z-index:30001;pointer-events:none;transition:all .18s ease}
-      .rp-tour-card{position:fixed;left:16px;right:16px;z-index:30002;max-width:430px;margin:auto;background:#fff;color:#111827;border-radius:22px;padding:18px;box-shadow:0 24px 70px rgba(0,0,0,.35);pointer-events:auto}
-      .rp-tour-card.top{top:max(78px,calc(env(safe-area-inset-top,0px) + 48px))}
-      .rp-tour-card.bottom{bottom:max(92px,calc(env(safe-area-inset-bottom,0px) + 78px))}
+      .rp-tour-card{position:fixed;left:16px;right:16px;z-index:30002;max-width:430px;margin:auto;background:#fff;color:#111827;border-radius:22px;padding:18px;box-shadow:0 24px 70px rgba(0,0,0,.35);pointer-events:auto;display:block!important;min-width:0!important;width:auto!important}
+      .rp-tour-card.rp-tour-card-top{top:max(78px,calc(env(safe-area-inset-top,0px) + 48px))}
+      .rp-tour-card.rp-tour-card-bottom{bottom:max(92px,calc(env(safe-area-inset-bottom,0px) + 78px))}
       .rp-tour-progress{font-size:11px;font-weight:900;letter-spacing:.08em;color:#64748b;text-transform:uppercase}
-      .rp-tour-card h2{margin:6px 0 7px;font-size:22px}
-      .rp-tour-card p{margin:0;color:#64748b;line-height:1.45}
-      .rp-tour-actions{display:grid;grid-template-columns:auto 1fr;gap:10px;margin-top:16px}
-      .rp-tour-actions button{border:0;border-radius:13px;padding:12px 14px;font:inherit;font-weight:800}
+      .rp-tour-card h2{margin:6px 0 7px;font-size:22px;display:block!important;min-width:0;white-space:normal}
+      .rp-tour-card p{margin:0;color:#64748b;line-height:1.45;display:block!important;min-width:0;white-space:normal;overflow-wrap:normal;word-break:normal}
+      .rp-tour-actions{display:grid!important;grid-template-columns:auto minmax(0,1fr)!important;gap:10px;margin-top:16px;width:100%}
+      .rp-tour-actions button{border:0;border-radius:13px;padding:12px 14px;font:inherit;font-weight:800;min-width:0;max-width:100%}
       .rp-tour-skip{background:#e2e8f0;color:#0f172a}
       .rp-tour-next{background:#111827;color:#fff}
       #rpTourReplayBtn{margin-top:14px}
@@ -83,7 +83,7 @@
     root.innerHTML = `
       <div class="rp-tour-backdrop"></div>
       <div class="rp-tour-spotlight"></div>
-      <div class="rp-tour-card bottom">
+      <div class="rp-tour-card rp-tour-card-bottom">
         <div class="rp-tour-progress"></div>
         <h2></h2>
         <p></p>
@@ -123,8 +123,8 @@
     if (!target) {
       spot.style.display = "none";
       backdrop.style.display = "block";
-      card.classList.remove("top");
-      card.classList.add("bottom");
+      card.classList.remove("rp-tour-card-top");
+      card.classList.add("rp-tour-card-bottom");
       return;
     }
 
@@ -136,8 +136,8 @@
     spot.style.top = Math.max(6, r.top - pad) + "px";
     spot.style.width = Math.min(window.innerWidth - 12, r.width + pad * 2) + "px";
     spot.style.height = Math.max(44, r.height + pad * 2) + "px";
-    card.classList.toggle("top", r.top + r.height / 2 > window.innerHeight / 2);
-    card.classList.toggle("bottom", !(r.top + r.height / 2 > window.innerHeight / 2));
+    card.classList.toggle("rp-tour-card-top", r.top + r.height / 2 > window.innerHeight / 2);
+    card.classList.toggle("rp-tour-card-bottom", !(r.top + r.height / 2 > window.innerHeight / 2));
   }
 
   function render() {
