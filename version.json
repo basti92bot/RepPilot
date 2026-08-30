@@ -1,5 +1,5 @@
 {
-  "version": "11.8.106",
+  "version": "11.8.105",
   "releasedAt": "2026-08-30",
-  "notes": "Verlauf hat jetzt zwei Unterreiter: Kraft und Laufen. Kennzahlen und Verlauf werden je Bereich getrennt angezeigt; das Laufdashboard erscheint nur unter Laufen."
+  "notes": "Kraftmessung folgt jetzt einem globalen 28-Tage-Zyklus. Nach abgeschlossener Messung bleibt sie fuer alle Krafttrainings bis zum naechsten Zyklus aus."
 }
