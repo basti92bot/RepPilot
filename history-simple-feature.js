@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.107";
+  const VERSION = "11.8.108";
   let mode = "strength";
 
   const esc = value => String(value ?? "").replace(/[&<>"']/g, ch => ({
@@ -155,6 +155,19 @@
       .history-simple-list li{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
       .history-simple-list li:last-child{border-bottom:0}
       .history-simple-list strong{text-align:right}
+      .history-exercise-dropdown{border-bottom:1px solid var(--line)}
+      .history-exercise-dropdown:last-child{border-bottom:0}
+      .history-exercise-dropdown summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;cursor:pointer;font-weight:800}
+      .history-exercise-dropdown summary::-webkit-details-marker{display:none}
+      .history-exercise-dropdown summary:after{content:"⌄";color:var(--muted);font-size:18px;line-height:1;transition:transform .18s ease}
+      .history-exercise-dropdown[open] summary:after{transform:rotate(180deg)}
+      .history-exercise-summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;flex:1}
+      .history-exercise-summary span{min-width:0;overflow:hidden;text-overflow:ellipsis}
+      .history-exercise-summary strong{white-space:nowrap}
+      .history-exercise-sets{display:grid;gap:8px;padding:0 0 13px}
+      .history-exercise-set{display:flex;justify-content:space-between;gap:12px;padding:9px 11px;border-radius:11px;background:#f9fafb;color:#374151;font-size:13px}
+      .history-exercise-set span{color:var(--muted);font-weight:700}
+      .history-exercise-set strong{font-weight:900}
       .history-simple-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
       .history-simple-metric{padding:12px;border:1px solid var(--line);border-radius:14px;background:#f9fafb}
       .history-simple-metric small{display:block;color:var(--muted);font-size:10px;font-weight:900}
@@ -256,10 +269,29 @@
 
     detail.innerHTML = list.map(row => {
       const exercises = (row.exercises || []).map(exercise => {
-        const exerciseVolume = (exercise.sets || []).reduce((sum,set) =>
-          sum + (set?.done === false ? 0 : (Number(set?.weight)||0) * (Number(set?.reps)||0)), 0);
-        if (exerciseVolume <= 0) return "";
-        return `<li><span>${esc(exercise.name || "Übung")}</span><strong>${weight(exerciseVolume)} kg</strong></li>`;
+        const doneSets = (exercise.sets || []).filter(set =>
+          set?.done !== false && (Number(set?.weight || 0) > 0 || Number(set?.reps || 0) > 0)
+        );
+        const exerciseVolume = doneSets.reduce((sum,set) =>
+          sum + (Number(set?.weight)||0) * (Number(set?.reps)||0), 0);
+        if (exerciseVolume <= 0 && !doneSets.length) return "";
+
+        const setRows = doneSets.map((set,index) => {
+          const kgValue = Number(set?.weight || 0);
+          const repsValue = Number(set?.reps || 0);
+          return `<div class="history-exercise-set"><span>Satz ${index+1}</span><strong>${weight(kgValue)} kg × ${repsValue}</strong></div>`;
+        }).join("");
+
+        return `
+          <details class="history-exercise-dropdown">
+            <summary>
+              <div class="history-exercise-summary">
+                <span>${esc(exercise.name || "Übung")}</span>
+                <strong>${weight(exerciseVolume)} kg</strong>
+              </div>
+            </summary>
+            <div class="history-exercise-sets">${setRows || '<div class="history-exercise-set"><span>Keine Satzdetails</span></div>'}</div>
+          </details>`;
       }).join("");
 
       return `
@@ -268,7 +300,7 @@
             <div><small>${esc(date(row.finishedAt || row.startedAt))}</small><h3>${esc(row.title || "Krafttraining")}</h3></div>
             <div class="history-simple-total">${weight(totalVolume(row))} kg</div>
           </div>
-          <ul class="history-simple-list">${exercises}</ul>
+          <div class="history-simple-list">${exercises}</div>
         </article>`;
     }).join("");
   }
