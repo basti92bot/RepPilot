@@ -2,14 +2,14 @@
   "id": "/RepPilot/?app=reppilot-v11-8-104",
   "name": "RepPilot",
   "short_name": "RepPilot",
-  "start_url": "/RepPilot/?launch=v11.8.105",
+  "start_url": "/RepPilot/?launch=v11.8.106",
   "scope": "/RepPilot/",
   "display": "standalone",
   "background_color": "#f3f4f6",
   "theme_color": "#111827",
   "icons": [
     {
-      "src": "reppilot-muscleman-logo-v11.8.26.png?v=11.8.105",
+      "src": "reppilot-muscleman-logo-v11.8.26.png?v=11.8.106",
       "sizes": "128x128",
       "type": "image/png",
       "purpose": "any"
