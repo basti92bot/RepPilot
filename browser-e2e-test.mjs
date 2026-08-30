@@ -92,6 +92,29 @@ try {
 
   check((await page.locator("html").getAttribute("data-app-version"))===VERSION,"Runtime-Version ist "+VERSION);
   check(await page.locator(".auth-overlay[hidden]").count()===1,"Test-Session blendet Login aus");
+
+  await page.waitForSelector("#rpOnboarding:not([hidden])",{timeout:10000});
+  check(await page.locator("#rpOnboarding").isVisible(),"Erst-Onboarding erscheint für neuen Account");
+  await page.locator("#rpOnboardingHeight").fill("183");
+  await page.locator("#rpOnboardingWeight").fill("90");
+  await page.locator('[data-rp-sex="male"]').click();
+  await page.locator('[data-rp-level="advanced"]').click();
+  await page.locator('[data-rp-focus="mixed"]').click();
+  await page.locator('[data-rp-frequency="3"]').click();
+  await page.locator('[data-rp-day="1"]').click();
+  await page.locator('[data-rp-day="3"]').click();
+  await page.locator('[data-rp-day="5"]').click();
+  await page.locator("#rpOnboardingSave").click();
+  await page.waitForSelector("#rpOnboarding[hidden]",{timeout:10000});
+  check(!(await page.locator("#rpOnboarding").isVisible()),"Onboarding lässt sich vollständig abschließen");
+  const onboardingState=await page.evaluate(()=>({
+    profile:JSON.parse(localStorage.getItem("reppilot-user-profile")||"{}"),
+    plan:localStorage.getItem("reppilot-selected-training-plan")
+  }));
+  check(!!onboardingState.profile.onboardingCompletedAt,"Onboarding speichert Abschlusszeitpunkt");
+  check(onboardingState.profile.trainingDaysPerWeek===3&&onboardingState.profile.trainingDays?.length===3,"Onboarding speichert Trainingshäufigkeit und Tage");
+  check(onboardingState.plan==="personalized","Onboarding aktiviert personalisierten Plan");
+
   check(await page.locator("nav button").count()===4,"Vier Bottom-Navigation-Reiter vorhanden");
 
   const navLabels = await page.locator("nav button").allTextContents();
