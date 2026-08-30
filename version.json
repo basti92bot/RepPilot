@@ -1,5 +1,5 @@
 {
-  "version": "11.8.101",
+  "version": "11.8.102",
   "releasedAt": "2026-08-30",
-  "notes": "Neuer passwortloser Testzugang: Bei der Anmeldung Test eingeben. Der Testaccount ist per Supabase/RLS vom normalen Account getrennt."
+  "notes": "Neue Erststart-Führung erklärt kurz die wichtigsten Bereiche Heute, Training, Verlauf und Profil. Die Führung kann im Profil erneut gestartet werden."
 }
