@@ -1,7 +1,6 @@
 (() => {
   const VERSION = "11.8.105-history-simple-1";
   let mode = "strength";
-  const selected = { strength: "", run: "" };
 
   const esc = value => String(value ?? "").replace(/[&<>"']/g, ch => ({
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
@@ -62,9 +61,7 @@
       .history-simple-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:5px;background:#f3f4f6;border-radius:16px;margin-bottom:14px}
       .history-simple-tab{border:0;border-radius:12px;background:transparent;color:var(--muted);padding:12px 10px;font:inherit;font-weight:900}
       .history-simple-tab.active{background:#fff;color:var(--text);box-shadow:0 2px 8px rgba(17,24,39,.08)}
-      .history-simple-label{display:block;margin:0 0 6px;color:var(--muted);font-size:12px;font-weight:900;letter-spacing:.04em}
-      #historySimpleSelect{display:block;width:100%;box-sizing:border-box;border:2px solid #d1d5db;border-radius:16px;padding:14px;background:#fff;color:var(--text);font:inherit;font-weight:800}
-      .history-simple-detail{margin-top:14px}
+      .history-simple-detail{display:grid;gap:14px;margin-top:14px}
       .history-simple-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 5px 16px rgba(17,24,39,.05)}
       .history-simple-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:14px}
       .history-simple-head h3{margin:3px 0 0;font-size:21px}
@@ -99,8 +96,6 @@
           <button type="button" class="history-simple-tab" data-history-simple-mode="strength">🏋️ Kraft</button>
           <button type="button" class="history-simple-tab" data-history-simple-mode="run">🏃 Laufen</button>
         </div>
-        <label class="history-simple-label" for="historySimpleSelect">EINHEIT AUSWÄHLEN</label>
-        <select id="historySimpleSelect"></select>
         <div id="historySimpleDetail" class="history-simple-detail"></div>
       `;
       title.insertAdjacentElement("afterend",wrap);
@@ -112,10 +107,6 @@
         });
       });
 
-      wrap.querySelector("#historySimpleSelect").addEventListener("change", event => {
-        selected[mode] = event.target.value;
-        renderDetail();
-      });
     }
 
     return wrap;
@@ -133,48 +124,50 @@
 
   function renderDetail() {
     const detail = document.getElementById("historySimpleDetail");
-    const select = document.getElementById("historySimpleSelect");
-    if (!detail || !select) return;
+    if (!detail) return;
 
     const list = rows();
-    const row = list.find((item,index) => keyOf(item,index) === select.value);
-    if (!row) {
+    if (!list.length) {
       detail.innerHTML = `<div class="card center muted">${mode === "run" ? "Noch keine Läufe gespeichert." : "Noch keine Krafttrainings gespeichert."}</div>`;
       return;
     }
 
     if (mode === "run") {
-      const distanceKm = Number(row.distanceKm || 0);
-      const paceSeconds = Number(row.paceSecondsPerKm || 0) || (Number(row.durationSeconds || 0) / Number(row.distanceKm || 1));
-      detail.innerHTML = `
-        <article class="history-simple-card">
-          <div class="history-simple-head">
-            <div><small>${esc(date(row.finishedAt || row.startedAt))}</small><h3>🏃 ${esc(row.title || "Lauftraining")}</h3></div>
-          </div>
-          <div class="history-simple-metrics">
-            <div class="history-simple-metric"><small>DISTANZ</small><strong>${distanceKm.toLocaleString("de-DE",{maximumFractionDigits:2})} km</strong></div>
-            <div class="history-simple-metric"><small>ZEIT</small><strong>${duration(row.durationSeconds)}</strong></div>
-            <div class="history-simple-metric"><small>PACE</small><strong>${pace(paceSeconds)}</strong></div>
-          </div>
-        </article>`;
+      detail.innerHTML = list.map(row => {
+        const distanceKm = Number(row.distanceKm || 0);
+        const paceSeconds = Number(row.paceSecondsPerKm || 0) || (Number(row.durationSeconds || 0) / Number(row.distanceKm || 1));
+        return `
+          <article class="history-simple-card">
+            <div class="history-simple-head">
+              <div><small>${esc(date(row.finishedAt || row.startedAt))}</small><h3>🏃 ${esc(row.title || "Lauftraining")}</h3></div>
+            </div>
+            <div class="history-simple-metrics">
+              <div class="history-simple-metric"><small>DISTANZ</small><strong>${distanceKm.toLocaleString("de-DE",{maximumFractionDigits:2})} km</strong></div>
+              <div class="history-simple-metric"><small>ZEIT</small><strong>${duration(row.durationSeconds)}</strong></div>
+              <div class="history-simple-metric"><small>PACE</small><strong>${pace(paceSeconds)}</strong></div>
+            </div>
+          </article>`;
+      }).join("");
       return;
     }
 
-    const exercises = (row.exercises || []).map(exercise => {
-      const done = (exercise.sets || []).filter(set => set?.done !== false && Number(set?.reps || 0) > 0);
-      if (!done.length) return "";
-      const setText = done.map(set => `${weight(set.weight)} kg × ${Number(set.reps || 0)}`).join(" · ");
-      return `<li><span>${esc(exercise.name || "Übung")}</span><strong>${esc(setText)}</strong></li>`;
-    }).join("");
+    detail.innerHTML = list.map(row => {
+      const exercises = (row.exercises || []).map(exercise => {
+        const done = (exercise.sets || []).filter(set => set?.done !== false && Number(set?.reps || 0) > 0);
+        if (!done.length) return "";
+        const setText = done.map(set => `${weight(set.weight)} kg × ${Number(set.reps || 0)}`).join(" · ");
+        return `<li><span>${esc(exercise.name || "Übung")}</span><strong>${esc(setText)}</strong></li>`;
+      }).join("");
 
-    detail.innerHTML = `
-      <article class="history-simple-card">
-        <div class="history-simple-head">
-          <div><small>${esc(date(row.finishedAt || row.startedAt))}</small><h3>${esc(row.title || "Krafttraining")}</h3></div>
-          <div class="history-simple-total">${weight(totalVolume(row))} kg</div>
-        </div>
-        <ul class="history-simple-list">${exercises || "<li><span>Keine abgeschlossenen Sätze</span></li>"}</ul>
-      </article>`;
+      return `
+        <article class="history-simple-card">
+          <div class="history-simple-head">
+            <div><small>${esc(date(row.finishedAt || row.startedAt))}</small><h3>${esc(row.title || "Krafttraining")}</h3></div>
+            <div class="history-simple-total">${weight(totalVolume(row))} kg</div>
+          </div>
+          <ul class="history-simple-list">${exercises || "<li><span>Keine abgeschlossenen Sätze</span></li>"}</ul>
+        </article>`;
+    }).join("");
   }
 
   function render() {
@@ -188,22 +181,6 @@
     wrap.querySelectorAll("[data-history-simple-mode]").forEach(btn =>
       btn.classList.toggle("active", btn.dataset.historySimpleMode === mode)
     );
-
-    const select = document.getElementById("historySimpleSelect");
-    const list = rows();
-    select.disabled = !list.length;
-    select.innerHTML = list.map((row,index) => {
-      const key = keyOf(row,index);
-      return `<option value="${esc(key)}">${esc(optionLabel(row))}</option>`;
-    }).join("");
-
-    const wanted = selected[mode];
-    if (wanted && list.some((row,index) => keyOf(row,index) === wanted)) {
-      select.value = wanted;
-    } else if (list.length) {
-      select.value = keyOf(list[0],0);
-      selected[mode] = select.value;
-    }
 
     renderDetail();
   }
