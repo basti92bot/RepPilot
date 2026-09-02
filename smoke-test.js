@@ -207,13 +207,13 @@ if (install) {
 
   if (/display-mode:\s*standalone/.test(install) &&
       /navigator\.standalone/.test(install) &&
-      /location\.replace\(['"]\.\/\?launch=v11\.8\.113['"]\)/.test(install)) {
+      /location\.replace\(['"]\.\/\?launch=v11\.8\.114['"]\)/.test(install)) {
     pass("Installierte Install-Seite leitet zur RepPilot-App weiter");
   } else {
     fail("Installierte Install-Seite leitet zur RepPilot-App weiter");
   }
 
-  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.113['"]/.test(install)) {
+  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.114['"]/.test(install)) {
     pass("Install-Seite registriert Service Worker");
   } else {
     fail("Install-Seite registriert Service Worker");
@@ -246,7 +246,7 @@ if (auth) {
     fail("Login erklaert den Testzugang");
   }
 
-  if (/auth\.js\?v=11\.8\.113/.test(index) && /auth\.js\?v=11\.8\.113/.test(sw)) {
+  if (/auth\.js\?v=11\.8\.114/.test(index) && /auth\.js\?v=11\.8\.114/.test(sw)) {
     pass("Aktuelle auth.js wird von App und Service Worker geladen");
   } else {
     fail("Aktuelle auth.js wird von App und Service Worker geladen");
@@ -280,8 +280,8 @@ if (auth && index && sw) {
     fail("Kraftmessung nutzt einen globalen 28-Tage-Zyklus");
   }
 
-  if (/strength-test-feature\.js\?v=11\.8\.113/.test(index) &&
-      /strength-test-feature\.js\?v=11\.8\.113/.test(sw)) {
+  if (/strength-test-feature\.js\?v=11\.8\.114/.test(index) &&
+      /strength-test-feature\.js\?v=11\.8\.114/.test(sw)) {
     pass("Aktuelle Kraftmessungslogik wird von App und Service Worker geladen");
   } else {
     fail("Aktuelle Kraftmessungslogik wird von App und Service Worker geladen");
@@ -310,8 +310,8 @@ if (tour) {
     fail("App-Fuehrung kann im Profil erneut gestartet werden");
   }
 
-  if (/app-tour-feature\.js\?v=11\.8\.113/.test(index) &&
-      /app-tour-feature\.js\?v=11\.8\.113/.test(sw)) {
+  if (/app-tour-feature\.js\?v=11\.8\.114/.test(index) &&
+      /app-tour-feature\.js\?v=11\.8\.114/.test(sw)) {
     pass("App-Fuehrung wird von App und Service Worker geladen");
   } else {
     fail("App-Fuehrung wird von App und Service Worker geladen");
@@ -412,8 +412,8 @@ try {
     fail("Kraft-Verlauf hat genau ein Uebungs-Dropdown pro Training");
   }
 
-  if (index.includes('history-simple-feature.js?v=11.8.113') &&
-      sw.includes('history-simple-feature.js?v=11.8.113')) {
+  if (index.includes('history-simple-feature.js?v=11.8.114') &&
+      sw.includes('history-simple-feature.js?v=11.8.114')) {
     pass("PWA laedt den einfachen Verlauf");
   } else {
     fail("PWA laedt den einfachen Verlauf");
@@ -422,8 +422,40 @@ try {
   fail("Einfacher Verlauf hat gueltige JavaScript-Syntax", e.message);
 }
 
+
+try {
+  const exerciseImages = read("exercise-images-feature.js");
+  const planQuality = read("training-plan-quality-feature.js");
+  new Function(exerciseImages);
+  pass("exercise-images-feature.js hat gueltige JavaScript-Syntax");
+
+  const activeNames = [...new Set([...planQuality.matchAll(/\["([^"]+)",\d+,[^\]]+\]/g)].map(m => m[1]))];
+  const missingImages = activeNames.filter(name => !exerciseImages.includes('"' + name + '":'));
+  if (activeNames.length === 44 && missingImages.length === 0) {
+    pass("Übungsbilder decken alle aktiven Übungen ab");
+  } else {
+    fail("Übungsbilder decken alle aktiven Übungen ab", "Übungen=" + activeNames.length + ", fehlend=" + missingImages.join(", "));
+  }
+
+  if (exists("exercise-sprite-v11.8.114.webp")) {
+    pass("Übungsbild-Sprite vorhanden");
+  } else {
+    fail("Übungsbild-Sprite vorhanden");
+  }
+
+  if (index.includes('exercise-images-feature.js?v=11.8.114') &&
+      sw.includes('exercise-images-feature.js?v=11.8.114') &&
+      sw.includes('exercise-sprite-v11.8.114.webp?v=11.8.114')) {
+    pass("PWA laedt und cached die Übungsbilder");
+  } else {
+    fail("PWA laedt und cached die Übungsbilder");
+  }
+} catch (e) {
+  fail("Übungsbilder-Feature ist gueltig", e.message);
+}
+
 if (sw) {
-  if (sw.includes("manifest.json") && sw.includes("icon-192.png?v=11.8.113") && sw.includes("icon-512.png?v=11.8.113")) {
+  if (sw.includes("manifest.json") && sw.includes("icon-192.png?v=11.8.114") && sw.includes("icon-512.png?v=11.8.114")) {
     pass("Service Worker cached Manifest und beide PWA-Icons");
   } else {
     fail("Service Worker cached Manifest und beide PWA-Icons");
