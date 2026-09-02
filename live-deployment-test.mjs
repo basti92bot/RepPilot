@@ -40,7 +40,7 @@ for(let attempt=1;attempt<=12;attempt++){
         check(/^image\/png/i.test(icon192.headers["content-type"]||""),"Live 192er Icon hat PNG Content-Type",icon192.headers["content-type"]||"");
         check(/^image\/png/i.test(icon512.headers["content-type"]||""),"Live 512er Icon hat PNG Content-Type",icon512.headers["content-type"]||"");
         check(exerciseFeature.status===200,"Live Übungsbild-Feature erreichbar",String(exerciseFeature.status));
-        check(exerciseFeature.text.includes('const VERSION="11.8.114"'),"Live Übungsbild-Feature hat aktuelle Version");
+        check(exerciseFeature.text.includes('const VERSION="11.8.115"'),"Live Übungsbild-Feature hat aktuelle Version");
         check(exerciseSprite.status===200,"Live Übungsbild-Sprite erreichbar",String(exerciseSprite.status));
         check(/^image\/webp/i.test(exerciseSprite.headers["content-type"]||""),"Live Übungsbild-Sprite hat WebP Content-Type",exerciseSprite.headers["content-type"]||"");
         if(failures.length){
