@@ -1,6 +1,6 @@
 (() => {
-  const VERSION="11.8.115";
-  const SPRITE="./exercise-sprite-v11.8.114.webp?v=11.8.115";
+  const VERSION="11.8.116";
+  const SPRITE="./exercise-sprite-v11.8.116.webp?v=11.8.116";
   const COLS=7, ROWS=4;
   const MAP={
     "Bauch Rotation":15,"Beinbeuger":6,"Beinheben":16,"Beinpresse":4,"Beinstrecker":5,"Bergsteiger":27,
