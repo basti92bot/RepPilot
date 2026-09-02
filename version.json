@@ -1,5 +1,5 @@
 {
-  "version": "11.8.115",
+  "version": "11.8.116",
   "releasedAt": "2026-09-02",
-  "notes": "iPhone-PWA-Fix für Übungsbilder: Sprite wird nicht mehr als CSS-Hintergrund gerendert, sondern als echtes Bild im gekappten Viewport. Browser-E2E prüft jetzt zusätzlich, dass die Bilddatei tatsächlich geladen wurde."
+  "notes": "Übungsbild-Fix: vollständiger, verifizierter Sprite ersetzt die zuvor trunkierte Datei. Runtime-Test prüft jetzt zusätzlich sichtbare Bildpixel im konkreten Übungsausschnitt."
 }
