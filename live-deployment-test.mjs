@@ -20,7 +20,7 @@ for(let attempt=1;attempt<=12;attempt++){
         console.log("PASS: Live version.json liefert",expected);
         const [index,manifestRes,sw,icon192,icon512,exerciseFeature,exerciseSprite]=await Promise.all([
           get("index.html"),get("manifest.json"),get("sw.js"),get("icon-192.png"),get("icon-512.png"),
-          get("exercise-images-feature.js"),get("exercise-sprite-v11.8.114.webp")
+          get("exercise-images-feature.js"),get("exercise-sprite-v11.8.116.webp")
         ]);
         const manifest=JSON.parse(manifestRes.text);
         const failures=[];
@@ -40,9 +40,11 @@ for(let attempt=1;attempt<=12;attempt++){
         check(/^image\/png/i.test(icon192.headers["content-type"]||""),"Live 192er Icon hat PNG Content-Type",icon192.headers["content-type"]||"");
         check(/^image\/png/i.test(icon512.headers["content-type"]||""),"Live 512er Icon hat PNG Content-Type",icon512.headers["content-type"]||"");
         check(exerciseFeature.status===200,"Live Übungsbild-Feature erreichbar",String(exerciseFeature.status));
-        check(exerciseFeature.text.includes('const VERSION="11.8.115"'),"Live Übungsbild-Feature hat aktuelle Version");
+        check(exerciseFeature.text.includes('const VERSION="11.8.116"'),"Live Übungsbild-Feature hat aktuelle Version");
         check(exerciseSprite.status===200,"Live Übungsbild-Sprite erreichbar",String(exerciseSprite.status));
         check(/^image\/webp/i.test(exerciseSprite.headers["content-type"]||""),"Live Übungsbild-Sprite hat WebP Content-Type",exerciseSprite.headers["content-type"]||"");
+        check(Number(exerciseSprite.headers["content-length"]||24518)===24518||exerciseSprite.text.length>15000,
+          "Live Übungsbild-Sprite hat erwartete Dateigröße",exerciseSprite.headers["content-length"]||String(exerciseSprite.text.length));
         if(failures.length){
           console.error("Live-Deployment-Test fehlgeschlagen:\n"+failures.join("\n"));
           process.exit(1);
