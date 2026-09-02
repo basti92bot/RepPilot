@@ -1,5 +1,5 @@
 {
-  "version": "11.8.113",
-  "releasedAt": "2026-08-30",
-  "notes": "iPhone-Keyboard-Fix: Sticky-Workout-Aktionen werden nach dem Schliessen der Bildschirmtastatur neu positioniert und liegen nicht mehr hinter der Bottom-Navigation."
+  "version": "11.8.114",
+  "releasedAt": "2026-09-02",
+  "notes": "Übungsbilder integriert: Alle 44 aktiven Kraft- und Home-Workout-Übungen sind einer anatomischen Grafik zugeordnet. Ähnliche Varianten teilen sich bewusst dasselbe Motiv; das aktuelle Übungsbild wird direkt im Satz-Panel angezeigt und offline mitgecached."
 }
