@@ -209,8 +209,6 @@ try {
   check(await workoutStart.count()===1,"Mindestens ein Krafttraining ist im Wochenplan startbar");
   await workoutStart.click();
   check((await activeView())==="workout","Krafttraining startet");
-  await page.waitForTimeout(120);
-  check(await page.locator("#repPilotExerciseImageCard").isVisible(),"Übungsbild für aktuelle Kraftübung sichtbar");
   const exerciseImageAudit=await page.evaluate(()=>window.RepPilotExerciseImages?.audit?.());
   check(exerciseImageAudit?.total===44&&exerciseImageAudit?.mapped===44&&exerciseImageAudit?.missing?.length===0,
     "Alle 44 aktiven Übungen haben eine Bildzuordnung",JSON.stringify(exerciseImageAudit));
@@ -234,6 +232,9 @@ try {
   }
 
   check(await page.locator("#weightInput").isVisible(),"Gewichtseingabe nach Kraftmessung sichtbar");
+  await page.waitForTimeout(80);
+  check(await page.locator("#repPilotExerciseImageCard").isVisible(),"Übungsbild im sichtbaren Satz-Panel");
+
   await page.locator("#weightInput").fill("61");
   await page.waitForTimeout(30);
   check(await page.locator("body").evaluate(el=>el.classList.contains("rp-keyboard-open")),"Keyboard-State wird bei Gewichtseingabe aktiviert");
