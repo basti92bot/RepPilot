@@ -1,6 +1,6 @@
 (() => {
-  const VERSION="11.8.114";
-  const SPRITE="./exercise-sprite-v11.8.114.webp?v=11.8.114";
+  const VERSION="11.8.115";
+  const SPRITE="./exercise-sprite-v11.8.114.webp?v=11.8.115";
   const COLS=7, ROWS=4;
   const MAP={
     "Bauch Rotation":15,"Beinbeuger":6,"Beinheben":16,"Beinpresse":4,"Beinstrecker":5,"Bergsteiger":27,
@@ -19,10 +19,10 @@
     "Reverse Butterfly":11,"Nackenheben":14,"Hüftabduktion":17,"Hüftadduktion":18,"Rückenstrecker":19
   };
 
-  const position=index=>{
-    const col=index%COLS,row=Math.floor(index/COLS);
-    return ((col/(COLS-1))*100)+"% "+((row/(ROWS-1))*100)+"%";
-  };
+  const position=index=>({
+    col:index%COLS,
+    row:Math.floor(index/COLS)
+  });
 
   function ensureStyles(){
     if(document.getElementById("repPilotExerciseImageStyles"))return;
@@ -30,7 +30,8 @@
     style.id="repPilotExerciseImageStyles";
     style.textContent=`
       #repPilotExerciseImageCard{max-width:270px;margin:12px auto 14px;border:1px solid var(--line,#e5e7eb);border-radius:18px;overflow:hidden;background:#f8fafc;box-shadow:0 4px 14px rgba(17,24,39,.05)}
-      #repPilotExerciseImageSprite{width:100%;aspect-ratio:1/1;background-image:url("${SPRITE}");background-size:700% 400%;background-repeat:no-repeat;background-color:#fff}
+      #repPilotExerciseImageViewport{width:100%;aspect-ratio:1/1;position:relative;overflow:hidden;background:#fff}
+      #repPilotExerciseImageSprite{position:absolute;left:0;top:0;width:700%;height:400%;max-width:none;display:block;object-fit:fill;pointer-events:none;user-select:none}
       #repPilotExerciseImageLabel{display:block;padding:8px 10px 10px;text-align:center;color:var(--muted,#6b7280);font-size:11px;font-weight:800}
       @media(max-width:390px){#repPilotExerciseImageCard{max-width:238px}}
     `;
@@ -47,7 +48,7 @@
     card=document.createElement("div");
     card.id="repPilotExerciseImageCard";
     card.hidden=true;
-    card.innerHTML='<div id="repPilotExerciseImageSprite" role="img"></div><small id="repPilotExerciseImageLabel"></small>';
+    card.innerHTML='<div id="repPilotExerciseImageViewport"><img id="repPilotExerciseImageSprite" src="'+SPRITE+'" alt="" decoding="async"></div><small id="repPilotExerciseImageLabel"></small>';
     title.insertAdjacentElement("afterend",card);
     return card;
   }
@@ -59,9 +60,14 @@
     const index=MAP[name];
     if(index===undefined){card.hidden=true;return;}
     const sprite=document.getElementById("repPilotExerciseImageSprite");
+    const viewport=document.getElementById("repPilotExerciseImageViewport");
+    const pos=position(index);
     card.hidden=false;
-    sprite.style.backgroundPosition=position(index);
-    sprite.setAttribute("aria-label","Übungsbild "+name);
+    sprite.style.left=(-pos.col*100)+"%";
+    sprite.style.top=(-pos.row*100)+"%";
+    sprite.alt="Übungsbild "+name;
+    viewport.setAttribute("role","img");
+    viewport.setAttribute("aria-label","Übungsbild "+name);
     document.getElementById("repPilotExerciseImageLabel").textContent=name;
   }
 
