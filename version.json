@@ -1,5 +1,5 @@
 {
-  "version": "11.8.114",
+  "version": "11.8.115",
   "releasedAt": "2026-09-02",
-  "notes": "Übungsbilder integriert: Alle 44 aktiven Kraft- und Home-Workout-Übungen sind einer anatomischen Grafik zugeordnet. Ähnliche Varianten teilen sich bewusst dasselbe Motiv; das aktuelle Übungsbild wird direkt im Satz-Panel angezeigt und offline mitgecached."
+  "notes": "iPhone-PWA-Fix für Übungsbilder: Sprite wird nicht mehr als CSS-Hintergrund gerendert, sondern als echtes Bild im gekappten Viewport. Browser-E2E prüft jetzt zusätzlich, dass die Bilddatei tatsächlich geladen wurde."
 }
