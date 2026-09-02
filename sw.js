@@ -41,7 +41,7 @@ const ASSETS=[
   "./reset-feature.js?v=11.8.115",
   "./training-plan-quality-feature.js?v=11.8.70",
   "./exercise-images-feature.js?v=11.8.115",
-  "./exercise-sprite-v11.8.115.webp?v=11.8.115",
+  "./exercise-sprite-v11.8.114.webp?v=11.8.115",
   "./update-feature.js?v=11.8.115"
 ];
 
