@@ -207,13 +207,13 @@ if (install) {
 
   if (/display-mode:\s*standalone/.test(install) &&
       /navigator\.standalone/.test(install) &&
-      /location\.replace\(['"]\.\/\?launch=v11\.8\.115['"]\)/.test(install)) {
+      /location\.replace\(['"]\.\/\?launch=v11\.8\.116['"]\)/.test(install)) {
     pass("Installierte Install-Seite leitet zur RepPilot-App weiter");
   } else {
     fail("Installierte Install-Seite leitet zur RepPilot-App weiter");
   }
 
-  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.115['"]/.test(install)) {
+  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.116['"]/.test(install)) {
     pass("Install-Seite registriert Service Worker");
   } else {
     fail("Install-Seite registriert Service Worker");
@@ -246,7 +246,7 @@ if (auth) {
     fail("Login erklaert den Testzugang");
   }
 
-  if (/auth\.js\?v=11\.8\.115/.test(index) && /auth\.js\?v=11\.8\.115/.test(sw)) {
+  if (/auth\.js\?v=11\.8\.116/.test(index) && /auth\.js\?v=11\.8\.116/.test(sw)) {
     pass("Aktuelle auth.js wird von App und Service Worker geladen");
   } else {
     fail("Aktuelle auth.js wird von App und Service Worker geladen");
@@ -280,8 +280,8 @@ if (auth && index && sw) {
     fail("Kraftmessung nutzt einen globalen 28-Tage-Zyklus");
   }
 
-  if (/strength-test-feature\.js\?v=11\.8\.115/.test(index) &&
-      /strength-test-feature\.js\?v=11\.8\.115/.test(sw)) {
+  if (/strength-test-feature\.js\?v=11\.8\.116/.test(index) &&
+      /strength-test-feature\.js\?v=11\.8\.116/.test(sw)) {
     pass("Aktuelle Kraftmessungslogik wird von App und Service Worker geladen");
   } else {
     fail("Aktuelle Kraftmessungslogik wird von App und Service Worker geladen");
@@ -310,8 +310,8 @@ if (tour) {
     fail("App-Fuehrung kann im Profil erneut gestartet werden");
   }
 
-  if (/app-tour-feature\.js\?v=11\.8\.115/.test(index) &&
-      /app-tour-feature\.js\?v=11\.8\.115/.test(sw)) {
+  if (/app-tour-feature\.js\?v=11\.8\.116/.test(index) &&
+      /app-tour-feature\.js\?v=11\.8\.116/.test(sw)) {
     pass("App-Fuehrung wird von App und Service Worker geladen");
   } else {
     fail("App-Fuehrung wird von App und Service Worker geladen");
@@ -412,8 +412,8 @@ try {
     fail("Kraft-Verlauf hat genau ein Uebungs-Dropdown pro Training");
   }
 
-  if (index.includes('history-simple-feature.js?v=11.8.115') &&
-      sw.includes('history-simple-feature.js?v=11.8.115')) {
+  if (index.includes('history-simple-feature.js?v=11.8.116') &&
+      sw.includes('history-simple-feature.js?v=11.8.116')) {
     pass("PWA laedt den einfachen Verlauf");
   } else {
     fail("PWA laedt den einfachen Verlauf");
@@ -437,15 +437,28 @@ try {
     fail("Übungsbilder decken alle aktiven Übungen ab", "Übungen=" + activeNames.length + ", fehlend=" + missingImages.join(", "));
   }
 
-  if (exists("exercise-sprite-v11.8.114.webp")) {
+  if (exists("exercise-sprite-v11.8.116.webp")) {
     pass("Übungsbild-Sprite vorhanden");
+    try {
+      const crypto = require("crypto");
+      const spritePath = path.join(root,"exercise-sprite-v11.8.116.webp");
+      const spriteBytes = fs.readFileSync(spritePath);
+      const spriteHash = crypto.createHash("sha256").update(spriteBytes).digest("hex");
+      if (spriteBytes.length === 24518 && spriteHash === "be59370272f3912b76aba13a0cbf61ec24bdc3ebcdf21644dc46c25e0b9d8835") {
+        pass("Übungsbild-Sprite hat verifizierte Größe und SHA-256");
+      } else {
+        fail("Übungsbild-Sprite hat verifizierte Größe und SHA-256", spriteBytes.length + " / " + spriteHash);
+      }
+    } catch (e) {
+      fail("Übungsbild-Sprite hat verifizierte Größe und SHA-256",e.message);
+    }
   } else {
     fail("Übungsbild-Sprite vorhanden");
   }
 
-  if (index.includes('exercise-images-feature.js?v=11.8.115') &&
-      sw.includes('exercise-images-feature.js?v=11.8.115') &&
-      sw.includes('exercise-sprite-v11.8.114.webp?v=11.8.115')) {
+  if (index.includes('exercise-images-feature.js?v=11.8.116') &&
+      sw.includes('exercise-images-feature.js?v=11.8.116') &&
+      sw.includes('exercise-sprite-v11.8.116.webp?v=11.8.116')) {
     pass("PWA laedt und cached die Übungsbilder");
   } else {
     fail("PWA laedt und cached die Übungsbilder");
@@ -455,7 +468,7 @@ try {
 }
 
 if (sw) {
-  if (sw.includes("manifest.json") && sw.includes("icon-192.png?v=11.8.115") && sw.includes("icon-512.png?v=11.8.115")) {
+  if (sw.includes("manifest.json") && sw.includes("icon-192.png?v=11.8.116") && sw.includes("icon-512.png?v=11.8.116")) {
     pass("Service Worker cached Manifest und beide PWA-Icons");
   } else {
     fail("Service Worker cached Manifest und beide PWA-Icons");
