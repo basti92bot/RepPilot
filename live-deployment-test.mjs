@@ -51,8 +51,8 @@ for(let attempt=1;attempt<=12;attempt++){
         check(/^image\/png/i.test(icon192.headers["content-type"]||""),"Live 192er Icon hat PNG Content-Type",icon192.headers["content-type"]||"");
         check(/^image\/png/i.test(icon512.headers["content-type"]||""),"Live 512er Icon hat PNG Content-Type",icon512.headers["content-type"]||"");
         check(exerciseFeature.status===200,"Live Übungsbild-Feature erreichbar",String(exerciseFeature.status));
-        check(/const VERSION\s*=\s*"11\.8\.118"/.test(exerciseFeature.text),"Live Übungsbild-Feature hat aktuelle Version");
-        check(/const BASE\s*=\s*"\.\/assets\/exercises\/v11\.8\.118\/"/.test(exerciseFeature.text) &&
+        check(/const VERSION\s*=\s*"11\.8\.119"/.test(exerciseFeature.text),"Live Übungsbild-Feature hat aktuelle Version");
+        check(/const BASE\s*=\s*"\.\/assets\/exercises\/v11\.8\.119\/"/.test(exerciseFeature.text) &&
           exerciseFeature.text.includes("img.width = 1024") && !/https?:\/\//.test(exerciseFeature.text),
           "Live Übungsbild-Feature nutzt lokale 1024px-Dateien");
         check([...exerciseFeature.text.matchAll(/^\s+"([^"]+)":\s*approved\(/gm)].length===44,
