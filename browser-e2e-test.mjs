@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 
 const BASE = process.env.REPPILOT_BASE_URL || "http://127.0.0.1:4173";
-const VERSION = "11.8.116";
+const VERSION = "11.8.117";
 const failures = [];
 const pass = label => console.log("PASS:", label);
 const fail = (label, detail="") => {
@@ -210,9 +210,14 @@ try {
   await workoutStart.click();
   check((await activeView())==="workout","Krafttraining startet");
   const exerciseImageAudit=await page.evaluate(()=>window.RepPilotExerciseImages?.audit?.());
-  check(exerciseImageAudit?.total===44&&exerciseImageAudit?.mapped===44&&exerciseImageAudit?.missing?.length===0,
-    "Alle 44 aktiven Übungen haben eine Bildzuordnung",JSON.stringify(exerciseImageAudit));
-
+  check(
+    exerciseImageAudit?.total===44 &&
+    exerciseImageAudit?.mapped===40 &&
+    exerciseImageAudit?.intentionalMissing?.length===4 &&
+    exerciseImageAudit?.unexpectedMissing?.length===0,
+    "40 exakte Übungsbilder, 4 bewusst ohne falsches Fallback",
+    JSON.stringify(exerciseImageAudit)
+  );
 
   const strengthInline = page.locator("#strengthInlineTest");
   if (await strengthInline.isVisible().catch(()=>false)) {
@@ -232,39 +237,43 @@ try {
   }
 
   check(await page.locator("#weightInput").isVisible(),"Gewichtseingabe nach Kraftmessung sichtbar");
-  await page.waitForTimeout(80);
+  await page.waitForTimeout(120);
   check(await page.locator("#repPilotExerciseImageCard").isVisible(),"Übungsbild im sichtbaren Satz-Panel");
-  const exerciseImgLoaded=await page.locator("#repPilotExerciseImageSprite").evaluate(img=>({
-    complete:img.complete,
-    naturalWidth:img.naturalWidth,
-    naturalHeight:img.naturalHeight,
-    src:img.currentSrc||img.src
-  }));
-  check(exerciseImgLoaded.complete&&exerciseImgLoaded.naturalWidth>0&&exerciseImgLoaded.naturalHeight>0,
-    "Übungsbilddatei ist wirklich geladen",JSON.stringify(exerciseImgLoaded));
-  const exercisePixelAudit=await page.evaluate(()=>{
-    const img=document.getElementById("repPilotExerciseImageSprite");
+
+  const exerciseImageRuntime=await page.evaluate(()=>{
+    const card=document.getElementById("repPilotExerciseImageCard");
+    const imgs=[...document.querySelectorAll(".repPilotExercisePose")];
     const name=String(document.getElementById("exerciseName")?.textContent||"").trim();
-    const index=window.RepPilotExerciseImages?.map?.[name];
-    if(!img||!Number.isInteger(index)||!img.naturalWidth||!img.naturalHeight)return {ok:false,name,index};
-    const cols=7,rows=4;
-    const sw=img.naturalWidth/cols,sh=img.naturalHeight/rows;
-    const col=index%cols,row=Math.floor(index/cols);
-    const canvas=document.createElement("canvas");
-    canvas.width=80;canvas.height=80;
-    const ctx=canvas.getContext("2d",{willReadFrequently:true});
-    ctx.drawImage(img,col*sw,row*sh,sw,sh,0,0,80,80);
-    const data=ctx.getImageData(0,0,80,80).data;
-    let visible=0,dark=0,red=0;
-    for(let i=0;i<data.length;i+=4){
-      const r=data[i],g=data[i+1],b=data[i+2],a=data[i+3];
-      if(a>10&&(r<248||g<248||b<248))visible++;
-      if(a>10&&r<180&&g<180&&b<180)dark++;
-      if(a>10&&r>140&&r>g*1.25&&r>b*1.25)red++;
-    }
-    return {ok:visible>500,dark,red,visible,name,index,width:img.naturalWidth,height:img.naturalHeight};
+    const source=window.RepPilotExerciseImages?.source;
+    const sourceCommit=window.RepPilotExerciseImages?.sourceCommit;
+    const assetId=card?.dataset?.assetId||"";
+    return {
+      name,
+      source,
+      sourceCommit,
+      assetId,
+      count:imgs.length,
+      images:imgs.map(img=>({
+        complete:img.complete,
+        naturalWidth:img.naturalWidth,
+        naturalHeight:img.naturalHeight,
+        src:img.currentSrc||img.src
+      }))
+    };
   });
-  check(exercisePixelAudit.ok,"Übungsausschnitt enthält sichtbare Bildpixel",JSON.stringify(exercisePixelAudit));
+  check(
+    exerciseImageRuntime.count>=1 &&
+    exerciseImageRuntime.images.every(x=>x.complete&&x.naturalWidth>=512&&x.naturalHeight>=512),
+    "Übungsbilder laden hochauflösend mit mindestens 512x512",
+    JSON.stringify(exerciseImageRuntime)
+  );
+  check(
+    exerciseImageRuntime.source==="RepDB" &&
+    exerciseImageRuntime.sourceCommit==="8f25d055e243b882aa05acaa66c2c51b1a9fc2d1" &&
+    exerciseImageRuntime.images.every(x=>x.src.includes("raw.githubusercontent.com/RepDB/exercise-dataset/8f25d055e243b882aa05acaa66c2c51b1a9fc2d1/images/flat/")),
+    "Übungsbilder kommen aus der gepinnten hochauflösenden Quelle",
+    JSON.stringify(exerciseImageRuntime)
+  );
 
   await page.locator("#weightInput").fill("61");
   await page.waitForTimeout(30);
@@ -338,14 +347,14 @@ try {
   });
   check(swState.supported,"Service Worker API verfügbar");
   check(swState.registrations===1,"Genau eine Service-Worker-Registrierung aktiv",JSON.stringify(swState));
-  check(swState.script.includes("sw.js?v=11.8.116"),"Aktiver Service Worker hat aktuelle Version",swState.script);
+  check(swState.script.includes("sw.js?v=11.8.117"),"Aktiver Service Worker hat aktuelle Version",swState.script);
   check(swState.keys.includes("reppilot-v11-8-116"),"Aktueller PWA-Cache vorhanden",swState.keys.join(","));
-  check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.116")),"192er Icon im Runtime-Cache");
-  check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.116")),"512er Icon im Runtime-Cache");
+  check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.117")),"192er Icon im Runtime-Cache");
+  check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.117")),"512er Icon im Runtime-Cache");
 
   // Manifest runtime fetch
   const manifestRuntime=await page.evaluate(async()=>{
-    const r=await fetch("./manifest.json?v=11.8.116",{cache:"no-store"});
+    const r=await fetch("./manifest.json?v=11.8.117",{cache:"no-store"});
     return {status:r.status,json:await r.json()};
   });
   check(manifestRuntime.status===200,"Manifest wird zur Laufzeit ausgeliefert");
@@ -368,7 +377,7 @@ try {
     await caches.open("reppilot-old-test-cache");
     const regs=await navigator.serviceWorker.getRegistrations();
     await Promise.all(regs.map(r=>r.unregister()));
-    const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.116&reinstall=1",{updateViaCache:"none"});
+    const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.117&reinstall=1",{updateViaCache:"none"});
     const worker=reg.installing||reg.waiting||reg.active;
     if(worker&&worker.state!=="activated"){
       await Promise.race([
