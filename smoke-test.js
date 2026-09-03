@@ -412,8 +412,8 @@ try {
     fail("Kraft-Verlauf hat genau ein Uebungs-Dropdown pro Training");
   }
 
-  if (index.includes('history-simple-feature.js?v=11.8.116') &&
-      sw.includes('history-simple-feature.js?v=11.8.116')) {
+  if (index.includes('history-simple-feature.js?v=11.8.117') &&
+      sw.includes('history-simple-feature.js?v=11.8.117')) {
     pass("PWA laedt den einfachen Verlauf");
   } else {
     fail("PWA laedt den einfachen Verlauf");
@@ -430,45 +430,52 @@ try {
   pass("exercise-images-feature.js hat gueltige JavaScript-Syntax");
 
   const activeNames = [...new Set([...planQuality.matchAll(/\["([^"]+)",\d+,[^\]]+\]/g)].map(m => m[1]))];
-  const missingImages = activeNames.filter(name => !exerciseImages.includes('"' + name + '":'));
-  if (activeNames.length === 44 && missingImages.length === 0) {
-    pass("Übungsbilder decken alle aktiven Übungen ab");
+  const mappedNames = activeNames.filter(name => exerciseImages.includes('"' + name + '":{id:'));
+  const intentional = [
+    "Reverse Butterfly am Kabelzug",
+    "Schneeengel in Bauchlage",
+    "Y-T-Heben in Bauchlage",
+    "Überkopf-Trizepsstrecken am Kabelzug"
+  ];
+  const unexpectedMissing = activeNames.filter(name => !mappedNames.includes(name) && !intentional.includes(name));
+  if (activeNames.length === 44 && mappedNames.length === 40 && unexpectedMissing.length === 0) {
+    pass("Übungsbilder haben 40 exakte Zuordnungen ohne falsche Fallbacks");
   } else {
-    fail("Übungsbilder decken alle aktiven Übungen ab", "Übungen=" + activeNames.length + ", fehlend=" + missingImages.join(", "));
+    fail("Übungsbilder haben 40 exakte Zuordnungen ohne falsche Fallbacks",
+      "Übungen=" + activeNames.length + ", mapped=" + mappedNames.length + ", unerwartet=" + unexpectedMissing.join(", "));
   }
 
-  if (exists("exercise-sprite-v11.8.116.webp")) {
-    pass("Übungsbild-Sprite vorhanden");
-    try {
-      const crypto = require("crypto");
-      const spritePath = path.join(root,"exercise-sprite-v11.8.116.webp");
-      const spriteBytes = fs.readFileSync(spritePath);
-      const spriteHash = crypto.createHash("sha256").update(spriteBytes).digest("hex");
-      if (spriteBytes.length === 24518 && spriteHash === "be59370272f3912b76aba13a0cbf61ec24bdc3ebcdf21644dc46c25e0b9d8835") {
-        pass("Übungsbild-Sprite hat verifizierte Größe und SHA-256");
-      } else {
-        fail("Übungsbild-Sprite hat verifizierte Größe und SHA-256", spriteBytes.length + " / " + spriteHash);
-      }
-    } catch (e) {
-      fail("Übungsbild-Sprite hat verifizierte Größe und SHA-256",e.message);
-    }
+  if (exerciseImages.includes('"Schrägbank-Curls":{id:"incline-db-curl"}') &&
+      exerciseImages.includes('"Hammercurls":{id:"hammer-curl"}') &&
+      exerciseImages.includes('"Scott-Curls":{id:"preacher-curl"}')) {
+    pass("Bizeps-Übungen haben getrennte, korrekte Bildzuordnungen");
   } else {
-    fail("Übungsbild-Sprite vorhanden");
+    fail("Bizeps-Übungen haben getrennte, korrekte Bildzuordnungen");
   }
 
-  if (index.includes('exercise-images-feature.js?v=11.8.116') &&
-      sw.includes('exercise-images-feature.js?v=11.8.116') &&
-      sw.includes('exercise-sprite-v11.8.116.webp?v=11.8.116')) {
-    pass("PWA laedt und cached die Übungsbilder");
+  if (exerciseImages.includes('const SOURCE_COMMIT="8f25d055e243b882aa05acaa66c2c51b1a9fc2d1"') &&
+      exerciseImages.includes('width=512;') &&
+      exerciseImages.includes('height=512;') &&
+      !exerciseImages.includes("exercise-sprite-v11.8.116.webp") &&
+      !exerciseImages.includes("repPilotExerciseImageSprite")) {
+    pass("Übungsbilder nutzen 512px Einzelillustrationen statt 96px Sprite");
   } else {
-    fail("PWA laedt und cached die Übungsbilder");
+    fail("Übungsbilder nutzen 512px Einzelillustrationen statt 96px Sprite");
+  }
+
+  if (index.includes('exercise-images-feature.js?v=11.8.117') &&
+      sw.includes('exercise-images-feature.js?v=11.8.117') &&
+      !sw.includes('exercise-sprite-v11.8.116.webp')) {
+    pass("PWA lädt das neue Übungsbild-Feature ohne Low-Res-Sprite");
+  } else {
+    fail("PWA lädt das neue Übungsbild-Feature ohne Low-Res-Sprite");
   }
 } catch (e) {
   fail("Übungsbilder-Feature ist gueltig", e.message);
 }
 
 if (sw) {
-  if (sw.includes("manifest.json") && sw.includes("icon-192.png?v=11.8.116") && sw.includes("icon-512.png?v=11.8.116")) {
+  if (sw.includes("manifest.json") && sw.includes("icon-192.png?v=11.8.117") && sw.includes("icon-512.png?v=11.8.117")) {
     pass("Service Worker cached Manifest und beide PWA-Icons");
   } else {
     fail("Service Worker cached Manifest und beide PWA-Icons");
