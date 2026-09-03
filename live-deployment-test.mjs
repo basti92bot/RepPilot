@@ -10,6 +10,13 @@ async function get(path){
   return {status:r.status,text:await r.text(),url:r.url,headers:Object.fromEntries(r.headers)};
 }
 
+async function getBytes(path){
+  const url=new URL(path+(path.includes("?")?"&":"?")+"ci="+Date.now(),BASE);
+  const r=await fetch(url,{cache:"no-store",redirect:"follow"});
+  const bytes=new Uint8Array(await r.arrayBuffer());
+  return {status:r.status,size:bytes.byteLength,url:r.url,headers:Object.fromEntries(r.headers)};
+}
+
 let last="";
 for(let attempt=1;attempt<=12;attempt++){
   try{
@@ -18,13 +25,17 @@ for(let attempt=1;attempt<=12;attempt++){
       const json=JSON.parse(version.text);
       if(json.version===expected){
         console.log("PASS: Live version.json liefert",expected);
-        const [index,manifestRes,sw,icon192,icon512,exerciseFeature]=await Promise.all([
+        const [index,manifestRes,sw,icon192,icon512,exerciseFeature,oldSprite114,oldSprite116,oldAssetSprite]=await Promise.all([
           get("index.html"),get("manifest.json"),get("sw.js"),get("icon-192.png"),get("icon-512.png"),
-          get("exercise-images-feature.js")
+          get("exercise-images-feature.js"),get("exercise-sprite-v11.8.114.webp"),
+          get("exercise-sprite-v11.8.116.webp"),get("assets/exercises/exercise-sprite-v11.8.116.webp")
         ]);
         const manifest=JSON.parse(manifestRes.text);
         const failures=[];
         const check=(ok,label,detail="")=>ok?console.log("PASS:",label):failures.push(label+(detail?" - "+detail:""));
+        const swAssetMatch=sw.text.match(/const EXERCISE_ASSET_FILES=(\[[\s\S]*?\]);/);
+        const exerciseFiles=swAssetMatch?JSON.parse(swAssetMatch[1]):[];
+        const exerciseAssets=await Promise.all(exerciseFiles.map(file=>getBytes("assets/exercises/v11.8.118/"+file)));
         check(index.status===200,"Live index.html erreichbar",String(index.status));
         check(index.text.includes(`data-app-version="${expected}"`),"Live index.html hat aktuelle Version");
         check(manifestRes.status===200,"Live manifest.json erreichbar",String(manifestRes.status));
@@ -40,13 +51,20 @@ for(let attempt=1;attempt<=12;attempt++){
         check(/^image\/png/i.test(icon192.headers["content-type"]||""),"Live 192er Icon hat PNG Content-Type",icon192.headers["content-type"]||"");
         check(/^image\/png/i.test(icon512.headers["content-type"]||""),"Live 512er Icon hat PNG Content-Type",icon512.headers["content-type"]||"");
         check(exerciseFeature.status===200,"Live Übungsbild-Feature erreichbar",String(exerciseFeature.status));
-        check(exerciseFeature.text.includes('const VERSION="11.8.117"'),"Live Übungsbild-Feature hat aktuelle Version");
-        check(exerciseFeature.text.includes('SOURCE_COMMIT="8f25d055e243b882aa05acaa66c2c51b1a9fc2d1"'),
-          "Live Übungsbild-Feature nutzt gepinnte 512px-Quelle");
-        check(exerciseFeature.text.includes('"Schrägbank-Curls":{id:"incline-db-curl"}'),
+        check(/const VERSION\s*=\s*"11\.8\.118"/.test(exerciseFeature.text),"Live Übungsbild-Feature hat aktuelle Version");
+        check(/const BASE\s*=\s*"\.\/assets\/exercises\/v11\.8\.118\/"/.test(exerciseFeature.text) &&
+          exerciseFeature.text.includes("img.width = 1024") && !/https?:\/\//.test(exerciseFeature.text),
+          "Live Übungsbild-Feature nutzt lokale 1024px-Dateien");
+        check([...exerciseFeature.text.matchAll(/^\s+"([^"]+)":\s*(?:repdb|custom)\(/gm)].length===44,
+          "Live Übungsbild-Feature enthält alle 44 Zuordnungen");
+        check(/"Schrägbank-Curls":\s*repdb\("incline-db-curl"\)/.test(exerciseFeature.text),
           "Live Schrägbank-Curls sind separat korrekt zugeordnet");
-        check(!exerciseFeature.text.includes("exercise-sprite-v11.8.116.webp"),
-          "Live Übungsbild-Feature verwendet keinen Low-Res-Sprite mehr");
+        check(exerciseFiles.length===76 && exerciseAssets.every(asset=>asset.status===200&&asset.size>1000&&/^image\/(?:webp|svg\+xml)/i.test(asset.headers["content-type"]||"")),
+          "Live sind alle 76 lokalen Übungsdateien vollständig erreichbar",
+          exerciseAssets.filter(asset=>asset.status!==200||asset.size<=1000).map(asset=>asset.status+" "+asset.url).join(", "));
+        check(!exerciseFeature.text.includes("exercise-sprite") && oldSprite114.status===404 && oldSprite116.status===404 && oldAssetSprite.status===404,
+          "Live werden keine alten Low-Res-Sprites mehr ausgeliefert",
+          [oldSprite114,oldSprite116,oldAssetSprite].map(asset=>asset.status+" "+asset.url).join(", "));
         if(failures.length){
           console.error("Live-Deployment-Test fehlgeschlagen:\n"+failures.join("\n"));
           process.exit(1);

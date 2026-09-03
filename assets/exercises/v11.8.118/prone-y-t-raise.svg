@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="512" viewBox="0 0 1024 512" role="img" aria-labelledby="title desc">
+  <title id="title">Y-T-Heben in Bauchlage</title>
+  <desc id="desc">Arme in Bauchlage abwechselnd in Y- und T-Position anheben</desc>
+  <rect width="1024" height="512" fill="#eaf7fb"/>
+  <path d="M512 24v464" stroke="#c7e3ec" stroke-width="4"/>
+  <g stroke="#354957" stroke-linecap="round" stroke-linejoin="round">
+    <g>
+      <rect x="70" y="62" width="372" height="388" rx="28" fill="#d8edf3" stroke="#a7cbd6" stroke-width="6"/>
+      <ellipse cx="256" cy="202" rx="34" ry="41" fill="#efaa82" stroke-width="7"/>
+      <path d="M230 181q25-24 52 0" fill="none" stroke="#3b2e2a" stroke-width="15"/>
+      <path d="M216 239q40-29 80 0l18 111H198z" fill="#20aee5" stroke-width="7"/>
+      <path d="M220 250L145 125M292 250l75-125" fill="none" stroke="#efaa82" stroke-width="25"/>
+      <circle cx="139" cy="115" r="11" fill="#efaa82" stroke-width="5"/>
+      <circle cx="373" cy="115" r="11" fill="#efaa82" stroke-width="5"/>
+      <path d="M225 347l-22 71M287 347l22 71" fill="none" stroke="#173a5e" stroke-width="35"/>
+      <path d="M203 422l-13 19M309 422l13 19" fill="none" stroke="#fff" stroke-width="24"/>
+      <circle cx="220" cy="249" r="17" fill="#e34850" stroke="none"/><circle cx="292" cy="249" r="17" fill="#e34850" stroke="none"/>
+    </g>
+    <g transform="translate(512)">
+      <rect x="70" y="62" width="372" height="388" rx="28" fill="#d8edf3" stroke="#a7cbd6" stroke-width="6"/>
+      <ellipse cx="256" cy="202" rx="34" ry="41" fill="#efaa82" stroke-width="7"/>
+      <path d="M230 181q25-24 52 0" fill="none" stroke="#3b2e2a" stroke-width="15"/>
+      <path d="M216 239q40-29 80 0l18 111H198z" fill="#20aee5" stroke-width="7"/>
+      <path d="M220 250L110 250M292 250h110" fill="none" stroke="#efaa82" stroke-width="25"/>
+      <circle cx="98" cy="250" r="11" fill="#efaa82" stroke-width="5"/>
+      <circle cx="414" cy="250" r="11" fill="#efaa82" stroke-width="5"/>
+      <path d="M225 347l-22 71M287 347l22 71" fill="none" stroke="#173a5e" stroke-width="35"/>
+      <path d="M203 422l-13 19M309 422l13 19" fill="none" stroke="#fff" stroke-width="24"/>
+      <circle cx="220" cy="249" r="17" fill="#e34850" stroke="none"/><circle cx="292" cy="249" r="17" fill="#e34850" stroke="none"/>
+    </g>
+  </g>
+</svg>

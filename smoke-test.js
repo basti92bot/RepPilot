@@ -19,6 +19,33 @@ const pngDimensions = rel => {
   }
   return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
 };
+const webpDimensions = rel => {
+  const buf = fs.readFileSync(path.join(root, rel));
+  if (buf.length < 30 || buf.toString("ascii", 0, 4) !== "RIFF" || buf.toString("ascii", 8, 12) !== "WEBP") {
+    throw new Error("kein gueltiges WebP");
+  }
+  const type = buf.toString("ascii", 12, 16);
+  if (type === "VP8X") {
+    return {
+      width: 1 + buf.readUIntLE(24, 3),
+      height: 1 + buf.readUIntLE(27, 3)
+    };
+  }
+  if (type === "VP8L") {
+    const b1 = buf[21], b2 = buf[22], b3 = buf[23], b4 = buf[24];
+    return {
+      width: 1 + b1 + ((b2 & 0x3f) << 8),
+      height: 1 + ((b2 & 0xc0) >> 6) + (b3 << 2) + ((b4 & 0x0f) << 10)
+    };
+  }
+  if (type === "VP8 " && buf[23] === 0x9d && buf[24] === 0x01 && buf[25] === 0x2a) {
+    return {
+      width: buf.readUInt16LE(26) & 0x3fff,
+      height: buf.readUInt16LE(28) & 0x3fff
+    };
+  }
+  throw new Error("unbekanntes WebP-Format " + type);
+};
 
 let index = "";
 let install = "";
@@ -207,13 +234,13 @@ if (install) {
 
   if (/display-mode:\s*standalone/.test(install) &&
       /navigator\.standalone/.test(install) &&
-      /location\.replace\(['"]\.\/\?launch=v11\.8\.117['"]\)/.test(install)) {
+      /location\.replace\(['"]\.\/\?launch=v11\.8\.118['"]\)/.test(install)) {
     pass("Installierte Install-Seite leitet zur RepPilot-App weiter");
   } else {
     fail("Installierte Install-Seite leitet zur RepPilot-App weiter");
   }
 
-  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.117['"]/.test(install)) {
+  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.118['"]/.test(install)) {
     pass("Install-Seite registriert Service Worker");
   } else {
     fail("Install-Seite registriert Service Worker");
@@ -246,7 +273,7 @@ if (auth) {
     fail("Login erklaert den Testzugang");
   }
 
-  if (/auth\.js\?v=11\.8\.117/.test(index) && /auth\.js\?v=11\.8\.117/.test(sw)) {
+  if (/auth\.js\?v=11\.8\.118/.test(index) && /auth\.js\?v=11\.8\.118/.test(sw)) {
     pass("Aktuelle auth.js wird von App und Service Worker geladen");
   } else {
     fail("Aktuelle auth.js wird von App und Service Worker geladen");
@@ -280,8 +307,8 @@ if (auth && index && sw) {
     fail("Kraftmessung nutzt einen globalen 28-Tage-Zyklus");
   }
 
-  if (/strength-test-feature\.js\?v=11\.8\.117/.test(index) &&
-      /strength-test-feature\.js\?v=11\.8\.117/.test(sw)) {
+  if (/strength-test-feature\.js\?v=11\.8\.118/.test(index) &&
+      /strength-test-feature\.js\?v=11\.8\.118/.test(sw)) {
     pass("Aktuelle Kraftmessungslogik wird von App und Service Worker geladen");
   } else {
     fail("Aktuelle Kraftmessungslogik wird von App und Service Worker geladen");
@@ -310,8 +337,8 @@ if (tour) {
     fail("App-Fuehrung kann im Profil erneut gestartet werden");
   }
 
-  if (/app-tour-feature\.js\?v=11\.8\.117/.test(index) &&
-      /app-tour-feature\.js\?v=11\.8\.117/.test(sw)) {
+  if (/app-tour-feature\.js\?v=11\.8\.118/.test(index) &&
+      /app-tour-feature\.js\?v=11\.8\.118/.test(sw)) {
     pass("App-Fuehrung wird von App und Service Worker geladen");
   } else {
     fail("App-Fuehrung wird von App und Service Worker geladen");
@@ -412,8 +439,8 @@ try {
     fail("Kraft-Verlauf hat genau ein Uebungs-Dropdown pro Training");
   }
 
-  if (index.includes('history-simple-feature.js?v=11.8.117') &&
-      sw.includes('history-simple-feature.js?v=11.8.117')) {
+  if (index.includes('history-simple-feature.js?v=11.8.118') &&
+      sw.includes('history-simple-feature.js?v=11.8.118')) {
     pass("PWA laedt den einfachen Verlauf");
   } else {
     fail("PWA laedt den einfachen Verlauf");
@@ -430,52 +457,84 @@ try {
   pass("exercise-images-feature.js hat gueltige JavaScript-Syntax");
 
   const activeNames = [...new Set([...planQuality.matchAll(/\["([^"]+)",\d+,[^\]]+\]/g)].map(m => m[1]))];
-  const mappedNames = activeNames.filter(name => exerciseImages.includes('"' + name + '":{id:'));
-  const intentional = [
-    "Reverse Butterfly am Kabelzug",
-    "Schneeengel in Bauchlage",
-    "Y-T-Heben in Bauchlage",
-    "Überkopf-Trizepsstrecken am Kabelzug"
-  ];
-  const unexpectedMissing = activeNames.filter(name => !mappedNames.includes(name) && !intentional.includes(name));
-  if (activeNames.length === 44 && mappedNames.length === 40 && unexpectedMissing.length === 0) {
-    pass("Übungsbilder haben 40 exakte Zuordnungen ohne falsche Fallbacks");
+  const mappingRows = [...exerciseImages.matchAll(/^\s+"([^"]+)":\s*(repdb|custom)\("([^"]+)"(?:,\s*"([^"]+)")?\),?$/gm)];
+  const mappedNames = mappingRows.map(row => row[1]);
+  const missing = activeNames.filter(name => !mappedNames.includes(name));
+  const inactiveMappings = mappedNames.filter(name => !activeNames.includes(name));
+  if (activeNames.length === 44 && mappedNames.length === 44 && missing.length === 0 && inactiveMappings.length === 0) {
+    pass("Übungsbilder haben 44 von 44 exakten Zuordnungen");
   } else {
-    fail("Übungsbilder haben 40 exakte Zuordnungen ohne falsche Fallbacks",
-      "Übungen=" + activeNames.length + ", mapped=" + mappedNames.length + ", unerwartet=" + unexpectedMissing.join(", "));
+    fail("Übungsbilder haben 44 von 44 exakten Zuordnungen",
+      "Übungen=" + activeNames.length + ", mapped=" + mappedNames.length + ", fehlend=" + missing.join(", ") + ", inaktiv=" + inactiveMappings.join(", "));
   }
 
-  if (exerciseImages.includes('"Schrägbank-Curls":{id:"incline-db-curl"}') &&
-      exerciseImages.includes('"Hammercurls":{id:"hammer-curl"}') &&
-      exerciseImages.includes('"Scott-Curls":{id:"preacher-curl"}')) {
+  if (/"Schrägbank-Curls":\s*repdb\("incline-db-curl"\)/.test(exerciseImages) &&
+      /"Hammercurls":\s*repdb\("hammer-curl"\)/.test(exerciseImages) &&
+      /"Scott-Curls":\s*repdb\("preacher-curl"\)/.test(exerciseImages)) {
     pass("Bizeps-Übungen haben getrennte, korrekte Bildzuordnungen");
   } else {
     fail("Bizeps-Übungen haben getrennte, korrekte Bildzuordnungen");
   }
 
-  if (exerciseImages.includes('const SOURCE_COMMIT="8f25d055e243b882aa05acaa66c2c51b1a9fc2d1"') &&
-      exerciseImages.includes('width=512;') &&
-      exerciseImages.includes('height=512;') &&
-      !exerciseImages.includes("exercise-sprite-v11.8.116.webp") &&
-      !exerciseImages.includes("repPilotExerciseImageSprite")) {
-    pass("Übungsbilder nutzen 512px Einzelillustrationen statt 96px Sprite");
+  const assetDir = path.join(root, "assets/exercises/v11.8.118");
+  const diskFiles = fs.readdirSync(assetDir).sort();
+  const webpFiles = diskFiles.filter(file => file.endsWith(".webp"));
+  const svgFiles = diskFiles.filter(file => file.endsWith(".svg"));
+  const referencedFiles = [...new Set(mappingRows.flatMap(row => {
+    const [, , type, id, mode] = row;
+    if (type === "custom") return [id + ".svg"];
+    if (mode === "main") return [id + "-main.webp"];
+    return [id + "-start.webp", id + "-peak.webp"];
+  }))].sort();
+  const swListMatch = sw.match(/const EXERCISE_ASSET_FILES=(\[[\s\S]*?\]);/);
+  const swFiles = swListMatch ? JSON.parse(swListMatch[1]).sort() : [];
+  const fileSetsMatch = JSON.stringify(diskFiles) === JSON.stringify(referencedFiles) &&
+    JSON.stringify(diskFiles) === JSON.stringify(swFiles);
+  const validWebp = webpFiles.every(file => {
+    const dimensions = webpDimensions("assets/exercises/v11.8.118/" + file);
+    return dimensions.width === 1024 && dimensions.height === 1024;
+  });
+  const validSvg = svgFiles.every(file => {
+    const svg = read("assets/exercises/v11.8.118/" + file);
+    return /<svg\b/.test(svg) && /width="1024"/.test(svg) && /height="512"/.test(svg) && /viewBox="0 0 1024 512"/.test(svg);
+  });
+  const nonEmpty = diskFiles.every(file => fs.statSync(path.join(assetDir, file)).size > 1000);
+  if (diskFiles.length === 76 && webpFiles.length === 72 && svgFiles.length === 4 &&
+      fileSetsMatch && validWebp && validSvg && nonEmpty) {
+    pass("Alle 76 lokalen Übungsdateien sind vollständig und hochauflösend");
   } else {
-    fail("Übungsbilder nutzen 512px Einzelillustrationen statt 96px Sprite");
+    fail("Alle 76 lokalen Übungsdateien sind vollständig und hochauflösend",
+      "gesamt=" + diskFiles.length + ", WebP=" + webpFiles.length + ", SVG=" + svgFiles.length + ", Sets=" + fileSetsMatch + ", Maße=" + validWebp + "/" + validSvg);
   }
 
-  if (index.includes('exercise-images-feature.js?v=11.8.117') &&
-      sw.includes('exercise-images-feature.js?v=11.8.117') &&
-      !sw.includes('exercise-sprite-v11.8.116.webp')) {
-    pass("PWA lädt das neue Übungsbild-Feature ohne Low-Res-Sprite");
+  if (/const BASE\s*=\s*"\.\/assets\/exercises\/v11\.8\.118\/"/.test(exerciseImages) &&
+      /const SOURCE_COMMIT\s*=\s*"8f25d055e243b882aa05acaa66c2c51b1a9fc2d1"/.test(exerciseImages) &&
+      exerciseImages.includes("img.width = 1024") &&
+      !/https?:\/\//.test(exerciseImages) &&
+      !exerciseImages.includes("exercise-sprite") &&
+      !exerciseImages.includes("repPilotExerciseImageSprite")) {
+    pass("Übungsbilder nutzen lokale 1024px Einzeldateien ohne Sprite oder Hotlink");
   } else {
-    fail("PWA lädt das neue Übungsbild-Feature ohne Low-Res-Sprite");
+    fail("Übungsbilder nutzen lokale 1024px Einzeldateien ohne Sprite oder Hotlink");
+  }
+
+  if (index.includes('exercise-images-feature.js?v=11.8.118') &&
+      sw.includes('exercise-images-feature.js?v=11.8.118') &&
+      sw.includes('"./assets/exercises/v11.8.118/"+file') &&
+      !sw.includes('exercise-sprite') &&
+      !exists("exercise-sprite-v11.8.114.webp") &&
+      !exists("exercise-sprite-v11.8.116.webp") &&
+      !exists("assets/exercises/exercise-sprite-v11.8.116.webp")) {
+    pass("PWA lädt und cached die neuen Einzelbilder ohne alte Sprites");
+  } else {
+    fail("PWA lädt und cached die neuen Einzelbilder ohne alte Sprites");
   }
 } catch (e) {
   fail("Übungsbilder-Feature ist gueltig", e.message);
 }
 
 if (sw) {
-  if (sw.includes("manifest.json") && sw.includes("icon-192.png?v=11.8.117") && sw.includes("icon-512.png?v=11.8.117")) {
+  if (sw.includes("manifest.json") && sw.includes("icon-192.png?v=11.8.118") && sw.includes("icon-512.png?v=11.8.118")) {
     pass("Service Worker cached Manifest und beide PWA-Icons");
   } else {
     fail("Service Worker cached Manifest und beide PWA-Icons");

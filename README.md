@@ -1,24 +1,13 @@
-# RepPilot v11.7.2 Test
+# RepPilot v11.8.118
 
 Neu:
-- Acht neue anatomische Dehnbilder mit rot markierten Zielmuskeln
-- Einheitliche Bildserie ohne fremde Logos oder Wasserzeichen
-- Eine optimierte Sprite-Datei für schnelle Ladezeiten
-- Trainingsplan vollständig neu ausbalanciert
-- 24 Arbeitssätze pro Krafttraining
-- Brust, Rücken, Schultern, Arme und Beine zweimal pro Woche belastet
-- Schwere Übungen vor den jeweiligen Isolationsübungen
-- Übungen an Montag und Mittwoch sinnvoll abwechselnd angeordnet
-- Versionsparameter verhindern, dass das iPhone alte Dateien aus dem Cache lädt
-- „Gerät besetzt, später machen“ direkt in der laufenden Übung
-- Übungsfortschritt mit verbleibender Anzahl
-- Letzte 30 Sekunden der Pause rot hervorgehoben
-- Vibration und Signalton am Pausenende
-- Bizeps: Incline Curls, Preacher Curls und Hammercurls
-- Trizeps: Overhead Cable Extension, Seil-Pushdown und Cross Body Cable Extension
-- Geführte Dehnroutine mit acht Illustrationen, Timer und Wechselzeit
+- Alle 44 Kraftübungen haben eine eindeutige Bildzuordnung
+- 76 lokale Übungsdateien statt verpixelter Sprites oder Remote-Hotlinks
+- 1024px WebP-Illustrationen und skalierbare SVGs
+- Start- und Endpositionen werden getrennt dargestellt
+- Alle Übungsbilder stehen auch offline im PWA-Cache bereit
 
 
 ## Übungsillustrationen
 
-Exercise data by [RepDB](https://repdb.co/) – verwendet für die hochauflösenden Übungsillustrationen in RepPilot.
+Exercise data by [RepDB](https://repdb.co/), verwendet für die Übungsillustrationen in RepPilot.

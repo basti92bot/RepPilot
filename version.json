@@ -1,5 +1,5 @@
 {
-  "version": "11.8.117",
+  "version": "11.8.118",
   "releasedAt": "2026-09-03",
-  "notes": "Übungsbilder komplett umgebaut: der 96x96-Sprite wird nicht mehr verwendet. Exakte Übungen nutzen jetzt 512x512 Start-/End-Illustrationen; Schrägbank-Curls ist separat korrekt zugeordnet."
+  "notes": "Übungsbilder komplett neu aufgebaut: alle 44 Übungen sind eindeutig zugeordnet. 76 lokale Einzeldateien ersetzen die alten Sprites und Remote-Hotlinks. Die Illustrationen liegen in 1024px oder als skalierbare SVG vor und sind vollständig offline verfügbar."
 }

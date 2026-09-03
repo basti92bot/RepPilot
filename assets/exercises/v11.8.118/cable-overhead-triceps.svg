@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="512" viewBox="0 0 1024 512" role="img" aria-labelledby="title desc">
+  <title id="title">Überkopf-Trizepsstrecken am Kabelzug</title>
+  <desc id="desc">Seitenansicht der Start- und Endposition beim Überkopf-Trizepsstrecken am tiefen Kabelzug</desc>
+  <rect width="1024" height="512" fill="#eaf7fb"/>
+  <path d="M512 24v464" stroke="#c7e3ec" stroke-width="4"/>
+  <defs>
+    <marker id="arrow" markerWidth="11" markerHeight="11" refX="8" refY="5.5" orient="auto">
+      <path d="M0 0l9 5.5L0 11z" fill="#20aee5"/>
+    </marker>
+  </defs>
+  <g stroke="#354957" stroke-linecap="round" stroke-linejoin="round">
+    <g>
+      <path d="M52 442V68h72v374M35 442h107" fill="#718695" stroke-width="7"/>
+      <rect x="73" y="108" width="30" height="245" rx="9" fill="#90a4b1" stroke-width="5"/>
+      <circle cx="94" cy="388" r="15" fill="#a8bac4" stroke-width="6"/>
+      <path d="M94 388L274 188" fill="none" stroke-width="5"/>
+      <path d="M267 183l14 12M273 177l14 12" fill="none" stroke-width="5"/>
+      <path d="M282 229q34-22 68 3l15 111-92 15z" fill="#20aee5" stroke-width="7"/>
+      <circle cx="321" cy="184" r="31" fill="#efaa82" stroke-width="7"/>
+      <path d="M299 168q24-22 47 0" fill="none" stroke="#3b2e2a" stroke-width="15"/>
+      <path d="M296 247l34-101M330 146l-53 43" fill="none" stroke="#efaa82" stroke-width="24"/>
+      <path d="M300 239l29-86" fill="none" stroke="#e34850" stroke-width="14"/>
+      <circle cx="277" cy="189" r="10" fill="#efaa82" stroke-width="5"/>
+      <path d="M290 354l-41 79M344 348l68 74" fill="none" stroke="#173a5e" stroke-width="35"/>
+      <path d="M249 435h-43M413 423h43" fill="none" stroke="#fff" stroke-width="23"/>
+      <path d="M284 202q58-55 111-84" fill="none" stroke="#20aee5" stroke-width="7" stroke-dasharray="12 13" marker-end="url(#arrow)"/>
+    </g>
+    <g transform="translate(512)">
+      <path d="M52 442V68h72v374M35 442h107" fill="#718695" stroke-width="7"/>
+      <rect x="73" y="108" width="30" height="245" rx="9" fill="#90a4b1" stroke-width="5"/>
+      <circle cx="94" cy="388" r="15" fill="#a8bac4" stroke-width="6"/>
+      <path d="M94 388L397 106" fill="none" stroke-width="5"/>
+      <path d="M391 100l14 12M397 94l14 12" fill="none" stroke-width="5"/>
+      <path d="M282 229q34-22 68 3l15 111-92 15z" fill="#20aee5" stroke-width="7"/>
+      <circle cx="321" cy="184" r="31" fill="#efaa82" stroke-width="7"/>
+      <path d="M299 168q24-22 47 0" fill="none" stroke="#3b2e2a" stroke-width="15"/>
+      <path d="M296 247l34-101M330 146l67-40" fill="none" stroke="#efaa82" stroke-width="24"/>
+      <path d="M300 239l29-86" fill="none" stroke="#e34850" stroke-width="14"/>
+      <circle cx="397" cy="106" r="10" fill="#efaa82" stroke-width="5"/>
+      <path d="M290 354l-41 79M344 348l68 74" fill="none" stroke="#173a5e" stroke-width="35"/>
+      <path d="M249 435h-43M413 423h43" fill="none" stroke="#fff" stroke-width="23"/>
+    </g>
+  </g>
+</svg>

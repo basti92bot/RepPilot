@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="512" viewBox="0 0 1024 512" role="img" aria-labelledby="title desc">
+  <title id="title">Schneeengel in Bauchlage</title>
+  <desc id="desc">Arme zunächst neben dem Körper und anschließend weit über den Kopf führen</desc>
+  <rect width="1024" height="512" fill="#eaf7fb"/>
+  <path d="M512 24v464" stroke="#c7e3ec" stroke-width="4"/>
+  <g stroke="#354957" stroke-linecap="round" stroke-linejoin="round">
+    <g>
+      <rect x="70" y="62" width="372" height="388" rx="28" fill="#d8edf3" stroke="#a7cbd6" stroke-width="6"/>
+      <ellipse cx="256" cy="139" rx="34" ry="41" fill="#efaa82" stroke-width="7"/>
+      <path d="M230 118q25-24 52 0" fill="none" stroke="#3b2e2a" stroke-width="15"/>
+      <path d="M216 178q40-29 80 0l18 142H198z" fill="#20aee5" stroke-width="7"/>
+      <path d="M216 190l-71 139M296 190l70 139" fill="none" stroke="#efaa82" stroke-width="25"/>
+      <circle cx="140" cy="340" r="11" fill="#efaa82" stroke-width="5"/>
+      <circle cx="372" cy="340" r="11" fill="#efaa82" stroke-width="5"/>
+      <path d="M225 316l-22 102M287 316l22 102" fill="none" stroke="#173a5e" stroke-width="35"/>
+      <path d="M203 422l-13 19M309 422l13 19" fill="none" stroke="#fff" stroke-width="24"/>
+      <path d="M220 188q36 29 72 0M221 208q35 25 70 0" fill="none" stroke="#e34850" stroke-width="14"/>
+    </g>
+    <g transform="translate(512)">
+      <rect x="70" y="62" width="372" height="388" rx="28" fill="#d8edf3" stroke="#a7cbd6" stroke-width="6"/>
+      <ellipse cx="256" cy="201" rx="34" ry="41" fill="#efaa82" stroke-width="7"/>
+      <path d="M230 180q25-24 52 0" fill="none" stroke="#3b2e2a" stroke-width="15"/>
+      <path d="M216 238q40-29 80 0l18 112H198z" fill="#20aee5" stroke-width="7"/>
+      <path d="M216 246L137 112M296 246l79-134" fill="none" stroke="#efaa82" stroke-width="25"/>
+      <circle cx="131" cy="102" r="11" fill="#efaa82" stroke-width="5"/>
+      <circle cx="381" cy="102" r="11" fill="#efaa82" stroke-width="5"/>
+      <path d="M225 347l-22 71M287 347l22 71" fill="none" stroke="#173a5e" stroke-width="35"/>
+      <path d="M203 422l-13 19M309 422l13 19" fill="none" stroke="#fff" stroke-width="24"/>
+      <path d="M220 248q36 29 72 0M221 268q35 25 70 0" fill="none" stroke="#e34850" stroke-width="14"/>
+    </g>
+  </g>
+</svg>

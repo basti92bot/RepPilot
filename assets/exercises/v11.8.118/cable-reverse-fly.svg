@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="512" viewBox="0 0 1024 512" role="img" aria-labelledby="title desc">
+  <title id="title">Reverse Butterfly am Kabelzug</title>
+  <desc id="desc">Start- und Endposition für Reverse Butterfly zwischen zwei Kabelzügen</desc>
+  <rect width="1024" height="512" fill="#eaf7fb"/>
+  <path d="M512 24v464" stroke="#c7e3ec" stroke-width="4"/>
+  <g stroke="#354957" stroke-linecap="round" stroke-linejoin="round">
+    <g>
+      <path d="M66 438V76h48v362M398 438V76h48v362M47 438h88M377 438h90" fill="#718695" stroke-width="7"/>
+      <circle cx="91" cy="139" r="13" fill="#a8bac4" stroke-width="6"/>
+      <circle cx="422" cy="139" r="13" fill="#a8bac4" stroke-width="6"/>
+      <path d="M91 139l174 113M422 139L247 252" fill="none" stroke-width="5"/>
+      <path d="M229 259q27-20 54 0l12 119h-78z" fill="#20aee5" stroke-width="7"/>
+      <circle cx="256" cy="216" r="29" fill="#efaa82" stroke-width="7"/>
+      <path d="M236 200q22-22 43-1" fill="none" stroke="#3b2e2a" stroke-width="14"/>
+      <path d="M232 275l36-23M280 275l-34-23" fill="none" stroke="#efaa82" stroke-width="22"/>
+      <circle cx="268" cy="252" r="9" fill="#efaa82" stroke-width="4"/>
+      <circle cx="246" cy="252" r="9" fill="#efaa82" stroke-width="4"/>
+      <circle cx="232" cy="268" r="15" fill="#e34850" stroke="none"/>
+      <circle cx="280" cy="268" r="15" fill="#e34850" stroke="none"/>
+      <path d="M236 378l-11 61M275 378l12 61" fill="none" stroke="#173a5e" stroke-width="31"/>
+      <path d="M225 440h-35M286 440h35" fill="none" stroke="#fff" stroke-width="21"/>
+    </g>
+    <g transform="translate(512)">
+      <path d="M66 438V76h48v362M398 438V76h48v362M47 438h88M377 438h90" fill="#718695" stroke-width="7"/>
+      <circle cx="91" cy="139" r="13" fill="#a8bac4" stroke-width="6"/>
+      <circle cx="422" cy="139" r="13" fill="#a8bac4" stroke-width="6"/>
+      <path d="M91 139l46 125M422 139l-47 125" fill="none" stroke-width="5"/>
+      <path d="M229 259q27-20 54 0l12 119h-78z" fill="#20aee5" stroke-width="7"/>
+      <circle cx="256" cy="216" r="29" fill="#efaa82" stroke-width="7"/>
+      <path d="M236 200q22-22 43-1" fill="none" stroke="#3b2e2a" stroke-width="14"/>
+      <path d="M232 275L139 264M280 275l93-11" fill="none" stroke="#efaa82" stroke-width="22"/>
+      <circle cx="137" cy="264" r="9" fill="#efaa82" stroke-width="4"/>
+      <circle cx="375" cy="264" r="9" fill="#efaa82" stroke-width="4"/>
+      <circle cx="232" cy="268" r="16" fill="#e34850" stroke="none"/>
+      <circle cx="280" cy="268" r="16" fill="#e34850" stroke="none"/>
+      <path d="M236 378l-11 61M275 378l12 61" fill="none" stroke="#173a5e" stroke-width="31"/>
+      <path d="M225 440h-35M286 440h35" fill="none" stroke="#fff" stroke-width="21"/>
+    </g>
+  </g>
+</svg>
