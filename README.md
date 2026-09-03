@@ -17,3 +17,8 @@ Neu:
 - Bizeps: Incline Curls, Preacher Curls und Hammercurls
 - Trizeps: Overhead Cable Extension, Seil-Pushdown und Cross Body Cable Extension
 - Geführte Dehnroutine mit acht Illustrationen, Timer und Wechselzeit
+
+
+## Übungsillustrationen
+
+Exercise data by [RepDB](https://repdb.co/) – verwendet für die hochauflösenden Übungsillustrationen in RepPilot.
