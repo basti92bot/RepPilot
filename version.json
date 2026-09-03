@@ -1,5 +1,5 @@
 {
-  "version": "11.8.116",
-  "releasedAt": "2026-09-02",
-  "notes": "Übungsbild-Fix: vollständiger, verifizierter Sprite ersetzt die zuvor trunkierte Datei. Runtime-Test prüft jetzt zusätzlich sichtbare Bildpixel im konkreten Übungsausschnitt."
+  "version": "11.8.117",
+  "releasedAt": "2026-09-03",
+  "notes": "Übungsbilder komplett umgebaut: der 96x96-Sprite wird nicht mehr verwendet. Exakte Übungen nutzen jetzt 512x512 Start-/End-Illustrationen; Schrägbank-Curls ist separat korrekt zugeordnet."
 }
