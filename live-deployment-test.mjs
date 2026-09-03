@@ -18,9 +18,9 @@ for(let attempt=1;attempt<=12;attempt++){
       const json=JSON.parse(version.text);
       if(json.version===expected){
         console.log("PASS: Live version.json liefert",expected);
-        const [index,manifestRes,sw,icon192,icon512,exerciseFeature,exerciseSprite]=await Promise.all([
+        const [index,manifestRes,sw,icon192,icon512,exerciseFeature]=await Promise.all([
           get("index.html"),get("manifest.json"),get("sw.js"),get("icon-192.png"),get("icon-512.png"),
-          get("exercise-images-feature.js"),get("exercise-sprite-v11.8.116.webp")
+          get("exercise-images-feature.js")
         ]);
         const manifest=JSON.parse(manifestRes.text);
         const failures=[];
@@ -40,11 +40,13 @@ for(let attempt=1;attempt<=12;attempt++){
         check(/^image\/png/i.test(icon192.headers["content-type"]||""),"Live 192er Icon hat PNG Content-Type",icon192.headers["content-type"]||"");
         check(/^image\/png/i.test(icon512.headers["content-type"]||""),"Live 512er Icon hat PNG Content-Type",icon512.headers["content-type"]||"");
         check(exerciseFeature.status===200,"Live Übungsbild-Feature erreichbar",String(exerciseFeature.status));
-        check(exerciseFeature.text.includes('const VERSION="11.8.116"'),"Live Übungsbild-Feature hat aktuelle Version");
-        check(exerciseSprite.status===200,"Live Übungsbild-Sprite erreichbar",String(exerciseSprite.status));
-        check(/^image\/webp/i.test(exerciseSprite.headers["content-type"]||""),"Live Übungsbild-Sprite hat WebP Content-Type",exerciseSprite.headers["content-type"]||"");
-        check(Number(exerciseSprite.headers["content-length"]||24518)===24518||exerciseSprite.text.length>15000,
-          "Live Übungsbild-Sprite hat erwartete Dateigröße",exerciseSprite.headers["content-length"]||String(exerciseSprite.text.length));
+        check(exerciseFeature.text.includes('const VERSION="11.8.117"'),"Live Übungsbild-Feature hat aktuelle Version");
+        check(exerciseFeature.text.includes('SOURCE_COMMIT="8f25d055e243b882aa05acaa66c2c51b1a9fc2d1"'),
+          "Live Übungsbild-Feature nutzt gepinnte 512px-Quelle");
+        check(exerciseFeature.text.includes('"Schrägbank-Curls":{id:"incline-db-curl"}'),
+          "Live Schrägbank-Curls sind separat korrekt zugeordnet");
+        check(!exerciseFeature.text.includes("exercise-sprite-v11.8.116.webp"),
+          "Live Übungsbild-Feature verwendet keinen Low-Res-Sprite mehr");
         if(failures.length){
           console.error("Live-Deployment-Test fehlgeschlagen:\n"+failures.join("\n"));
           process.exit(1);
