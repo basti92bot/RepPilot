@@ -1,5 +1,5 @@
 {
-  "version": "11.8.118",
+  "version": "11.8.119",
   "releasedAt": "2026-09-03",
-  "notes": "Übungsbilder komplett neu aufgebaut: alle 44 Übungen sind eindeutig zugeordnet. 76 lokale Einzeldateien ersetzen die alten Sprites und Remote-Hotlinks. Die Illustrationen liegen in 1024px oder als skalierbare SVG vor und sind vollständig offline verfügbar."
+  "notes": "Die bestätigte anatomische Bildserie ist allen 44 Übungen zugeordnet. 28 lokale, auf 1024 Pixel aufbereitete Einzelmotive ersetzen die blauen Illustrationen. Die doppelte Übungsbezeichnung unter dem Bild wurde entfernt."
 }

@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 
 const BASE = process.env.REPPILOT_BASE_URL || "http://127.0.0.1:4173";
-const VERSION = "11.8.118";
+const VERSION = "11.8.119";
 const failures = [];
 const pass = label => console.log("PASS:", label);
 const fail = (label, detail="") => {
@@ -214,7 +214,7 @@ try {
     exerciseImageAudit?.total===44 &&
     exerciseImageAudit?.mapped===44 &&
     exerciseImageAudit?.missing?.length===0 &&
-    exerciseImageAudit?.localFiles===76 &&
+    exerciseImageAudit?.localFiles===28 &&
     exerciseImageAudit?.remoteUrls?.length===0,
     "44 von 44 Übungen sind mit lokalen Einzelbildern zugeordnet",
     JSON.stringify(exerciseImageAudit)
@@ -237,9 +237,9 @@ try {
     return {count:urls.length,results};
   });
   check(
-    exerciseAssetAudit.count===76 &&
-    exerciseAssetAudit.results.every(x=>x.status===200&&x.width>=1024&&x.height>=512&&x.url.includes("/assets/exercises/v11.8.118/")),
-    "Alle 76 Übungsdateien laden lokal und hochauflösend",
+    exerciseAssetAudit.count===28 &&
+    exerciseAssetAudit.results.every(x=>x.status===200&&x.width>=1024&&x.height>=512&&x.url.includes("/assets/exercises/v11.8.119/")),
+    "Alle 28 bestätigten Übungsmotive laden lokal und hochauflösend",
     JSON.stringify(exerciseAssetAudit.results.filter(x=>x.status!==200||x.width<1024||x.height<512))
   );
 
@@ -293,8 +293,8 @@ try {
   );
   check(
     exerciseImageRuntime.source==="local" &&
-    exerciseImageRuntime.sourceCommit==="8f25d055e243b882aa05acaa66c2c51b1a9fc2d1" &&
-    exerciseImageRuntime.images.every(x=>x.src.includes("/assets/exercises/v11.8.118/")&&!x.src.includes("raw.githubusercontent.com")),
+    exerciseImageRuntime.sourceCommit==="75f6ae7" &&
+    exerciseImageRuntime.images.every(x=>x.src.includes("/assets/exercises/v11.8.119/")&&!x.src.includes("raw.githubusercontent.com")),
     "Übungsbilder kommen aus dem lokalen, versionsgebundenen Bestand",
     JSON.stringify(exerciseImageRuntime)
   );
@@ -365,21 +365,21 @@ try {
     const reg=await navigator.serviceWorker.ready;
     const regs=await navigator.serviceWorker.getRegistrations();
     const keys=await caches.keys();
-    const current=await caches.open("reppilot-v11-8-118");
+    const current=await caches.open("reppilot-v11-8-119");
     const requests=(await current.keys()).map(r=>r.url);
     return {supported:true,script:reg.active?.scriptURL||"",registrations:regs.length,keys,requests};
   });
   check(swState.supported,"Service Worker API verfügbar");
   check(swState.registrations===1,"Genau eine Service-Worker-Registrierung aktiv",JSON.stringify(swState));
-  check(swState.script.includes("sw.js?v=11.8.118"),"Aktiver Service Worker hat aktuelle Version",swState.script);
-  check(swState.keys.includes("reppilot-v11-8-118"),"Aktueller PWA-Cache vorhanden",swState.keys.join(","));
-  check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.118")),"192er Icon im Runtime-Cache");
-  check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.118")),"512er Icon im Runtime-Cache");
-  check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.118/")).length===76,"Alle 76 Übungsdateien im Runtime-Cache");
+  check(swState.script.includes("sw.js?v=11.8.119"),"Aktiver Service Worker hat aktuelle Version",swState.script);
+  check(swState.keys.includes("reppilot-v11-8-119"),"Aktueller PWA-Cache vorhanden",swState.keys.join(","));
+  check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.119")),"192er Icon im Runtime-Cache");
+  check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.119")),"512er Icon im Runtime-Cache");
+  check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.119/")).length===28,"Alle 28 Übungsmotive im Runtime-Cache");
 
   // Manifest runtime fetch
   const manifestRuntime=await page.evaluate(async()=>{
-    const r=await fetch("./manifest.json?v=11.8.118",{cache:"no-store"});
+    const r=await fetch("./manifest.json?v=11.8.119",{cache:"no-store"});
     return {status:r.status,json:await r.json()};
   });
   check(manifestRuntime.status===200,"Manifest wird zur Laufzeit ausgeliefert");
@@ -402,7 +402,7 @@ try {
     await caches.open("reppilot-old-test-cache");
     const regs=await navigator.serviceWorker.getRegistrations();
     await Promise.all(regs.map(r=>r.unregister()));
-    const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.118&reinstall=1",{updateViaCache:"none"});
+    const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.119&reinstall=1",{updateViaCache:"none"});
     const worker=reg.installing||reg.waiting||reg.active;
     if(worker&&worker.state!=="activated"){
       await Promise.race([
@@ -413,7 +413,7 @@ try {
   });
   const cacheKeysAfter=await page.evaluate(()=>caches.keys());
   check(!cacheKeysAfter.includes("reppilot-old-test-cache"),"Aktivierung löscht alte PWA-Caches",cacheKeysAfter.join(","));
-  check(cacheKeysAfter.includes("reppilot-v11-8-118"),"Aktueller Cache bleibt nach Bereinigung erhalten");
+  check(cacheKeysAfter.includes("reppilot-v11-8-119"),"Aktueller Cache bleibt nach Bereinigung erhalten");
 
   // General browser errors
   check(pageErrors.length===0,"Keine unbehandelten JavaScript-Fehler",pageErrors.join(" | "));

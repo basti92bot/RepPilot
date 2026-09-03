@@ -1,60 +1,60 @@
 (() => {
-  const VERSION = "11.8.118";
-  const BASE = "./assets/exercises/v11.8.118/";
-  const SOURCE_COMMIT = "8f25d055e243b882aa05acaa66c2c51b1a9fc2d1";
+  const VERSION = "11.8.119";
+  const BASE = "./assets/exercises/v11.8.119/";
+  const SOURCE_COMMIT = "75f6ae7";
 
-  const repdb = (id, mode = "pair") => ({
+  const approved = id => ({
     id,
-    source: "RepDB",
-    files: mode === "main" ? [`${id}-main.webp`] : [`${id}-start.webp`, `${id}-peak.webp`]
+    source: "RepPilot approved series",
+    files: [`${id}.webp`],
+    wide: true
   });
-  const custom = id => ({ id, source: "RepPilot", files: [`${id}.svg`], wide: true });
 
   const MAP = Object.freeze({
-    "Bauch Rotation": repdb("russian-twist"),
-    "Beinbeuger": repdb("leg-curl"),
-    "Beinheben": repdb("lying-leg-raise"),
-    "Beinpresse": repdb("leg-press"),
-    "Beinstrecker": repdb("leg-extension"),
-    "Bergsteiger": repdb("mountain-climbers"),
-    "Brustgestütztes Rudern": repdb("chest-supported-db-row"),
-    "Brustpresse": repdb("chest-press-machine"),
-    "Crunch-Maschine": repdb("machine-seated-crunch"),
-    "Diagonales Arm-Bein-Strecken": repdb("dead-bug"),
-    "Diagonales Arm-Bein-Strecken im Vierfüßlerstand": repdb("bird-dog"),
-    "Einarmiger Trizeps am Kabelzug": repdb("single-arm-tricep-pushdown"),
-    "Einbeiniges Hüftheben": repdb("single-leg-glute-bridge"),
-    "Enge Liegestütze": repdb("close-grip-push-ups"),
-    "Hammercurls": repdb("hammer-curl"),
-    "Hängendes Beinheben": repdb("hanging-leg-raise"),
-    "Hüftheben": repdb("glute-bridge"),
-    "Hüftheben mit Beinwechsel": repdb("single-leg-glute-bridge"),
-    "Kabel-Flys": repdb("cable-fly"),
-    "Kniebeugen": repdb("bodyweight-squat"),
-    "Latzug breit": repdb("lat-pulldown"),
-    "Latzug neutral": repdb("v-bar-lat-pulldown"),
-    "Liegestütze bis Maximum": repdb("push-up"),
-    "Reverse Butterfly am Kabelzug": custom("cable-reverse-fly"),
-    "Rückenstrecker in Bauchlage": repdb("superman"),
-    "Rückwärts-Ausfallschritte": repdb("reverse-lunge"),
-    "Schneeengel in Bauchlage": custom("prone-snow-angel"),
-    "Schrägbank-Curls": repdb("incline-db-curl"),
-    "Schrägbankdrücken": repdb("incline-bench-press"),
-    "Schrägbankdrücken leicht": repdb("incline-bench-press"),
-    "Schulter-Liegestütze": repdb("pike-push-ups"),
-    "Schulterpresse": repdb("machine-shoulder-press"),
-    "Scott-Curls": repdb("preacher-curl"),
-    "Seitheben": repdb("lateral-raise"),
-    "Seitheben am Kabelzug": repdb("cable-lateral-raise"),
-    "Seitheben Maschine": repdb("plate-loaded-lateral-raise"),
-    "Seitstütz": repdb("side-plank", "main"),
-    "Stationäre Ausfallschritte": repdb("split-squat"),
-    "Tempo-Kniebeugen": repdb("bodyweight-squat"),
-    "Trizepsdrücken am Seilzug": repdb("tricep-pushdown"),
-    "Überkopf-Trizepsstrecken am Kabelzug": custom("cable-overhead-triceps"),
-    "Unterarmstütz": repdb("plank", "main"),
-    "Wadenheben": repdb("machine-calf-raise"),
-    "Y-T-Heben in Bauchlage": custom("prone-y-t-raise")
+    "Bauch Rotation": approved("ab-machine"),
+    "Beinbeuger": approved("lying-leg-curl"),
+    "Beinheben": approved("leg-raise"),
+    "Beinpresse": approved("leg-press"),
+    "Beinstrecker": approved("leg-extension"),
+    "Bergsteiger": approved("mountain-climber"),
+    "Brustgestütztes Rudern": approved("seated-row"),
+    "Brustpresse": approved("chest-press"),
+    "Crunch-Maschine": approved("ab-machine"),
+    "Diagonales Arm-Bein-Strecken": approved("bird-dog"),
+    "Diagonales Arm-Bein-Strecken im Vierfüßlerstand": approved("bird-dog"),
+    "Einarmiger Trizeps am Kabelzug": approved("cable-triceps-pushdown"),
+    "Einbeiniges Hüftheben": approved("bridge"),
+    "Enge Liegestütze": approved("push-up"),
+    "Hammercurls": approved("cable-biceps-curl"),
+    "Hängendes Beinheben": approved("hanging-leg-raise"),
+    "Hüftheben": approved("bridge"),
+    "Hüftheben mit Beinwechsel": approved("bridge"),
+    "Kabel-Flys": approved("butterfly"),
+    "Kniebeugen": approved("squat"),
+    "Latzug breit": approved("lat-pulldown"),
+    "Latzug neutral": approved("lat-pulldown"),
+    "Liegestütze bis Maximum": approved("push-up"),
+    "Reverse Butterfly am Kabelzug": approved("reverse-butterfly"),
+    "Rückenstrecker in Bauchlage": approved("back-extension"),
+    "Rückwärts-Ausfallschritte": approved("lunge"),
+    "Schneeengel in Bauchlage": approved("reverse-butterfly"),
+    "Schrägbank-Curls": approved("cable-biceps-curl"),
+    "Schrägbankdrücken": approved("incline-bench-press"),
+    "Schrägbankdrücken leicht": approved("incline-bench-press"),
+    "Schulter-Liegestütze": approved("push-up"),
+    "Schulterpresse": approved("shoulder-press"),
+    "Scott-Curls": approved("cable-biceps-curl"),
+    "Seitheben": approved("lateral-raise"),
+    "Seitheben am Kabelzug": approved("lateral-raise"),
+    "Seitheben Maschine": approved("lateral-raise"),
+    "Seitstütz": approved("plank"),
+    "Stationäre Ausfallschritte": approved("lunge"),
+    "Tempo-Kniebeugen": approved("squat"),
+    "Trizepsdrücken am Seilzug": approved("cable-triceps-pushdown"),
+    "Überkopf-Trizepsstrecken am Kabelzug": approved("cable-triceps-pushdown"),
+    "Unterarmstütz": approved("plank"),
+    "Wadenheben": approved("calf-raise"),
+    "Y-T-Heben in Bauchlage": approved("reverse-butterfly")
   });
 
   let renderToken = 0;
@@ -65,11 +65,8 @@
     style.id = "repPilotExerciseImageStyles";
     style.textContent = `
       #repPilotExerciseImageCard{max-width:360px;margin:12px auto 14px;border:1px solid var(--line,#e5e7eb);border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 4px 14px rgba(17,24,39,.05)}
-      #repPilotExerciseImageViewport{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line,#e5e7eb)}
-      #repPilotExerciseImageViewport.single{grid-template-columns:1fr}
-      .repPilotExercisePose{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:contain;background:#eaf7fb;image-rendering:auto}
-      .repPilotExercisePose.wide{aspect-ratio:2/1}
-      #repPilotExerciseImageLabel{display:block;padding:8px 10px 10px;text-align:center;color:var(--muted,#6b7280);font-size:11px;font-weight:800}
+      #repPilotExerciseImageViewport{display:grid;grid-template-columns:1fr;background:#fff}
+      .repPilotExercisePose{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:contain;background:#fff;image-rendering:auto}
       @media(max-width:390px){#repPilotExerciseImageCard{max-width:330px}}
     `;
     document.head.appendChild(style);
@@ -85,7 +82,7 @@
     card = document.createElement("div");
     card.id = "repPilotExerciseImageCard";
     card.hidden = true;
-    card.innerHTML = '<div id="repPilotExerciseImageViewport"></div><small id="repPilotExerciseImageLabel"></small>';
+    card.innerHTML = '<div id="repPilotExerciseImageViewport"></div>';
     title.insertAdjacentElement("afterend", card);
     return card;
   }
@@ -106,7 +103,7 @@
     img.loading = "eager";
     img.fetchPriority = "high";
     img.width = 1024;
-    img.height = isWide ? 512 : 1024;
+    img.height = isWide ? 768 : 1024;
     img.onload = () => {
       if (token !== renderToken) return;
       img.dataset.loaded = "true";
@@ -127,9 +124,7 @@
     const name = String(document.getElementById("exerciseName")?.textContent || "").trim();
     const entry = MAP[name];
     const viewport = document.getElementById("repPilotExerciseImageViewport");
-    const label = document.getElementById("repPilotExerciseImageLabel");
     viewport.replaceChildren();
-    viewport.classList.toggle("single", !entry || entry.files.length === 1);
     card.hidden = true;
 
     if (!entry) return;
@@ -137,7 +132,6 @@
     card.dataset.exercise = name;
     card.dataset.assetId = entry.id;
     card.dataset.assetSource = entry.source;
-    label.textContent = name;
     entry.files.forEach((file, index) => renderImage(viewport, card, name, entry, file, index, token));
   }
 
