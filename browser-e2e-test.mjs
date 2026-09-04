@@ -2,6 +2,7 @@ import { chromium } from "playwright";
 
 const BASE = process.env.REPPILOT_BASE_URL || "http://127.0.0.1:4173";
 const VERSION = "11.8.121";
+const CACHE = "reppilot-v" + VERSION.replaceAll(".", "-");
 const failures = [];
 const pass = label => console.log("PASS:", label);
 const fail = (label, detail="") => {
@@ -365,19 +366,19 @@ try {
   check((await activeView())==="home","Training lässt sich sauber abbrechen");
 
   // Service worker and caches
-  const swState = await page.evaluate(async()=>{
+  const swState = await page.evaluate(async cacheName=>{
     if(!("serviceWorker" in navigator))return {supported:false};
     const reg=await navigator.serviceWorker.ready;
     const regs=await navigator.serviceWorker.getRegistrations();
     const keys=await caches.keys();
-    const current=await caches.open("reppilot-v11-8-120");
+    const current=await caches.open(cacheName);
     const requests=(await current.keys()).map(r=>r.url);
     return {supported:true,script:reg.active?.scriptURL||"",registrations:regs.length,keys,requests};
-  });
+  }, CACHE);
   check(swState.supported,"Service Worker API verfügbar");
   check(swState.registrations===1,"Genau eine Service-Worker-Registrierung aktiv",JSON.stringify(swState));
   check(swState.script.includes("sw.js?v=11.8.121"),"Aktiver Service Worker hat aktuelle Version",swState.script);
-  check(swState.keys.includes("reppilot-v11-8-120"),"Aktueller PWA-Cache vorhanden",swState.keys.join(","));
+  check(swState.keys.includes(CACHE),"Aktueller PWA-Cache vorhanden",swState.keys.join(","));
   check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.121")),"192er Icon im Runtime-Cache");
   check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.121")),"512er Icon im Runtime-Cache");
   check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.120/")).length===43,"Alle 43 Übungsmotive im Runtime-Cache");
@@ -418,7 +419,7 @@ try {
   });
   const cacheKeysAfter=await page.evaluate(()=>caches.keys());
   check(!cacheKeysAfter.includes("reppilot-old-test-cache"),"Aktivierung löscht alte PWA-Caches",cacheKeysAfter.join(","));
-  check(cacheKeysAfter.includes("reppilot-v11-8-120"),"Aktueller Cache bleibt nach Bereinigung erhalten");
+  check(cacheKeysAfter.includes(CACHE),"Aktueller Cache bleibt nach Bereinigung erhalten");
 
   // General browser errors
   check(pageErrors.length===0,"Keine unbehandelten JavaScript-Fehler",pageErrors.join(" | "));
