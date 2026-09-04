@@ -1,7 +1,7 @@
 (() => {
   if (window.RepPilotUpdate) return;
-  const VERSION="11.8.121";
-  const current=()=>document.documentElement?.dataset?.appVersion||"11.8.121";
+  const VERSION="11.8.122";
+  const current=()=>document.documentElement?.dataset?.appVersion||"11.8.122";
   const check=async()=> {
     try {
       const r=await fetch("./version.json?ts="+Date.now(),{cache:"no-store"});

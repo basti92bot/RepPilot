@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.84";
+  const VERSION = "11.8.122";
   const RUNNER_EXERCISES = [
     {
       icon:"🦶",
@@ -156,10 +156,10 @@
       .home-workout-details summary:after{content:"⌄";font-size:17px;color:var(--muted);transition:transform .18s ease}
       .home-workout-details[open] summary:after{transform:rotate(180deg)}
       .home-workout-exercises{list-style:none;margin:0;padding:0;border-top:1px solid var(--line);background:#fff}
-      .home-workout-exercises li{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border-bottom:1px solid var(--line);font-size:13px}
+      .home-workout-exercises li{display:block;padding:14px 12px;border-bottom:1px solid var(--line);font-size:14px}
       .home-workout-exercises li:last-child{border-bottom:0}
-      .home-workout-exercises strong{font-size:13px}
-      .home-workout-exercises span{white-space:nowrap;color:var(--muted);font-weight:800}
+      .home-workout-exercises strong{display:block;font-size:16px}
+      .home-workout-exercises span{display:block;color:var(--muted);font-weight:800}
       .runner-equipment{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 16px}
       .runner-equipment span{padding:7px 9px;border-radius:999px;background:#f3f4f6;font-size:12px;font-weight:800}
       .runner-list{display:grid;gap:10px;margin-top:14px}
@@ -168,7 +168,6 @@
       .runner-list p{margin:3px 0;color:#4b5563;font-size:14px;line-height:1.4}
       .runner-dose{font-weight:900;color:var(--text)!important}
       .runner-session-card{text-align:center}
-      .runner-session-icon{font-size:52px;margin-bottom:8px}
       .runner-session-card h2{margin:5px 0 7px}
       .runner-session-card .note{text-align:left;margin:14px 0}
       .runner-session-actions{display:grid;grid-template-columns:1fr 1.4fr;gap:9px;margin-top:14px}
@@ -205,11 +204,13 @@
     }catch{return null}
   }
 
+  const exerciseImage = (name, context = "", eager = false) => window.RepPilotTrainingImages?.markup(name, {context, eager}) || "";
+
   function homeWorkoutMarkup(id,label){
     const workout=homeWorkoutData(id);
     const exercises=Array.isArray(workout?.exercises)?workout.exercises:[];
     const list=exercises.length
-      ? exercises.map(e=>`<li><strong>${e?.[0]||"Übung"}</strong><span>${Number(e?.[1]||0)} ${Number(e?.[1]||0)===1?"Satz":"Sätze"}</span></li>`).join("")
+      ? exercises.map(e=>`<li><strong>${e?.[0]||"Übung"}</strong>${exerciseImage(e?.[0]||"",id)}<span>${Number(e?.[1]||0)} ${Number(e?.[1]||0)===1?"Satz":"Sätze"}</span></li>`).join("")
       : '<li><strong>Übungen werden beim Start geladen</strong></li>';
     return `
       <div class="home-workout-box">
@@ -277,7 +278,7 @@
         <button id="startRunnerRoutine" class="wide">Routine starten</button>
       </article>
       <div class="runner-list">
-        ${RUNNER_EXERCISES.map((x,i)=>`<article><h3>${i+1}. ${x.icon} ${x.name}</h3><p class="runner-dose">${x.dose}</p><p>${x.text}</p><small>${x.equipment}</small></article>`).join("")}
+        ${RUNNER_EXERCISES.map((x,i)=>`<article><h3>${i+1}. ${x.name}</h3>${exerciseImage(x.name)}<p class="runner-dose">${x.dose}</p><p>${x.text}</p><small>${x.equipment}</small></article>`).join("")}
       </div>`;
     document.getElementById("closeRunnerTraining").onclick=backToHub;
     document.getElementById("startRunnerRoutine").onclick=()=>{runnerIndex=0;renderRunnerStep()};
@@ -290,8 +291,8 @@
       <div class="top"><div><small>ÜBUNG ${runnerIndex+1} VON ${RUNNER_EXERCISES.length}</small><h2>Läufer-Stabi</h2></div><button id="endRunnerRoutine" class="secondary">Beenden</button></div>
       <div class="track"><div style="width:${((runnerIndex+1)/RUNNER_EXERCISES.length)*100}%"></div></div>
       <article class="card runner-session-card">
-        <div class="runner-session-icon">${x.icon}</div>
         <h2>${x.name}</h2>
+        ${exerciseImage(x.name,"",true)}
         <p class="runner-dose">${x.dose}</p>
         <div class="note">${x.text}</div>
         <div class="runner-equipment"><span>${x.equipment}</span></div>
@@ -333,7 +334,7 @@
         <button id="startSkiRoutine" class="wide">Routine starten</button>
       </article>
       <div class="runner-list">
-        ${SKI_EXERCISES.map((x,i)=>`<article><h3>${i+1}. ${x.icon} ${x.name}</h3><p class="runner-dose">${x.dose}</p><p>${x.text}</p><small>${x.equipment}</small></article>`).join("")}
+        ${SKI_EXERCISES.map((x,i)=>`<article><h3>${i+1}. ${x.name}</h3>${exerciseImage(x.name)}<p class="runner-dose">${x.dose}</p><p>${x.text}</p><small>${x.equipment}</small></article>`).join("")}
       </div>`;
     document.getElementById("closeSkiTraining").onclick=backToHub;
     document.getElementById("startSkiRoutine").onclick=()=>{skiIndex=0;renderSkiStep()};
@@ -346,8 +347,8 @@
       <div class="top"><div><small>ÜBUNG ${skiIndex+1} VON ${SKI_EXERCISES.length}</small><h2>Ski-Workout</h2></div><button id="endSkiRoutine" class="secondary">Beenden</button></div>
       <div class="track"><div style="width:${((skiIndex+1)/SKI_EXERCISES.length)*100}%"></div></div>
       <article class="card runner-session-card">
-        <div class="runner-session-icon">${x.icon}</div>
         <h2>${x.name}</h2>
+        ${exerciseImage(x.name,"",true)}
         <p class="runner-dose">${x.dose}</p>
         <div class="note">${x.text}</div>
         <div class="runner-equipment"><span>${x.equipment}</span></div>

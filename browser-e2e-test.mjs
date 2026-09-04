@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 
 const BASE = process.env.REPPILOT_BASE_URL || "http://127.0.0.1:4173";
-const VERSION = "11.8.121";
+const VERSION = "11.8.122";
 const CACHE = "reppilot-v" + VERSION.replaceAll(".", "-");
 const failures = [];
 const pass = label => console.log("PASS:", label);
@@ -365,6 +365,45 @@ try {
   await page.waitForTimeout(50);
   check((await activeView())==="home","Training lässt sich sauber abbrechen");
 
+  // Home, runner and ski imagery must be tested in their own screens.
+  await page.getByRole("button",{name:"Training",exact:true}).click();
+  const trainingAudit=await page.evaluate(()=>RepPilotTrainingImages.audit());
+  check(trainingAudit.ready&&trainingAudit.total===60&&trainingAudit.mapped===60&&trainingAudit.localFiles===58&&trainingAudit.missing.length===0,"Alle 60 Übungsnamen einschließlich Läuferstabi und Ski sind zugeordnet",JSON.stringify(trainingAudit));
+  for(const id of ["home-a","home-b","home-c"]){
+    const box=page.locator('[data-home-workout="'+id+'"]').locator('..');
+    await box.locator("summary").click();
+    check(await box.locator(".repPilotTrainingImage img").count()===8,"Home-Übungsübersicht enthält 8 Bilder: "+id);
+    await page.locator('[data-home-workout="'+id+'"]').click();
+    await page.locator("#repPilotExerciseImageCard").waitFor({state:"visible"});
+    check(await page.locator("#exerciseIcon").count()===0,"Home-Training ohne Übungs-Icon: "+id);
+    check(!(await page.locator("#weightInput").isVisible()),"Home-Training bleibt ohne Gewichtseingabe: "+id);
+    const homeImage=await page.locator("#repPilotExerciseImageCard img").evaluate(img=>({loaded:img.complete,width:img.naturalWidth,height:img.naturalHeight}));
+    check(homeImage.loaded&&homeImage.width===1254&&homeImage.height===1254,"Home-Bild lädt nativ: "+id);
+    await page.locator("#cancelBtn").click();
+    await page.getByRole("button",{name:"Training",exact:true}).click();
+  }
+  const checkRoutine=async(type,offline=false)=>{
+    await page.getByRole("button",{name:"Training",exact:true}).click();
+    const runner=type==="runner";
+    await page.locator(runner?"#openRunnerStrength":"#openSkiStrength").click();
+    const rows=await page.evaluate(key=>RepPilotTrainingHub[key],runner?"runnerExercises":"skiExercises");
+    check(await page.locator(".runner-list .repPilotTrainingImage").count()===rows.length,"Routine-Übersicht vollständig bebildert: "+type);
+    await page.locator(runner?"#startRunnerRoutine":"#startSkiRoutine").click();
+    for(const row of rows){
+      await page.waitForFunction(()=>{const img=document.querySelector(".runner-session-card .repPilotTrainingImage img");return img?.complete&&img.naturalWidth===1254;},null,{timeout:15000});
+      const card=page.locator(".runner-session-card");
+      check((await card.locator("h2").innerText())===row.name,"Routine zeigt richtigen Übungstitel: "+row.name);
+      check(await card.locator(".repPilotTrainingImage").count()===1,"Genau ein Bild: "+row.name+(offline?" offline":""));
+      check(await card.locator(".runner-session-icon").count()===0,"Kein Übungs-Icon: "+row.name);
+      const geometry=await card.evaluate(el=>{const h=el.querySelector("h2"),image=el.querySelector(".repPilotTrainingImage"),dose=el.querySelector(".runner-dose");return {ordered:h.getBoundingClientRect().bottom<=image.getBoundingClientRect().top&&image.getBoundingClientRect().bottom<=dose.getBoundingClientRect().top,overflow:document.documentElement.scrollWidth>innerWidth+1};});
+      check(geometry.ordered&&!geometry.overflow,"Titel, Bild, Anleitung ohne horizontalen Überlauf: "+row.name);
+      await page.locator(runner?"#runnerNext":"#skiNext").click();
+    }
+    await page.locator(runner?"#runnerDone":"#skiDone").click();
+  };
+  await checkRoutine("runner");
+  await checkRoutine("ski");
+
   // Service worker and caches
   const swState = await page.evaluate(async cacheName=>{
     if(!("serviceWorker" in navigator))return {supported:false};
@@ -377,15 +416,16 @@ try {
   }, CACHE);
   check(swState.supported,"Service Worker API verfügbar");
   check(swState.registrations===1,"Genau eine Service-Worker-Registrierung aktiv",JSON.stringify(swState));
-  check(swState.script.includes("sw.js?v=11.8.121"),"Aktiver Service Worker hat aktuelle Version",swState.script);
+  check(swState.script.includes("sw.js?v=11.8.122"),"Aktiver Service Worker hat aktuelle Version",swState.script);
   check(swState.keys.includes(CACHE),"Aktueller PWA-Cache vorhanden",swState.keys.join(","));
-  check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.121")),"192er Icon im Runtime-Cache");
-  check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.121")),"512er Icon im Runtime-Cache");
+  check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.122")),"192er Icon im Runtime-Cache");
+  check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.122")),"512er Icon im Runtime-Cache");
   check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.120/")).length===43,"Alle 43 Übungsmotive im Runtime-Cache");
+  check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.122/")).length===15,"Alle 15 zusätzlichen Läufer-/Ski-Motive im Runtime-Cache");
 
   // Manifest runtime fetch
   const manifestRuntime=await page.evaluate(async()=>{
-    const r=await fetch("./manifest.json?v=11.8.121",{cache:"no-store"});
+    const r=await fetch("./manifest.json?v=11.8.122",{cache:"no-store"});
     return {status:r.status,json:await r.json()};
   });
   check(manifestRuntime.status===200,"Manifest wird zur Laufzeit ausgeliefert");
@@ -401,6 +441,8 @@ try {
   check((await page.locator("html").getAttribute("data-app-version"))===VERSION,"Offline-Reload liefert aktuelle App-Version");
   await page.getByRole("button",{name:"Verlauf",exact:true}).click();
   check((await activeView())==="history","Navigation funktioniert offline");
+  await checkRoutine("runner",true);
+  await checkRoutine("ski",true);
   await context.setOffline(false);
 
   // Cache cleanup on fresh SW activation
@@ -408,7 +450,7 @@ try {
     await caches.open("reppilot-old-test-cache");
     const regs=await navigator.serviceWorker.getRegistrations();
     await Promise.all(regs.map(r=>r.unregister()));
-    const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.121&reinstall=1",{updateViaCache:"none"});
+    const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.122&reinstall=1",{updateViaCache:"none"});
     const worker=reg.installing||reg.waiting||reg.active;
     if(worker&&worker.state!=="activated"){
       await Promise.race([

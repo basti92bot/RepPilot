@@ -1,0 +1,31 @@
+{
+  "corrections": [
+    {
+      "id": "knee-to-wall",
+      "prompt": "Use case: precise-object-edit. Correct the MOVEMENT. The current image mistakenly shows a calf stretch. Replace BOTH poses with a half-kneeling knee-to-wall ankle mobilization, same style/athlete/white background/no text. Side view. Rear knee rests on floor behind. FRONT bare foot lies FLAT directly before wall, toes about5cm from wall. LEFT front knee upright with gap from wall. RIGHT FRONT KNEECAP TOUCHES THE WALL, front shin tilts diagonally forward, front ankle bends deeply, front heel and all front toes stay flat and exactly in same position. Weight travels onto front ankle, NOT stretching rear calf. Frame full athlete or clear lower-body view. A visible front knee-wall contact in right pose is essential. Highlight front soleus subtly, no long straight rear standing leg."
+    },
+    {
+      "id": "slow-step-down",
+      "prompt": "Use case: precise-object-edit. Correct only body position in RIGHT pose. The standing/working foot MUST STAY ON TOP of the gray exercise step in BOTH poses. In RIGHT pose bend that supporting knee 30-45degrees so the body lowers while the OTHER mostly straight leg lowers its heel to touch the floor next to step. Never put both feet on floor. Step height about15cm. LEFT support foot on top with straight support knee and other foot hanging clear. Show full body, same athlete/anatomy/shorts/colors, one correct step-down exercise, no text. Red on working thigh whose foot remains on step."
+    },
+    {
+      "id": "feet-elevated-side-plank",
+      "prompt": "Use case: precise-object-edit. Correct ONLY support placement of feet. In BOTH figures place the athlete's STACKED FEET visibly resting ON THE HORIZONTAL TOP SURFACE of the padded bench, not pressing against its vertical side. Bench cushion underneath lower foot and ankle, heels/toes extend onto top of cushion at least10cm. Supporting forearm stays on FLOOR mat under shoulder, body side-on, hips lifted in straight line shoulder-hip-ankles. Feet clearly ELEVATED above floor and supported by TOP, with full body visible. Preserve anatomical grayscale/red style, two stacked poses, white background, no text."
+    },
+    {
+      "id": "suitcase-march",
+      "prompt": "Use case: precise-object-edit. Correct only the LEFT figure by lowering its raised leg so BOTH feet stand flat in a neutral starting stance. Keep RIGHT figure with knee lifted to hip level. This then clearly shows standing-to-marching movement rather than duplicate poses. Keep single kettlebell hanging in the same hand at side, torso upright, anatomy, colors, clothes, white background, no text or labels. Do not change RIGHT figure."
+    }
+  ],
+  "additionalCorrections": [
+    {
+      "id": "slow-step-down",
+      "prompt": "Use case: scientific-educational. Create ONE square native1254x1254 high-resolution RepPilot exercise illustration. Supplied image is ONLY an anatomy art STYLE reference, NOT a pose. Realistic grayscale anatomical man, short dark hair, black shorts, gray shoes, working quadriceps coral-red, plain white background, no text or labels. Depict ONE SINGLE athlete doing the LOWERED phase of a LATERAL STEP-DOWN, full body visible. CRITICAL GEOMETRY: his RIGHT FOOT is visibly FLAT ON TOP OF a small gray 20cm-high rectangular exercise block, which is directly beneath this right shoe. The right knee bends about40 degrees with knee over foot, lowering pelvis. The LEFT LEG extends diagonally DOWN beside the block, and only its HEEL touches the FLOOR at a clearly LOWER elevation than the right foot. Right foot must NEVER touch floor: block is entirely between right sole and floor. Both shoe soles must be visible enough to prove one is on top of block and one is down on floor. View almost frontally from a slight angle so the support shoe atop block cannot hide behind the other leg. Hands together chest height, pelvis level, neutral spine. No second person, no extra leg, no bench behind body. Composition fill frame with single athlete and block. Do not show stepping off the block with both feet. This static correct end position is preferred over any wrong pair of poses."
+    },
+    {
+      "id": "slow-step-down",
+      "prompt": "Use case: precise-object-edit. Keep this single athlete, anatomical style, white background and no text. Correct the LOWER BODY to a genuine lateral step-down, not a side lunge. Make gray block HALF its current height, only about15-20cm. Move athlete pelvis and torso so vertically centered OVER the shoe that stays on block, not halfway between the two feet. Supporting knee on block is only moderately flexed30-40degrees, not deep90degree lunge. Other leg hangs DOWN ALONGSIDE support leg, nearly parallel, so its heel touches floor only10cm BESIDE the block, not far out in wide stance. Supporting sole remains visibly flat ON TOP of block, free heel on floor lower than block. Narrow balanced stance. Bodyweight over elevated support leg. Keep hands at chest and same black shorts, one pose, full body. No other changes."
+    }
+  ],
+  "note": "Step-Downs uses one static lowered position so the support foot on the step is unambiguous. Final image provenance is recorded in training-image-manifest.json."
+}

@@ -1,4 +1,15 @@
-# RepPilot v11.8.121
+# RepPilot v11.8.122
+
+## Läuferstabi, Ski und Home
+
+- Alle 8 Läuferstabi- und 10 Ski-Übungen zeigen Bilder in Übersicht und laufender Routine.
+- 15 neue hochauflösende Motive im bisherigen Anatomie-Stil, native 1254 × 1254 Pixel.
+- Übungs-Icons entfernt. Reihenfolge: Übungsname, Bild, Umfang und Anleitung.
+- Alle drei Home-Übungsübersichten zeigen zusätzlich die schon vorhandenen Bilder.
+- Prüfung umfasst nun 60 unterschiedliche Übungsnamen und 58 lokale Motive, einschließlich Home, Läuferstabi und Ski.
+- Neue Motive, Herkunft und Prüfsummen: `training-image-manifest.json`. Prompts: `docs/training-images-v11.8.122-prompts.json`.
+- Zusätzliche Regressionstests: `node training-images-test.js` sowie vollständige Routinen im Browser-Test.
+
 
 Das Emoji-Icon neben dem Namen der aktuellen Übung ist entfernt. Die Überschrift steht allein über dem Bild. RepPilot-Logo und vorhandene hochauflösende Übungsbilder bleiben unverändert.
 

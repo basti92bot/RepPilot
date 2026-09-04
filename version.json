@@ -1,5 +1,5 @@
 {
-  "version": "11.8.121",
+  "version": "11.8.122",
   "releasedAt": "2026-09-04",
-  "notes": "Übungs-Icon neben dem Namen entfernt. Titel direkt über dem hochauflösenden Übungsbild. RepPilot-Logo, Übungsbilder und Trainingsfunktionen bleiben unverändert."
+  "notes": "Bilder für alle 8 Läuferstabi- und 10 Ski-Übungen. 15 neue native Motive im bestehenden Anatomie-Stil. Übungsname, Bild, Anleitung ohne Übungs-Icons. Home-Übungsübersichten ebenfalls mit Bildern. Vollständigkeitsprüfung für alle 60 Übungsnamen und 58 Motive."
 }
