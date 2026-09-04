@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 
 const BASE = process.env.REPPILOT_BASE_URL || "http://127.0.0.1:4173";
-const VERSION = "11.8.120";
+const VERSION = "11.8.121";
 const failures = [];
 const pass = label => console.log("PASS:", label);
 const fail = (label, detail="") => {
@@ -262,6 +262,10 @@ try {
   }
 
   check(await page.locator("#weightInput").isVisible(),"Gewichtseingabe nach Kraftmessung sichtbar");
+  check(await page.locator("#exerciseIcon").count()===0,"Kein Emoji-Icon neben dem Übungsnamen");
+  check(await page.locator("#setPanel .exercise-title > *").count()===1,"Übungsüberschrift enthält nur den Namen");
+  check(await page.locator("header .brand-logo").isVisible(),"RepPilot-Logo im Header bleibt sichtbar");
+
   await page.locator("#repPilotExerciseImageCard").waitFor({state:"visible",timeout:20000});
   check(await page.locator("#repPilotExerciseImageCard").isVisible(),"Übungsbild im sichtbaren Satz-Panel");
 
@@ -372,15 +376,15 @@ try {
   });
   check(swState.supported,"Service Worker API verfügbar");
   check(swState.registrations===1,"Genau eine Service-Worker-Registrierung aktiv",JSON.stringify(swState));
-  check(swState.script.includes("sw.js?v=11.8.120"),"Aktiver Service Worker hat aktuelle Version",swState.script);
+  check(swState.script.includes("sw.js?v=11.8.121"),"Aktiver Service Worker hat aktuelle Version",swState.script);
   check(swState.keys.includes("reppilot-v11-8-120"),"Aktueller PWA-Cache vorhanden",swState.keys.join(","));
-  check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.120")),"192er Icon im Runtime-Cache");
-  check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.120")),"512er Icon im Runtime-Cache");
+  check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.121")),"192er Icon im Runtime-Cache");
+  check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.121")),"512er Icon im Runtime-Cache");
   check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.120/")).length===43,"Alle 43 Übungsmotive im Runtime-Cache");
 
   // Manifest runtime fetch
   const manifestRuntime=await page.evaluate(async()=>{
-    const r=await fetch("./manifest.json?v=11.8.120",{cache:"no-store"});
+    const r=await fetch("./manifest.json?v=11.8.121",{cache:"no-store"});
     return {status:r.status,json:await r.json()};
   });
   check(manifestRuntime.status===200,"Manifest wird zur Laufzeit ausgeliefert");
@@ -403,7 +407,7 @@ try {
     await caches.open("reppilot-old-test-cache");
     const regs=await navigator.serviceWorker.getRegistrations();
     await Promise.all(regs.map(r=>r.unregister()));
-    const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.120&reinstall=1",{updateViaCache:"none"});
+    const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.121&reinstall=1",{updateViaCache:"none"});
     const worker=reg.installing||reg.waiting||reg.active;
     if(worker&&worker.state!=="activated"){
       await Promise.race([

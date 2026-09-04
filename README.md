@@ -1,4 +1,6 @@
-# RepPilot v11.8.120
+# RepPilot v11.8.121
+
+Das Emoji-Icon neben dem Namen der aktuellen Übung ist entfernt. Die Überschrift steht allein über dem Bild. RepPilot-Logo und vorhandene hochauflösende Übungsbilder bleiben unverändert.
 
 ## Übungsillustrationen
 

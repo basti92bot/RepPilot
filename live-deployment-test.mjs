@@ -18,7 +18,7 @@ async function verify(){
   if(version.status!==200||JSON.parse(version.text).version!==expected)throw new Error("Live-Version noch nicht "+expected);
   const failures=[];
   const check=(ok,label)=>{if(ok)console.log("PASS:",label);else failures.push(label);};
-  const core=["index.html","install.html","manifest.json","sw.js","exercise-images-feature.js","exercise-image-spec.json","exercise-image-manifest.json"];
+  const core=["app.js","styles.css","update-feature.js","index.html","install.html","manifest.json","sw.js","exercise-images-feature.js","exercise-image-spec.json","exercise-image-manifest.json"];
   for(const path of core){
     const response=await get(path);
     check(response.status===200&&sha(response.bytes)===sha(fs.readFileSync(path)),"Live-Datei exakt aktuell: "+path);

@@ -1,5 +1,5 @@
 {
-  "version": "11.8.120",
+  "version": "11.8.121",
   "releasedAt": "2026-09-04",
-  "notes": "44 Kraftübungen mit 43 passenden Motiven in nativer 1254×1254-Auflösung, verlustfrei gespeichert. Bestätigte Originale plus passende Ergänzungen, Bauchrotation kniend, Wadenheben getrennt für Studio/Home. Keine doppelte Bildbeschriftung. Versionsgebundener Offline-Cache."
+  "notes": "Übungs-Icon neben dem Namen entfernt. Titel direkt über dem hochauflösenden Übungsbild. RepPilot-Logo, Übungsbilder und Trainingsfunktionen bleiben unverändert."
 }
