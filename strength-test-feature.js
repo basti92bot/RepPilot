@@ -1,11 +1,12 @@
 (() => {
-  const VERSION="11.8.105";
+  const VERSION="11.8.123";
   const KEY="reppilot-strength-tests-v1";
   const STATE_KEY="reppilot-strength-test-state-v2";
   const INTERVAL_DAYS=28;
   const DAY=86400000;
   const CYCLE_EXERCISE="__strength_cycle__";
   const CYCLE_MODE="cycle";
+  const BATTLE_TEST_KEY="reppilot-battle-test-exercises-v1";
   const BODYWEIGHT=/liegestütz|liegestuetz|hanging leg raise|hängend.*bein|unterarmstütz|seitstütz|beinheben|bergsteiger|hüftheben|ausfallschritt|kniebeugen|rückenstrecker|schneeengel|arm-bein-strecken|y-t-heben/i;
 
   const fmt=v=>Number(v||0).toLocaleString("de-DE",{maximumFractionDigits:1});
@@ -58,6 +59,9 @@
     }catch{return new Set()}
   }
   function tracked(name){return trackedNames().has(name);}
+  function battleTestNames(){try{return new Set(JSON.parse(localStorage.getItem(BATTLE_TEST_KEY)||"[]"))}catch{return new Set()}}
+  function requestBattleTest(name){const normalized=normalizeName(name);if(!normalized||!tracked(normalized))return false;const names=battleTestNames();names.add(normalized);localStorage.setItem(BATTLE_TEST_KEY,JSON.stringify([...names]));markPlanDue();return true;}
+  function clearBattleTest(name){const names=battleTestNames();names.delete(normalizeName(name));localStorage.setItem(BATTLE_TEST_KEY,JSON.stringify([...names]));}
   function read(){try{const data=JSON.parse(localStorage.getItem(KEY)||"[]");return Array.isArray(data)?data:[]}catch{return []}}
   function write(data){localStorage.setItem(KEY,JSON.stringify(data));}
   function readState(){try{const data=JSON.parse(localStorage.getItem(STATE_KEY)||"{}");return data&&typeof data==="object"&&!Array.isArray(data)?data:{}}catch{return{}}}
@@ -218,7 +222,7 @@
   function due(name,workoutId=currentWorkoutId()){
     if(isHomeWorkoutId(workoutId))return false;
     if(!tracked(name))return false;
-    return cycleDue();
+    return battleTestNames().has(normalizeName(name))||cycleDue();
   }
   function nextDue(){
     const last=latestCycle();
@@ -232,6 +236,7 @@
   function markCycleComplete(date=new Date().toISOString()){
     const record={date,exercise:CYCLE_EXERCISE,mode:CYCLE_MODE,formula:"28-Tage-Kraftmessungszyklus abgeschlossen"};
     persistRecord(record);
+    clearBattleTest(e.name);
     markPlanDue();
     return record;
   }
@@ -388,6 +393,6 @@
     window.repPilotSupabase?.auth?.onAuthStateChange(()=>setTimeout(()=>syncStrengthCloud(),100));
   }
 
-  window.RepPilotStrengthTest={version:VERSION,intervalDays:INTERVAL_DAYS,estimate1RM,trainingWeight,due,nextDue,cycleDue,latestCycle,trackedNames,recordKey,latestFor,stateKey:STATE_KEY,syncCloud:syncStrengthCloud,refresh:()=>{applyInline();markPlanDue();}};
+  window.RepPilotStrengthTest={version:VERSION,intervalDays:INTERVAL_DAYS,estimate1RM,trainingWeight,due,nextDue,cycleDue,latestCycle,trackedNames,recordKey,latestFor,requestBattleTest,stateKey:STATE_KEY,syncCloud:syncStrengthCloud,refresh:()=>{applyInline();markPlanDue();}};
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",install,{once:true});else install();
 })();

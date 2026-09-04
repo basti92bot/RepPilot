@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.122";
+  const VERSION = "11.8.123";
   const RUNNER_EXERCISES = [
     {
       icon:"🦶",
@@ -259,10 +259,19 @@
             ${homeWorkoutMarkup("home-c","Workout C")}
           </div>
         </div>
+      </article>
+      <article class="card training-hub-card">
+        <div class="training-hub-icon">🏆</div>
+        <div>
+          <h3>Kraft-Duell</h3>
+          <p>Fordere ein anderes Profil bei einer Übung heraus. Fairer Vergleich über e1RM und Körpergewicht.</p>
+        </div>
+        <div class="training-hub-actions"><button id="openStrengthBattle">Öffnen</button></div>
       </article>`;
     document.getElementById("openStretchTraining").onclick=openStretching;
     document.getElementById("openRunnerStrength").onclick=renderRunnerOverview;
     document.getElementById("openSkiStrength").onclick=renderSkiOverview;
+    document.getElementById("openStrengthBattle").onclick=()=>window.RepPilotBattle?.open();
     root.querySelectorAll("[data-home-workout]").forEach(b=>b.onclick=()=>startHome(b.dataset.homeWorkout));
   }
 
