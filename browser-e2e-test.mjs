@@ -39,7 +39,7 @@ await context.addInitScript(() => {
     }});
     return proxy;
   };
-  window.supabase = {
+  const supabaseStub = {
     createClient(){
       return {
         auth:{
@@ -55,6 +55,14 @@ await context.addInitScript(() => {
       };
     }
   };
+  // Service-worker responses bypass page.route(), including a cached CDN SDK.
+  // Keep the same isolated test client on both online and offline reloads.
+  Object.defineProperty(window, "supabase", {
+    configurable: false,
+    enumerable: true,
+    get: () => supabaseStub,
+    set: () => {}
+  });
 });
 
 const page = await context.newPage();
@@ -439,6 +447,9 @@ try {
   await page.waitForFunction(()=>document.querySelectorAll("nav button").length===4,{timeout:10000});
   check(await page.locator("nav button").count()===4,"App startet offline mit Navigation");
   check((await page.locator("html").getAttribute("data-app-version"))===VERSION,"Offline-Reload liefert aktuelle App-Version");
+  await page.waitForFunction(()=>document.querySelector(".auth-overlay")?.hidden===true,null,{timeout:10000});
+  const offlineTestUser=await page.evaluate(async()=>(await window.repPilotSupabase.auth.getSession()).data.session?.user?.id);
+  check(offlineTestUser==="e2e-user","Offline-Prüfung verwendet weiterhin die isolierte Test-Session");
   await page.getByRole("button",{name:"Verlauf",exact:true}).click();
   check((await activeView())==="history","Navigation funktioniert offline");
   await checkRoutine("runner",true);
