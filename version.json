@@ -1,5 +1,5 @@
 {
-  "version": "11.8.119",
-  "releasedAt": "2026-09-03",
-  "notes": "Die bestätigte anatomische Bildserie ist allen 44 Übungen zugeordnet. 28 lokale, auf 1024 Pixel aufbereitete Einzelmotive ersetzen die blauen Illustrationen. Die doppelte Übungsbezeichnung unter dem Bild wurde entfernt."
+  "version": "11.8.120",
+  "releasedAt": "2026-09-04",
+  "notes": "44 Kraftübungen mit 43 passenden Motiven in nativer 1254×1254-Auflösung, verlustfrei gespeichert. Bestätigte Originale plus passende Ergänzungen, Bauchrotation kniend, Wadenheben getrennt für Studio/Home. Keine doppelte Bildbeschriftung. Versionsgebundener Offline-Cache."
 }

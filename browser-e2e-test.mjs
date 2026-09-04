@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 
 const BASE = process.env.REPPILOT_BASE_URL || "http://127.0.0.1:4173";
-const VERSION = "11.8.119";
+const VERSION = "11.8.120";
 const failures = [];
 const pass = label => console.log("PASS:", label);
 const fail = (label, detail="") => {
@@ -214,7 +214,8 @@ try {
     exerciseImageAudit?.total===44 &&
     exerciseImageAudit?.mapped===44 &&
     exerciseImageAudit?.missing?.length===0 &&
-    exerciseImageAudit?.localFiles===28 &&
+    exerciseImageAudit?.missingContexts?.length===0 &&
+    exerciseImageAudit?.localFiles===43 &&
     exerciseImageAudit?.remoteUrls?.length===0,
     "44 von 44 Übungen sind mit lokalen Einzelbildern zugeordnet",
     JSON.stringify(exerciseImageAudit)
@@ -237,10 +238,10 @@ try {
     return {count:urls.length,results};
   });
   check(
-    exerciseAssetAudit.count===28 &&
-    exerciseAssetAudit.results.every(x=>x.status===200&&x.width>=1024&&x.height>=512&&x.url.includes("/assets/exercises/v11.8.119/")),
-    "Alle 28 bestätigten Übungsmotive laden lokal und hochauflösend",
-    JSON.stringify(exerciseAssetAudit.results.filter(x=>x.status!==200||x.width<1024||x.height<512))
+    exerciseAssetAudit.count===43 &&
+    exerciseAssetAudit.results.every(x=>x.status===200&&x.width===1254&&x.height===1254&&x.url.includes("/assets/exercises/v11.8.120/")),
+    "Alle 43 bestätigten Übungsmotive laden lokal und hochauflösend",
+    JSON.stringify(exerciseAssetAudit.results.filter(x=>x.status!==200||x.width!==1254||x.height!==1254))
   );
 
   const strengthInline = page.locator("#strengthInlineTest");
@@ -261,7 +262,7 @@ try {
   }
 
   check(await page.locator("#weightInput").isVisible(),"Gewichtseingabe nach Kraftmessung sichtbar");
-  await page.waitForTimeout(120);
+  await page.locator("#repPilotExerciseImageCard").waitFor({state:"visible",timeout:20000});
   check(await page.locator("#repPilotExerciseImageCard").isVisible(),"Übungsbild im sichtbaren Satz-Panel");
 
   const exerciseImageRuntime=await page.evaluate(()=>{
@@ -269,12 +270,12 @@ try {
     const imgs=[...document.querySelectorAll(".repPilotExercisePose")];
     const name=String(document.getElementById("exerciseName")?.textContent||"").trim();
     const source=window.RepPilotExerciseImages?.source;
-    const sourceCommit=window.RepPilotExerciseImages?.sourceCommit;
+    const sourceSeries=window.RepPilotExerciseImages?.sourceSeries;
     const assetId=card?.dataset?.assetId||"";
     return {
       name,
       source,
-      sourceCommit,
+      sourceSeries,
       assetId,
       count:imgs.length,
       images:imgs.map(img=>({
@@ -287,14 +288,14 @@ try {
   });
   check(
     exerciseImageRuntime.count>=1 &&
-    exerciseImageRuntime.images.every(x=>x.complete&&x.naturalWidth>=1024&&x.naturalHeight>=512),
-    "Übungsbilder laden hochauflösend mit mindestens 1024px Breite",
+    exerciseImageRuntime.images.every(x=>x.complete&&x.naturalWidth===1254&&x.naturalHeight===1254),
+    "Übungsbilder laden hochauflösend mit nativen 1254×1254 Pixeln",
     JSON.stringify(exerciseImageRuntime)
   );
   check(
     exerciseImageRuntime.source==="local" &&
-    exerciseImageRuntime.sourceCommit==="75f6ae7" &&
-    exerciseImageRuntime.images.every(x=>x.src.includes("/assets/exercises/v11.8.119/")&&!x.src.includes("raw.githubusercontent.com")),
+    exerciseImageRuntime.sourceSeries?.includes("originals 2026-09-02") &&
+    exerciseImageRuntime.images.every(x=>x.src.includes("/assets/exercises/v11.8.120/")&&!x.src.includes("raw.githubusercontent.com")),
     "Übungsbilder kommen aus dem lokalen, versionsgebundenen Bestand",
     JSON.stringify(exerciseImageRuntime)
   );
@@ -365,21 +366,21 @@ try {
     const reg=await navigator.serviceWorker.ready;
     const regs=await navigator.serviceWorker.getRegistrations();
     const keys=await caches.keys();
-    const current=await caches.open("reppilot-v11-8-119");
+    const current=await caches.open("reppilot-v11-8-120");
     const requests=(await current.keys()).map(r=>r.url);
     return {supported:true,script:reg.active?.scriptURL||"",registrations:regs.length,keys,requests};
   });
   check(swState.supported,"Service Worker API verfügbar");
   check(swState.registrations===1,"Genau eine Service-Worker-Registrierung aktiv",JSON.stringify(swState));
-  check(swState.script.includes("sw.js?v=11.8.119"),"Aktiver Service Worker hat aktuelle Version",swState.script);
-  check(swState.keys.includes("reppilot-v11-8-119"),"Aktueller PWA-Cache vorhanden",swState.keys.join(","));
-  check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.119")),"192er Icon im Runtime-Cache");
-  check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.119")),"512er Icon im Runtime-Cache");
-  check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.119/")).length===28,"Alle 28 Übungsmotive im Runtime-Cache");
+  check(swState.script.includes("sw.js?v=11.8.120"),"Aktiver Service Worker hat aktuelle Version",swState.script);
+  check(swState.keys.includes("reppilot-v11-8-120"),"Aktueller PWA-Cache vorhanden",swState.keys.join(","));
+  check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.120")),"192er Icon im Runtime-Cache");
+  check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.120")),"512er Icon im Runtime-Cache");
+  check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.120/")).length===43,"Alle 43 Übungsmotive im Runtime-Cache");
 
   // Manifest runtime fetch
   const manifestRuntime=await page.evaluate(async()=>{
-    const r=await fetch("./manifest.json?v=11.8.119",{cache:"no-store"});
+    const r=await fetch("./manifest.json?v=11.8.120",{cache:"no-store"});
     return {status:r.status,json:await r.json()};
   });
   check(manifestRuntime.status===200,"Manifest wird zur Laufzeit ausgeliefert");
@@ -402,7 +403,7 @@ try {
     await caches.open("reppilot-old-test-cache");
     const regs=await navigator.serviceWorker.getRegistrations();
     await Promise.all(regs.map(r=>r.unregister()));
-    const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.119&reinstall=1",{updateViaCache:"none"});
+    const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.120&reinstall=1",{updateViaCache:"none"});
     const worker=reg.installing||reg.waiting||reg.active;
     if(worker&&worker.state!=="activated"){
       await Promise.race([
@@ -413,7 +414,7 @@ try {
   });
   const cacheKeysAfter=await page.evaluate(()=>caches.keys());
   check(!cacheKeysAfter.includes("reppilot-old-test-cache"),"Aktivierung löscht alte PWA-Caches",cacheKeysAfter.join(","));
-  check(cacheKeysAfter.includes("reppilot-v11-8-119"),"Aktueller Cache bleibt nach Bereinigung erhalten");
+  check(cacheKeysAfter.includes("reppilot-v11-8-120"),"Aktueller Cache bleibt nach Bereinigung erhalten");
 
   // General browser errors
   check(pageErrors.length===0,"Keine unbehandelten JavaScript-Fehler",pageErrors.join(" | "));

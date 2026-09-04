@@ -1,73 +1,83 @@
 (() => {
-  const VERSION = "11.8.119";
-  const BASE = "./assets/exercises/v11.8.119/";
-  const SOURCE_COMMIT = "75f6ae7";
+  const VERSION = "11.8.120";
+  const BASE = "./assets/exercises/v11.8.120/";
+  const SOURCE_SERIES = "RepPilot originals 2026-09-02 + matching additions 2026-09-04";
+  const WIDTH = 1254;
+  const HEIGHT = 1254;
 
-  const approved = id => ({
-    id,
-    source: "RepPilot approved series",
-    files: [`${id}.webp`],
-    wide: true
+  // Original pixels are preserved. Only the caption area is clipped by the viewport.
+  const art = (id, origin, cropBottom = 0) => Object.freeze({
+    id, origin, source: SOURCE_SERIES, files: Object.freeze([id + ".webp"]),
+    width: WIDTH, height: HEIGHT, cropBottom
   });
 
   const MAP = Object.freeze({
-    "Bauch Rotation": approved("ab-machine"),
-    "Beinbeuger": approved("lying-leg-curl"),
-    "Beinheben": approved("leg-raise"),
-    "Beinpresse": approved("leg-press"),
-    "Beinstrecker": approved("leg-extension"),
-    "Bergsteiger": approved("mountain-climber"),
-    "Brustgestütztes Rudern": approved("seated-row"),
-    "Brustpresse": approved("chest-press"),
-    "Crunch-Maschine": approved("ab-machine"),
-    "Diagonales Arm-Bein-Strecken": approved("bird-dog"),
-    "Diagonales Arm-Bein-Strecken im Vierfüßlerstand": approved("bird-dog"),
-    "Einarmiger Trizeps am Kabelzug": approved("cable-triceps-pushdown"),
-    "Einbeiniges Hüftheben": approved("bridge"),
-    "Enge Liegestütze": approved("push-up"),
-    "Hammercurls": approved("cable-biceps-curl"),
-    "Hängendes Beinheben": approved("hanging-leg-raise"),
-    "Hüftheben": approved("bridge"),
-    "Hüftheben mit Beinwechsel": approved("bridge"),
-    "Kabel-Flys": approved("butterfly"),
-    "Kniebeugen": approved("squat"),
-    "Latzug breit": approved("lat-pulldown"),
-    "Latzug neutral": approved("lat-pulldown"),
-    "Liegestütze bis Maximum": approved("push-up"),
-    "Reverse Butterfly am Kabelzug": approved("reverse-butterfly"),
-    "Rückenstrecker in Bauchlage": approved("back-extension"),
-    "Rückwärts-Ausfallschritte": approved("lunge"),
-    "Schneeengel in Bauchlage": approved("reverse-butterfly"),
-    "Schrägbank-Curls": approved("cable-biceps-curl"),
-    "Schrägbankdrücken": approved("incline-bench-press"),
-    "Schrägbankdrücken leicht": approved("incline-bench-press"),
-    "Schulter-Liegestütze": approved("push-up"),
-    "Schulterpresse": approved("shoulder-press"),
-    "Scott-Curls": approved("cable-biceps-curl"),
-    "Seitheben": approved("lateral-raise"),
-    "Seitheben am Kabelzug": approved("lateral-raise"),
-    "Seitheben Maschine": approved("lateral-raise"),
-    "Seitstütz": approved("plank"),
-    "Stationäre Ausfallschritte": approved("lunge"),
-    "Tempo-Kniebeugen": approved("squat"),
-    "Trizepsdrücken am Seilzug": approved("cable-triceps-pushdown"),
-    "Überkopf-Trizepsstrecken am Kabelzug": approved("cable-triceps-pushdown"),
-    "Unterarmstütz": approved("plank"),
-    "Wadenheben": approved("calf-raise"),
-    "Y-T-Heben in Bauchlage": approved("reverse-butterfly")
+    "Bauch Rotation": art("kneeling-torso-rotation-machine", "generated"),
+    "Beinbeuger": art("leg-curl", "original", 173),
+    "Beinheben": art("supine-leg-raise", "generated"),
+    "Beinpresse": art("leg-press", "original", 175),
+    "Beinstrecker": art("leg-extension", "original", 189),
+    "Bergsteiger": art("mountain-climber", "original"),
+    "Brustgestütztes Rudern": art("chest-supported-dumbbell-row", "generated"),
+    "Brustpresse": art("chest-press", "original", 197),
+    "Crunch-Maschine": art("abdominal-crunch-machine", "original", 204),
+    "Diagonales Arm-Bein-Strecken": art("dead-bug", "original"),
+    "Diagonales Arm-Bein-Strecken im Vierfüßlerstand": art("bird-dog", "original"),
+    "Einarmiger Trizeps am Kabelzug": art("single-arm-cross-body-triceps-extension", "generated"),
+    "Einbeiniges Hüftheben": art("single-leg-glute-bridge", "generated"),
+    "Enge Liegestütze": art("close-grip-pushup", "generated"),
+    "Hammercurls": art("hammer-curl", "generated"),
+    "Hängendes Beinheben": art("hanging-leg-raise", "original", 196),
+    "Hüftheben": art("glute-bridge", "original"),
+    "Hüftheben mit Beinwechsel": art("glute-bridge-march", "generated"),
+    "Kabel-Flys": art("cable-chest-fly", "generated"),
+    "Kniebeugen": art("bodyweight-squat", "original"),
+    "Latzug breit": art("wide-lat-pulldown", "original", 171),
+    "Latzug neutral": art("neutral-grip-lat-pulldown", "generated"),
+    "Liegestütze bis Maximum": art("pushup", "original"),
+    "Reverse Butterfly am Kabelzug": art("cable-reverse-fly", "generated"),
+    "Rückenstrecker in Bauchlage": art("prone-back-extension", "generated"),
+    "Rückwärts-Ausfallschritte": art("reverse-lunge", "generated"),
+    "Schneeengel in Bauchlage": art("prone-snow-angel", "generated"),
+    "Schrägbank-Curls": art("incline-dumbbell-curl", "generated"),
+    "Schrägbankdrücken": art("incline-dumbbell-press", "original", 199),
+    "Schrägbankdrücken leicht": art("incline-dumbbell-press", "original", 199),
+    "Schulter-Liegestütze": art("pike-pushup", "generated"),
+    "Schulterpresse": art("shoulder-press-machine", "original", 161),
+    "Scott-Curls": art("preacher-curl", "generated"),
+    "Seitheben": art("dumbbell-lateral-raise", "original", 198),
+    "Seitheben am Kabelzug": art("single-arm-cable-lateral-raise", "generated"),
+    "Seitheben Maschine": art("lateral-raise-machine", "generated"),
+    "Seitstütz": art("side-plank", "generated"),
+    "Stationäre Ausfallschritte": art("split-squat", "original"),
+    "Tempo-Kniebeugen": art("bodyweight-squat", "original"),
+    "Trizepsdrücken am Seilzug": art("rope-triceps-pushdown", "generated"),
+    "Überkopf-Trizepsstrecken am Kabelzug": art("overhead-cable-triceps-extension", "generated"),
+    "Unterarmstütz": art("forearm-plank", "original"),
+    "Wadenheben": art("machine-calf-raise", "original", 171),
+    "Y-T-Heben in Bauchlage": art("prone-y-t-raise", "generated")
   });
-
+  const HOME_CALF = art("bodyweight-calf-raise", "generated");
   let renderToken = 0;
+
+  function workoutId() {
+    try { return typeof active !== "undefined" ? active?.id || "" : ""; }
+    catch { return ""; }
+  }
+
+  function resolve(name, context = workoutId()) {
+    if (name === "Wadenheben" && String(context).startsWith("home-")) return HOME_CALF;
+    return MAP[name] || null;
+  }
 
   function ensureStyles() {
     if (document.getElementById("repPilotExerciseImageStyles")) return;
     const style = document.createElement("style");
     style.id = "repPilotExerciseImageStyles";
     style.textContent = `
-      #repPilotExerciseImageCard{max-width:360px;margin:12px auto 14px;border:1px solid var(--line,#e5e7eb);border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 4px 14px rgba(17,24,39,.05)}
-      #repPilotExerciseImageViewport{display:grid;grid-template-columns:1fr;background:#fff}
-      .repPilotExercisePose{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:contain;background:#fff;image-rendering:auto}
-      @media(max-width:390px){#repPilotExerciseImageCard{max-width:330px}}
+      #repPilotExerciseImageCard{width:100%;max-width:400px;margin:12px auto 14px;border:1px solid var(--line,#e5e7eb);border-radius:18px;overflow:hidden;background:#fff;box-sizing:border-box;box-shadow:0 4px 14px rgba(17,24,39,.05)}
+      #repPilotExerciseImageViewport{position:relative;overflow:hidden;background:#fff;aspect-ratio:1}
+      .repPilotExercisePose{position:absolute;top:0;left:0;display:block;width:100%;max-width:none;height:auto;object-fit:contain;background:#fff;image-rendering:auto}
     `;
     document.head.appendChild(style);
   }
@@ -82,28 +92,43 @@
     card = document.createElement("div");
     card.id = "repPilotExerciseImageCard";
     card.hidden = true;
-    card.innerHTML = '<div id="repPilotExerciseImageViewport"></div>';
+    const viewport = document.createElement("div");
+    viewport.id = "repPilotExerciseImageViewport";
+    card.appendChild(viewport);
     title.insertAdjacentElement("afterend", card);
     return card;
   }
 
-  function imageUrl(file) {
-    return BASE + file;
-  }
+  function refresh() {
+    const card = ensureCard();
+    if (!card) return;
+    const name = String(document.getElementById("exerciseName")?.textContent || "").trim();
+    const context = workoutId();
+    const entry = resolve(name, context);
+    const viewport = document.getElementById("repPilotExerciseImageViewport");
+    const key = [name, context, entry?.id || ""].join("|");
+    if (card.dataset.renderKey === key && viewport.querySelector("img")) return;
+    const token = ++renderToken;
+    viewport.replaceChildren();
+    card.hidden = true;
+    card.dataset.renderKey = key;
+    if (!entry) return;
 
-  function renderImage(viewport, card, name, entry, file, index, token) {
+    card.dataset.exercise = name;
+    card.dataset.workoutId = context;
+    card.dataset.assetId = entry.id;
+    card.dataset.assetSource = entry.origin;
+    viewport.style.aspectRatio = entry.width + " / " + (entry.height - entry.cropBottom);
+    viewport.dataset.cropBottom = String(entry.cropBottom);
+
     const img = document.createElement("img");
-    const isWide = entry.wide && entry.files.length === 1;
-    img.className = "repPilotExercisePose" + (isWide ? " wide" : "");
-    img.src = imageUrl(file);
-    img.alt = entry.files.length === 1
-      ? `${name} Ausführung`
-      : `${name} ${index === 0 ? "Startposition" : "Endposition"}`;
+    img.className = "repPilotExercisePose";
+    img.alt = name + " – Ausführung";
+    img.width = entry.width;
+    img.height = entry.height;
     img.decoding = "async";
     img.loading = "eager";
     img.fetchPriority = "high";
-    img.width = 1024;
-    img.height = isWide ? 768 : 1024;
     img.onload = () => {
       if (token !== renderToken) return;
       img.dataset.loaded = "true";
@@ -112,27 +137,10 @@
     img.onerror = () => {
       if (token !== renderToken) return;
       img.remove();
-      if (!viewport.querySelector("img")) card.hidden = true;
+      card.hidden = true;
     };
     viewport.appendChild(img);
-  }
-
-  function refresh() {
-    const card = ensureCard();
-    if (!card) return;
-    const token = ++renderToken;
-    const name = String(document.getElementById("exerciseName")?.textContent || "").trim();
-    const entry = MAP[name];
-    const viewport = document.getElementById("repPilotExerciseImageViewport");
-    viewport.replaceChildren();
-    card.hidden = true;
-
-    if (!entry) return;
-
-    card.dataset.exercise = name;
-    card.dataset.assetId = entry.id;
-    card.dataset.assetSource = entry.source;
-    entry.files.forEach((file, index) => renderImage(viewport, card, name, entry, file, index, token));
+    img.src = BASE + entry.files[0];
   }
 
   function exerciseNames() {
@@ -141,44 +149,39 @@
   }
 
   function assetFiles() {
-    return [...new Set(Object.values(MAP).flatMap(entry => entry.files.map(file => BASE + file)))];
+    return [...new Set([...Object.values(MAP), HOME_CALF].flatMap(entry => entry.files.map(file => BASE + file)))];
   }
 
   function audit() {
+    const definitions = window.RepPilotPlanQuality?.definitions || {};
     const names = exerciseNames();
-    const missing = names.filter(name => !MAP[name]);
+    const missing = names.filter(name => !resolve(name));
+    const missingContexts = Object.entries(definitions).flatMap(([id, rows]) =>
+      rows.filter(row => !resolve(row[0], id)).map(row => ({ workoutId: id, name: row[0] }))
+    );
     return {
-      version: VERSION,
-      total: names.length,
-      mapped: names.length - missing.length,
-      missing,
-      localFiles: assetFiles().length,
+      version: VERSION, total: names.length, mapped: names.length - missing.length,
+      missing, missingContexts, localFiles: assetFiles().length, contextVariants: 1,
+      nativeWidth: WIDTH, nativeHeight: HEIGHT,
       remoteUrls: assetFiles().filter(file => /^https?:/i.test(file))
     };
   }
 
   function init() {
-    const name = document.getElementById("exerciseName");
     ensureCard();
+    const name = document.getElementById("exerciseName");
     if (name) new MutationObserver(refresh).observe(name, { childList: true, subtree: true, characterData: true });
     refresh();
     setTimeout(() => {
       const result = audit();
-      if (result.missing.length) console.warn("RepPilot Übungsbilder fehlen", result.missing);
+      if (result.missing.length || result.missingContexts.length) console.warn("RepPilot Übungsbilder fehlen", result);
     }, 0);
   }
 
   window.RepPilotExerciseImages = {
-    version: VERSION,
-    source: "local",
-    sourceCommit: SOURCE_COMMIT,
-    base: BASE,
-    map: MAP,
-    assetFiles,
-    audit,
-    refresh
+    version: VERSION, source: "local", sourceSeries: SOURCE_SERIES,
+    base: BASE, map: MAP, resolve, assetFiles, audit, refresh
   };
-
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
   else init();
 })();

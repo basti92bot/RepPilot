@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <base href="../../">
+  <title>RepPilot – Bildprüfung</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#f1f5f5;color:#111827;font-family:system-ui,sans-serif}
+    main{width:100%;max-width:390px;padding:16px;margin:auto}label{display:block;font-size:14px;margin:12px 0 5px}
+    select{width:100%;font:inherit;padding:8px;border:1px solid #d1d5db;border-radius:8px;background:white}
+    #setPanel{padding:16px;background:white;border:1px solid #e5e7eb;border-radius:22px;margin-top:20px}
+    h1{font-size:20px}h2{font-size:24px;line-height:1.2;margin:16px 0}.eyebrow{font-size:12px;font-weight:600}
+  </style>
+</head>
+<body><main>
+  <h1>RepPilot · Bildprüfung v11.8.120</h1>
+  <label for="exerciseChoice">Übung</label><select id="exerciseChoice"></select>
+  <label for="workoutChoice">Trainingsort</label><select id="workoutChoice"><option value="push">Studio</option><option value="home-b">Home</option></select>
+  <section id="setPanel"><div class="eyebrow">AKTUELLE ÜBUNG</div><div class="exercise-title"><h2 id="exerciseName">Brustpresse</h2></div></section>
+</main>
+<script>let active={id:"push"};</script>
+<script src="exercise-images-feature.js?v=11.8.120"></script>
+<script>
+  const exerciseChoice=document.getElementById("exerciseChoice");
+  Object.keys(RepPilotExerciseImages.map).forEach(name=>{const option=document.createElement("option");option.value=name;option.textContent=name;exerciseChoice.appendChild(option);});
+  exerciseChoice.value="Brustpresse";
+  function selectExercise(){active.id=document.getElementById("workoutChoice").value;document.getElementById("exerciseName").textContent=exerciseChoice.value;RepPilotExerciseImages.refresh();}
+  exerciseChoice.addEventListener("change",selectExercise);document.getElementById("workoutChoice").addEventListener("change",selectExercise);
+</script>
+</body></html>

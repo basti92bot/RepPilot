@@ -1,78 +1,93 @@
-const CACHE="reppilot-v11-8-119";
-const VERSION="11.8.119";
+const CACHE="reppilot-v11-8-120";
+const VERSION="11.8.120";
 const EXERCISE_ASSET_FILES=[
-  "ab-machine.webp",
-  "back-extension.webp",
+  "abdominal-crunch-machine.webp",
   "bird-dog.webp",
-  "bridge.webp",
-  "butterfly.webp",
-  "cable-biceps-curl.webp",
-  "cable-triceps-pushdown.webp",
-  "calf-raise.webp",
+  "bodyweight-calf-raise.webp",
+  "bodyweight-squat.webp",
+  "cable-chest-fly.webp",
+  "cable-reverse-fly.webp",
   "chest-press.webp",
+  "chest-supported-dumbbell-row.webp",
+  "close-grip-pushup.webp",
+  "dead-bug.webp",
+  "dumbbell-lateral-raise.webp",
+  "forearm-plank.webp",
+  "glute-bridge.webp",
+  "glute-bridge-march.webp",
+  "hammer-curl.webp",
   "hanging-leg-raise.webp",
-  "hip-abduction.webp",
-  "hip-adduction.webp",
-  "incline-bench-press.webp",
-  "lat-pulldown.webp",
-  "lateral-raise.webp",
+  "incline-dumbbell-curl.webp",
+  "incline-dumbbell-press.webp",
+  "kneeling-torso-rotation-machine.webp",
+  "lateral-raise-machine.webp",
+  "leg-curl.webp",
   "leg-extension.webp",
   "leg-press.webp",
-  "leg-raise.webp",
-  "lunge.webp",
-  "lying-leg-curl.webp",
+  "machine-calf-raise.webp",
   "mountain-climber.webp",
-  "plank.webp",
-  "push-up.webp",
-  "reverse-butterfly.webp",
-  "seated-row.webp",
-  "shoulder-press.webp",
-  "shrugs.webp",
-  "squat.webp"
+  "neutral-grip-lat-pulldown.webp",
+  "overhead-cable-triceps-extension.webp",
+  "pike-pushup.webp",
+  "preacher-curl.webp",
+  "prone-back-extension.webp",
+  "prone-snow-angel.webp",
+  "prone-y-t-raise.webp",
+  "pushup.webp",
+  "reverse-lunge.webp",
+  "rope-triceps-pushdown.webp",
+  "shoulder-press-machine.webp",
+  "side-plank.webp",
+  "single-arm-cable-lateral-raise.webp",
+  "single-arm-cross-body-triceps-extension.webp",
+  "single-leg-glute-bridge.webp",
+  "split-squat.webp",
+  "supine-leg-raise.webp",
+  "wide-lat-pulldown.webp"
 ];
-const EXERCISE_ASSETS=EXERCISE_ASSET_FILES.map(file=>"./assets/exercises/v11.8.119/"+file);
+const EXERCISE_ASSETS=EXERCISE_ASSET_FILES.map(file=>"./assets/exercises/v11.8.120/"+file);
 const ASSETS=[
   "./install.html",
   "./index.html",
-  "./styles.css?v=11.8.119",
-  "./header-fix.css?v=11.8.119",
-  "./manifest.json?v=11.8.119",
-  "./icon-192.png?v=11.8.119",
-  "./icon-512.png?v=11.8.119",
-  "./reppilot-muscleman-logo-v11.8.26.png?v=11.8.119",
+  "./styles.css?v=11.8.120",
+  "./header-fix.css?v=11.8.120",
+  "./manifest.json?v=11.8.120",
+  "./icon-192.png?v=11.8.120",
+  "./icon-512.png?v=11.8.120",
+  "./reppilot-muscleman-logo-v11.8.26.png?v=11.8.120",
   "./reppilot-logo-old-stable.png?v=11.8.27",
-  "./auth.js?v=11.8.119",
+  "./auth.js?v=11.8.120",
   "./storage-bridge.js?v=11.8.69",
-  "./app.js?v=11.8.119",
+  "./app.js?v=11.8.120",
   "./cloud-history-feature.js?v=11.8.64",
   "./workout-fix.js?v=11.8.70",
-  "./run-feature.js?v=11.8.119",
+  "./run-feature.js?v=11.8.120",
   "./run-dashboard-feature.js?v=11.8.34",
-  "./history-simple-feature.js?v=11.8.119",
-  "./profile-feature.js?v=11.8.119",
-  "./app-tour-feature.js?v=11.8.119",
-  "./apple-health-feature.js?v=11.8.119",
-  "./shortcut-health-feature.js?v=11.8.119",
+  "./history-simple-feature.js?v=11.8.120",
+  "./profile-feature.js?v=11.8.120",
+  "./app-tour-feature.js?v=11.8.120",
+  "./apple-health-feature.js?v=11.8.120",
+  "./shortcut-health-feature.js?v=11.8.120",
   "./bodyweight-auto.js?v=11.8.58",
-  "./training-plan-feature.js?v=11.8.119",
-  "./home-plan-card-hide.js?v=11.8.119",
+  "./training-plan-feature.js?v=11.8.120",
+  "./home-plan-card-hide.js?v=11.8.120",
   "./personal-records-feature.js?v=11.8.71",
   "./home-workout-feature.js?v=11.8.58",
-  "./training-hub-feature.js?v=11.8.119",
+  "./training-hub-feature.js?v=11.8.120",
   "./onboarding-feature.js?v=11.8.58",
   "./progression-feature.js?v=11.8.58",
-  "./stretch-routine-feature.js?v=11.8.119",
+  "./stretch-routine-feature.js?v=11.8.120",
   "./timer-sound-feature.js?v=11.8.58",
   "./navigation-fix.js?v=11.8.58",
-  "./workout-sticky-actions.js?v=11.8.119",
+  "./workout-sticky-actions.js?v=11.8.120",
   "./day-exercise-overview.js?v=11.8.58",
   "./pushup-feature.js?v=11.8.58",
   "./plan-title-fix.js?v=11.8.58",
-  "./strength-test-feature.js?v=11.8.119",
-  "./reset-feature.js?v=11.8.119",
+  "./strength-test-feature.js?v=11.8.120",
+  "./reset-feature.js?v=11.8.120",
   "./training-plan-quality-feature.js?v=11.8.70",
-  "./exercise-images-feature.js?v=11.8.119",
-  "./update-feature.js?v=11.8.119"
+  "./exercise-images-feature.js?v=11.8.120",
+  "./update-feature.js?v=11.8.120"
 ];
 
 self.addEventListener("install",event=>{
@@ -80,8 +95,8 @@ self.addEventListener("install",event=>{
   event.waitUntil((async()=>{
     const cache=await caches.open(CACHE);
     await Promise.all(ASSETS.map(asset=>cache.add(asset)));
-    for(let start=0;start<EXERCISE_ASSETS.length;start+=12){
-      await Promise.all(EXERCISE_ASSETS.slice(start,start+12).map(asset=>cache.add(asset)));
+    for(let start=0;start<EXERCISE_ASSETS.length;start+=4){
+      await Promise.all(EXERCISE_ASSETS.slice(start,start+4).map(asset=>cache.add(asset)));
     }
   })());
 });
@@ -96,6 +111,18 @@ self.addEventListener("activate",event=>{
 
 self.addEventListener("fetch",event=>{
   if(event.request.method!=="GET")return;
+  // Versioned image URLs are immutable; use their offline copy without re-downloading.
+  if(event.request.url.startsWith(new URL("./assets/exercises/v11.8.120/",self.registration.scope).href)){
+    event.respondWith((async()=>{
+      const cache=await caches.open(CACHE);
+      const cached=await cache.match(event.request,{ignoreSearch:true});
+      if(cached)return cached;
+      const fresh=await fetch(event.request);
+      if(fresh.ok)await cache.put(event.request,fresh.clone());
+      return fresh;
+    })());
+    return;
+  }
   if(event.request.mode==="navigate"){
     event.respondWith((async()=>{
       try{
