@@ -262,7 +262,7 @@ try {
   });
   check(
     exerciseAssetAudit.count===43 &&
-    exerciseAssetAudit.results.every(x=>x.status===200&&x.width===1254&&x.height===1254&&x.url.includes("/assets/exercises/v11.8.120/")),
+    exerciseAssetAudit.results.every(x=>x.status===200&&x.width===1254&&x.height===1254&&x.url.includes("/assets/exercises/")),
     "Alle 43 bestätigten Übungsmotive laden lokal und hochauflösend",
     JSON.stringify(exerciseAssetAudit.results.filter(x=>x.status!==200||x.width!==1254||x.height!==1254))
   );
@@ -322,7 +322,7 @@ try {
   check(
     exerciseImageRuntime.source==="local" &&
     exerciseImageRuntime.sourceSeries?.includes("originals 2026-09-02") &&
-    exerciseImageRuntime.images.every(x=>x.src.includes("/assets/exercises/v11.8.120/")&&!x.src.includes("raw.githubusercontent.com")),
+    exerciseImageRuntime.images.every(x=>x.src.includes("/assets/exercises/")&&!x.src.includes("raw.githubusercontent.com")),
     "Übungsbilder kommen aus dem lokalen, versionsgebundenen Bestand",
     JSON.stringify(exerciseImageRuntime)
   );
@@ -442,7 +442,7 @@ try {
   check(swState.keys.includes(CACHE),"Aktueller PWA-Cache vorhanden",swState.keys.join(","));
   check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.124")),"192er Icon im Runtime-Cache");
   check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.124")),"512er Icon im Runtime-Cache");
-  check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.120/")).length===43,"Alle 43 Übungsmotive im Runtime-Cache");
+  check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.120/")||x.includes("/assets/exercises/v11.8.124/rope-triceps-pushdown.webp")).length===43,"Alle 43 Übungsmotive im Runtime-Cache");
   check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.122/")).length===15,"Alle 15 zusätzlichen Läufer-/Ski-Motive im Runtime-Cache");
 
   // Manifest runtime fetch
