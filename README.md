@@ -1,5 +1,11 @@
 # RepPilot v11.8.124
 
+## Korrigiertes Trizepsdrücken
+
+- Der Körper ist in beiden Bewegungspositionen zur Kabelstation ausgerichtet.
+- Das Kabel läuft durchgehend von der oberen Rolle zum Metallanschluss des Seils.
+- Neues verlustfreies 1254 × 1254-Motiv mit eigener versionsgebundener URL.
+
 ## Läuferstabi, Ski und Home
 
 - Alle 8 Läuferstabi- und 10 Ski-Übungen zeigen Bilder in Übersicht und laufender Routine.
