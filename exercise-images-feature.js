@@ -1,6 +1,9 @@
 (() => {
   const VERSION = "11.8.120";
   const BASE = "./assets/exercises/v11.8.120/";
+  const ASSET_OVERRIDES = Object.freeze({
+    "rope-triceps-pushdown": "./assets/exercises/v11.8.124/rope-triceps-pushdown.webp"
+  });
   const SOURCE_SERIES = "RepPilot originals 2026-09-02 + matching additions 2026-09-04";
   const WIDTH = 1254;
   const HEIGHT = 1254;
@@ -68,6 +71,10 @@
   function resolve(name, context = workoutId()) {
     if (name === "Wadenheben" && String(context).startsWith("home-")) return HOME_CALF;
     return MAP[name] || null;
+  }
+
+  function assetUrl(entry) {
+    return ASSET_OVERRIDES[entry.id] || BASE + entry.files[0];
   }
 
   function ensureStyles() {
@@ -140,7 +147,7 @@
       card.hidden = true;
     };
     viewport.appendChild(img);
-    img.src = BASE + entry.files[0];
+    img.src = assetUrl(entry);
   }
 
   function exerciseNames() {
@@ -149,7 +156,7 @@
   }
 
   function assetFiles() {
-    return [...new Set([...Object.values(MAP), HOME_CALF].flatMap(entry => entry.files.map(file => BASE + file)))];
+    return [...new Set([...Object.values(MAP), HOME_CALF].map(assetUrl))];
   }
 
   function audit() {
@@ -180,7 +187,7 @@
 
   window.RepPilotExerciseImages = {
     version: VERSION, source: "local", sourceSeries: SOURCE_SERIES,
-    base: BASE, map: MAP, resolve, assetFiles, audit, refresh
+    base: BASE, map: MAP, resolve, assetUrl, assetFiles, audit, refresh
   };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
   else init();

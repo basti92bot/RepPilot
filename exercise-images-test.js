@@ -53,10 +53,12 @@ assert.equal(manifest.version,spec.version); assert.equal(manifest.assets.length
 const files = Array.from(api.assetFiles(),p=>p.replace(/^\.\//,"")).sort();
 assert.deepEqual(files,manifest.assets.map(a=>a.file).sort());
 const dir = "assets/exercises/v"+spec.version;
-assert.deepEqual(fs.readdirSync(path.join(root,dir)).sort(),files.map(f=>path.basename(f)).sort());
+for(const file of files) assert.ok(fs.existsSync(path.join(root,file)),"Bilddatei fehlt: "+file);
 const sw = read("sw.js");
 const swFiles = JSON.parse(sw.match(/const EXERCISE_ASSET_FILES=(\[[\s\S]*?\]);/)[1]);
-assert.deepEqual(swFiles.sort(),files.map(f=>path.basename(f)).sort());
+const swOverrides = JSON.parse(sw.match(/const EXERCISE_ASSET_OVERRIDES=(\[[\s\S]*?\]);/)[1]).map(file=>file.replace(/^\.\//,""));
+const swAssets=[...swFiles.map(file=>dir+"/"+file),...swOverrides].sort();
+assert.deepEqual(swAssets,files);
 for(const asset of manifest.assets) {
   const bytes=fs.readFileSync(path.join(root,asset.file));
   assert.equal(bytes.toString("ascii",0,4),"RIFF"); assert.equal(bytes.toString("ascii",8,12),"WEBP");
@@ -91,6 +93,7 @@ img.onload(); assert.equal(card.hidden,false); stale.onerror(); assert.equal(car
 assert.equal(card.dataset.assetId,"kneeling-torso-rotation-machine");
 img=select("Wadenheben","home-b"); assert.match(img.src,/bodyweight-calf-raise\.webp$/);
 img=select("Wadenheben","personal-legs"); assert.match(img.src,/machine-calf-raise\.webp$/);
+img=select("Trizepsdrücken am Seilzug"); assert.equal(img.src,"./assets/exercises/v11.8.124/rope-triceps-pushdown.webp");
 img.onerror(); assert.equal(card.hidden,true); assert.equal(viewport.children.length,0);
 api.refresh(); assert.ok(viewport.querySelector("img"));
 select("Nicht zugeordnet"); assert.equal(card.hidden,true); assert.equal(viewport.children.length,0);
@@ -104,7 +107,7 @@ log("Bildwechsel, Ladefehler, veraltete Callbacks, doppelte Überschriften und B
   const swContext=vm.createContext({URL,Response,console,self:{registration:{scope},skipWaiting:()=>{},clients:{claim:async()=>{}},addEventListener:(event,fn)=>handlers[event]=fn},caches:{open:async()=>cache,keys:async()=>[],match:cache.match,delete:async()=>true},fetch:async()=>{fetches++;return {ok:true,clone:()=>({ok:true})};}});
   vm.runInContext(sw,swContext);
   let install; handlers.install({waitUntil:promise=>install=promise}); await install;
-  assert.equal([...cached.keys()].filter(url=>url.includes("/assets/exercises/v"+spec.version+"/")).length,43);
+  assert.equal([...cached.keys()].filter(url=>url.includes("/assets/exercises/v"+spec.version+"/")||url.endsWith("/assets/exercises/v11.8.124/rope-triceps-pushdown.webp")).length,43);
   let response; handlers.fetch({request:{method:"GET",url:scope+files[0]},respondWith:promise=>response=promise});
   assert.equal((await response).cached,true); assert.equal(fetches,0);
   log("Service Worker speichert alle 43 Bilder und nutzt vorhandene Bilder ohne erneuten Download");

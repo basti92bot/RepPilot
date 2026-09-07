@@ -412,14 +412,14 @@
     },
     {
       "id": "rope-triceps-pushdown",
-      "file": "assets/exercises/v11.8.120/rope-triceps-pushdown.webp",
+      "file": "assets/exercises/v11.8.124/rope-triceps-pushdown.webp",
       "origin": "generated",
       "width": 1254,
       "height": 1254,
       "cropBottom": 0,
-      "bytes": 1081558,
-      "sha256": "b7015803126927fd5862ac581aab4be31c75bf0178123e911ca646ad424fad23",
-      "sourcePngSha256": "150fd7633de5e1ac966f86cb50c370daa50e8fad281662e740b84886ab2934f9",
+      "bytes": 1093700,
+      "sha256": "1d86f9561440ef456963c75e7e49c682bc7a33c136df18d847741547b92f0696",
+      "sourcePngSha256": "e962f006a005582fd3ab466f6744d6f50cc393a8faf89cc276e0e69e612d80b9",
       "losslessPixelComparison": "0 differing pixels"
     },
     {

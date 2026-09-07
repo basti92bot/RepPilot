@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.123";
+  const VERSION="11.8.124";
   const BODYWEIGHT=/liegestütz|liegestuetz|hanging leg raise|hängend.*bein|unterarmstütz|seitstütz|beinheben|bergsteiger|hüftheben|ausfallschritt|kniebeugen|rückenstrecker|schneeengel|arm-bein-strecken|y-t-heben/i;
   const $=id=>document.getElementById(id);
   const esc=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
