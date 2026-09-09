@@ -6,6 +6,13 @@ const root = __dirname;
 const assert = require("node:assert/strict");
 const iconFreeIndex = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const iconFreeApp = fs.readFileSync(path.join(root, "app.js"), "utf8");
+const progressionFeature = fs.readFileSync(path.join(root, "progression-feature.js"), "utf8");
+if(iconFreeApp.includes('WORKING_WEIGHT_KEY="reppilot-working-weights-v1"')&&iconFreeApp.includes("rememberWorkingWeight(e.name,s.weight)")&&iconFreeApp.includes('addEventListener("change",updateCurrentWorkingWeight)')){
+  console.log("PASS: Korrigierte Arbeitsgewichte werden sofort und beim Satzabschluss gespeichert");
+}else throw new Error("Dauerhafte Gewichtsübernahme fehlt");
+if(iconFreeApp.includes("preferredWorkingWeight(name,p)")&&progressionFeature.includes("RepPilotWorkingWeights?.remember?.")){
+  console.log("PASS: Startgewicht und Progressions-Übernahme verwenden den dauerhaften Arbeitswert");
+}else throw new Error("Gespeichertes Arbeitsgewicht wird nicht vollständig wiederverwendet");
 assert.ok(!iconFreeIndex.includes('id="exerciseIcon"'), "Übungs-Icon darf nicht im Titel stehen");
 assert.ok(iconFreeIndex.includes('<div class="exercise-title"><h2 id="exerciseName"></h2></div>'), "Übungstitel besteht nur aus dem Namen");
 assert.ok(!iconFreeApp.includes('$("exerciseIcon")'), "renderSet darf nicht mehr auf das entfernte Icon zugreifen");
@@ -243,13 +250,13 @@ if (install) {
 
   if (/display-mode:\s*standalone/.test(install) &&
       /navigator\.standalone/.test(install) &&
-      /location\.replace\(['"]\.\/\?launch=v11\.8\.124['"]\)/.test(install)) {
+      /location\.replace\(['"]\.\/\?launch=v11\.8\.125['"]\)/.test(install)) {
     pass("Installierte Install-Seite leitet zur RepPilot-App weiter");
   } else {
     fail("Installierte Install-Seite leitet zur RepPilot-App weiter");
   }
 
-  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.124['"]/.test(install)) {
+  if (/navigator\.serviceWorker\.register\(['"]\.\/sw\.js\?v=11\.8\.125['"]/.test(install)) {
     pass("Install-Seite registriert Service Worker");
   } else {
     fail("Install-Seite registriert Service Worker");
@@ -282,7 +289,7 @@ if (auth) {
     fail("Login erklaert den Testzugang");
   }
 
-  if (/auth\.js\?v=11\.8\.124/.test(index) && /auth\.js\?v=11\.8\.124/.test(sw)) {
+  if (/auth\.js\?v=11\.8\.125/.test(index) && /auth\.js\?v=11\.8\.125/.test(sw)) {
     pass("Aktuelle auth.js wird von App und Service Worker geladen");
   } else {
     fail("Aktuelle auth.js wird von App und Service Worker geladen");
@@ -316,8 +323,8 @@ if (auth && index && sw) {
     fail("Kraftmessung nutzt einen globalen 28-Tage-Zyklus");
   }
 
-  if (/strength-test-feature\.js\?v=11\.8\.124/.test(index) &&
-      /strength-test-feature\.js\?v=11\.8\.124/.test(sw)) {
+  if (/strength-test-feature\.js\?v=11\.8\.125/.test(index) &&
+      /strength-test-feature\.js\?v=11\.8\.125/.test(sw)) {
     pass("Aktuelle Kraftmessungslogik wird von App und Service Worker geladen");
   } else {
     fail("Aktuelle Kraftmessungslogik wird von App und Service Worker geladen");
@@ -346,8 +353,8 @@ if (tour) {
     fail("App-Fuehrung kann im Profil erneut gestartet werden");
   }
 
-  if (/app-tour-feature\.js\?v=11\.8\.124/.test(index) &&
-      /app-tour-feature\.js\?v=11\.8\.124/.test(sw)) {
+  if (/app-tour-feature\.js\?v=11\.8\.125/.test(index) &&
+      /app-tour-feature\.js\?v=11\.8\.125/.test(sw)) {
     pass("App-Fuehrung wird von App und Service Worker geladen");
   } else {
     fail("App-Fuehrung wird von App und Service Worker geladen");
@@ -448,8 +455,8 @@ try {
     fail("Kraft-Verlauf hat genau ein Uebungs-Dropdown pro Training");
   }
 
-  if (index.includes('history-simple-feature.js?v=11.8.124') &&
-      sw.includes('history-simple-feature.js?v=11.8.124')) {
+  if (index.includes('history-simple-feature.js?v=11.8.125') &&
+      sw.includes('history-simple-feature.js?v=11.8.125')) {
     pass("PWA laedt den einfachen Verlauf");
   } else {
     fail("PWA laedt den einfachen Verlauf");
@@ -462,14 +469,14 @@ try {
 try {
   require("node:child_process").execFileSync(process.execPath, [path.join(root, "exercise-images-test.js")], {stdio:"inherit"});
   pass("Übungsbilder: alle Zuordnungen, native Dateien und Rendering-Regressionen");
-  if (!index.includes("exercise-images-feature.js?v=11.8.124") || !sw.includes("exercise-images-feature.js?v=11.8.124")) throw new Error("Bild-Feature ist nicht versionsgebunden eingebunden");
+  if (!index.includes("exercise-images-feature.js?v=11.8.125") || !sw.includes("exercise-images-feature.js?v=11.8.125")) throw new Error("Bild-Feature ist nicht versionsgebunden eingebunden");
   pass("PWA lädt das aktuelle Übungsbilder-Feature");
 } catch (e) {
   fail("Übungsbilder-Feature ist gültig", e.message);
 }
 
 if (sw) {
-  if (sw.includes("manifest.json") && sw.includes("icon-192.png?v=11.8.124") && sw.includes("icon-512.png?v=11.8.124")) {
+  if (sw.includes("manifest.json") && sw.includes("icon-192.png?v=11.8.125") && sw.includes("icon-512.png?v=11.8.125")) {
     pass("Service Worker cached Manifest und beide PWA-Icons");
   } else {
     fail("Service Worker cached Manifest und beide PWA-Icons");

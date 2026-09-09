@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.124";
+  const VERSION="11.8.125";
   const KEY="reppilot-strength-tests-v1";
   const STATE_KEY="reppilot-strength-test-state-v2";
   const INTERVAL_DAYS=28;

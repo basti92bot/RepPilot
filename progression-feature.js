@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.54";
+  const VERSION = "11.8.125";
   const BODYWEIGHT = /liegestütz|liegestuetz|hanging leg raise|hängend.*bein|plank|unterarmstütz|seitstütz|beinheben|bergsteiger|hüftheben|ausfallschritt|kniebeugen|rückenstrecker|schneeengel|arm-bein-strecken|y-t-heben/i;
 
   const roundHalf = value => Math.round(value * 2) / 2;
@@ -161,6 +161,7 @@
       if (exercise?.sets?.[0]) {
         exercise.sets.forEach(set => { if (!set.done) set.weight = rec.target; });
       }
+      window.RepPilotWorkingWeights?.remember?.(exercise?.name, rec.target);
       btn.hidden = true;
       input.focus();
     };

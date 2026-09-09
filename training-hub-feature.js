@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.124";
+  const VERSION = "11.8.125";
   const RUNNER_EXERCISES = [
     {
       icon:"🦶",

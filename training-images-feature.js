@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.124";
+  const VERSION = "11.8.125";
   const BASE = "./assets/exercises/v11.8.122/";
   const MAP = Object.freeze({
   "Fußgewölbe aktivieren": "short-foot",

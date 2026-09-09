@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 
 const BASE = process.env.REPPILOT_BASE_URL || "http://127.0.0.1:4173";
-const VERSION = "11.8.124";
+const VERSION = "11.8.125";
 const CACHE = "reppilot-v" + VERSION.replaceAll(".", "-");
 const failures = [];
 const pass = label => console.log("PASS:", label);
@@ -387,6 +387,18 @@ try {
   await page.waitForTimeout(50);
   check((await activeView())==="home","Training lässt sich sauber abbrechen");
 
+  const rememberedWeight=await page.evaluate(()=>{
+    const rows=JSON.parse(localStorage.getItem("reppilot-working-weights-v1")||"{}");
+    return Object.values(rows).find(row=>Number(row?.weight)===61);
+  });
+  check(Number(rememberedWeight?.weight)===61&&!!rememberedWeight?.at,"Korrigiertes Arbeitsgewicht wird sofort dauerhaft gespeichert",JSON.stringify(rememberedWeight));
+  await workoutStart.click();
+  await page.waitForTimeout(50);
+  check(Number(await page.locator("#weightInput").inputValue())===61,"Korrigiertes Gewicht wird nach abgebrochenem Training wieder übernommen",await page.locator("#weightInput").inputValue());
+  await page.locator("#cancelBtn").click();
+  await page.waitForTimeout(50);
+  check((await activeView())==="home","Gewichtsübernahme-Test beendet Training sauber");
+
   // Home, runner and ski imagery must be tested in their own screens.
   await page.getByRole("button",{name:"Training",exact:true}).click();
   const trainingAudit=await page.evaluate(()=>RepPilotTrainingImages.audit());
@@ -438,16 +450,16 @@ try {
   }, CACHE);
   check(swState.supported,"Service Worker API verfügbar");
   check(swState.registrations===1,"Genau eine Service-Worker-Registrierung aktiv",JSON.stringify(swState));
-  check(swState.script.includes("sw.js?v=11.8.124"),"Aktiver Service Worker hat aktuelle Version",swState.script);
+  check(swState.script.includes("sw.js?v=11.8.125"),"Aktiver Service Worker hat aktuelle Version",swState.script);
   check(swState.keys.includes(CACHE),"Aktueller PWA-Cache vorhanden",swState.keys.join(","));
-  check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.124")),"192er Icon im Runtime-Cache");
-  check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.124")),"512er Icon im Runtime-Cache");
+  check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.125")),"192er Icon im Runtime-Cache");
+  check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.125")),"512er Icon im Runtime-Cache");
   check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.120/")||x.includes("/assets/exercises/v11.8.124/rope-triceps-pushdown.webp")).length===43,"Alle 43 Übungsmotive im Runtime-Cache");
   check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.122/")).length===15,"Alle 15 zusätzlichen Läufer-/Ski-Motive im Runtime-Cache");
 
   // Manifest runtime fetch
   const manifestRuntime=await page.evaluate(async()=>{
-    const r=await fetch("./manifest.json?v=11.8.124",{cache:"no-store"});
+    const r=await fetch("./manifest.json?v=11.8.125",{cache:"no-store"});
     return {status:r.status,json:await r.json()};
   });
   check(manifestRuntime.status===200,"Manifest wird zur Laufzeit ausgeliefert");
@@ -475,7 +487,7 @@ try {
     await caches.open("reppilot-old-test-cache");
     const regs=await navigator.serviceWorker.getRegistrations();
     await Promise.all(regs.map(r=>r.unregister()));
-    const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.124&reinstall=1",{updateViaCache:"none"});
+    const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.125&reinstall=1",{updateViaCache:"none"});
     const worker=reg.installing||reg.waiting||reg.active;
     if(worker&&worker.state!=="activated"){
       await Promise.race([
