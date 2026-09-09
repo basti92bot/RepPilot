@@ -1,5 +1,13 @@
 # RepPilot v11.8.125
 
+## Zuverlässige Gewichtsübernahme
+
+- Manuell korrigierte Arbeitsgewichte werden sofort pro Übung gespeichert.
+- Der Wert gilt automatisch für alle noch offenen Sätze und das nächste Training.
+- Die Übernahme bleibt auch erhalten, wenn ein Training vorzeitig abgebrochen wird.
+- Ein neueres vollständig gespeichertes Training hat weiterhin Vorrang.
+- Der Button „Übernehmen“ der automatischen Progression speichert denselben dauerhaften Arbeitswert.
+
 ## Korrigiertes Trizepsdrücken
 
 - Der Körper ist in beiden Bewegungspositionen zur Kabelstation ausgerichtet.
