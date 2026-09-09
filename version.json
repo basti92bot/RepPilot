@@ -1,5 +1,5 @@
 {
-  "version": "11.8.125",
+  "version": "11.8.126",
   "releasedAt": "2026-09-09",
-  "notes": "Korrigierte Arbeitsgewichte werden sofort pro Übung gespeichert, auf offene Sätze übertragen und beim nächsten Training wieder übernommen – auch nach einem vorzeitig abgebrochenen Training."
+  "notes": "Arm-Fokus im 5-Tage-Plan: 9 direkte Bizeps-Sätze und 9 direkte Trizeps-Sätze pro Woche, frühere Platzierung der Armübungen und maximal 24 Sätze pro Krafttag."
 }
