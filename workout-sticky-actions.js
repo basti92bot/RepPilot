@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.77";
+  const VERSION = "11.8.128";
   let bar = null;
   let observer = null;
 
@@ -19,7 +19,7 @@
         box-shadow:0 10px 28px rgba(17,24,39,.16);backdrop-filter:blur(14px);
       }
       #rpWorkoutActions.single{grid-template-columns:1fr}
-      #rpWorkoutActions button{min-height:52px;padding:12px 10px;border-radius:13px;font-size:15px;line-height:1.15}
+      #rpWorkoutActions button{min-height:52px;padding:12px 10px;border-radius:13px;font-size:15px;line-height:1.15;touch-action:manipulation}
       #rpWorkoutActions[hidden]{display:none!important}
       #workout.rp-sticky-actions-active{padding-bottom:76px}
       body.rp-sticky-workout #completeSetBtn,
@@ -125,11 +125,24 @@
     return [];
   }
 
+  function actionSignature(actions){
+    return actions.map(btn => [
+      btn.dataset.proxyFor || "",
+      btn.textContent || "",
+      btn.className || "",
+      btn.disabled ? "1" : "0"
+    ].join(":")) .join("|");
+  }
+
   function update(){
     const b = ensureBar();
     const workout = document.getElementById("workout");
     const actions = currentActions();
-    b.replaceChildren(...actions);
+    const signature = actionSignature(actions);
+    if(b.dataset.actionSignature !== signature){
+      b.replaceChildren(...actions);
+      b.dataset.actionSignature = signature;
+    }
     const on = actions.length > 0;
     b.hidden = !on;
     b.classList.toggle("single", actions.length === 1);
