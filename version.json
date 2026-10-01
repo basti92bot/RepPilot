@@ -1,5 +1,5 @@
 {
-  "version": "11.8.127",
+  "version": "11.8.128",
   "releasedAt": "2026-10-01",
-  "notes": "Hack Squat ersetzt im 5-Tage-Arm-Fokus-Plan die Beinpresse. Zwei Arbeitssätze bleiben erhalten, damit der Krafttag bei maximal 24 Sätzen bleibt."
+  "notes": "Pause überspringen reagiert wieder zuverlässig auf den ersten Tipp. Die feste Workout-Aktionsleiste ersetzt ihre Buttons während des laufenden Pausentimers nicht mehr ständig."
 }
