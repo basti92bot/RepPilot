@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.126";
+  const VERSION="11.8.127";
 
   const patchArmFocusDefinitions=()=>{
     const quality=window.RepPilotPlanQuality;
@@ -18,7 +18,7 @@
     ];
 
     defs["pull-legs"]=[
-      ["Beinpresse",2,120],
+      ["Hack Squat",2,60],
       ["Brustgestütztes Rudern",3,50],
       ["Beinstrecker",2,40],
       ["Latzug neutral",3,55],
