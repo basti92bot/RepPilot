@@ -1,5 +1,5 @@
-const CACHE="reppilot-v11-8-126";
-const VERSION="11.8.126";
+const CACHE="reppilot-v11-8-127";
+const VERSION="11.8.127";
 const EXERCISE_ASSET_FILES=[
   "abdominal-crunch-machine.webp",
   "bird-dog.webp",
@@ -66,50 +66,50 @@ const TRAINING_ASSET_FILES=[
 const TRAINING_ASSETS=TRAINING_ASSET_FILES.map(file=>"./assets/exercises/v11.8.122/"+file);
 const ALL_EXERCISE_ASSETS=[...EXERCISE_ASSETS,...TRAINING_ASSETS];
 const ASSETS=[
-  "./training-images-feature.js?v=11.8.126",
+  "./training-images-feature.js?v=11.8.127",
   "./training-image-manifest.json",
   "./install.html",
   "./index.html",
-  "./styles.css?v=11.8.126",
-  "./header-fix.css?v=11.8.126",
-  "./manifest.json?v=11.8.126",
-  "./icon-192.png?v=11.8.126",
-  "./icon-512.png?v=11.8.126",
-  "./reppilot-muscleman-logo-v11.8.26.png?v=11.8.126",
+  "./styles.css?v=11.8.127",
+  "./header-fix.css?v=11.8.127",
+  "./manifest.json?v=11.8.127",
+  "./icon-192.png?v=11.8.127",
+  "./icon-512.png?v=11.8.127",
+  "./reppilot-muscleman-logo-v11.8.26.png?v=11.8.127",
   "./reppilot-logo-old-stable.png?v=11.8.27",
-  "./auth.js?v=11.8.126",
+  "./auth.js?v=11.8.127",
   "./storage-bridge.js?v=11.8.69",
-  "./app.js?v=11.8.126",
+  "./app.js?v=11.8.127",
   "./cloud-history-feature.js?v=11.8.64",
   "./workout-fix.js?v=11.8.70",
-  "./run-feature.js?v=11.8.126",
+  "./run-feature.js?v=11.8.127",
   "./run-dashboard-feature.js?v=11.8.34",
-  "./history-simple-feature.js?v=11.8.126",
-  "./profile-feature.js?v=11.8.126",
-  "./app-tour-feature.js?v=11.8.126",
-  "./apple-health-feature.js?v=11.8.126",
-  "./shortcut-health-feature.js?v=11.8.126",
+  "./history-simple-feature.js?v=11.8.127",
+  "./profile-feature.js?v=11.8.127",
+  "./app-tour-feature.js?v=11.8.127",
+  "./apple-health-feature.js?v=11.8.127",
+  "./shortcut-health-feature.js?v=11.8.127",
   "./bodyweight-auto.js?v=11.8.58",
-  "./training-plan-feature.js?v=11.8.126",
-  "./home-plan-card-hide.js?v=11.8.126",
+  "./training-plan-feature.js?v=11.8.127",
+  "./home-plan-card-hide.js?v=11.8.127",
   "./personal-records-feature.js?v=11.8.71",
   "./home-workout-feature.js?v=11.8.58",
-  "./training-hub-feature.js?v=11.8.126",
+  "./training-hub-feature.js?v=11.8.127",
   "./onboarding-feature.js?v=11.8.58",
-  "./progression-feature.js?v=11.8.126",
-  "./stretch-routine-feature.js?v=11.8.126",
+  "./progression-feature.js?v=11.8.127",
+  "./stretch-routine-feature.js?v=11.8.127",
   "./timer-sound-feature.js?v=11.8.58",
   "./navigation-fix.js?v=11.8.58",
-  "./workout-sticky-actions.js?v=11.8.126",
+  "./workout-sticky-actions.js?v=11.8.127",
   "./day-exercise-overview.js?v=11.8.58",
   "./pushup-feature.js?v=11.8.58",
   "./plan-title-fix.js?v=11.8.58",
-  "./strength-test-feature.js?v=11.8.126",
-  "./battle-feature.js?v=11.8.126",
-  "./reset-feature.js?v=11.8.126",
+  "./strength-test-feature.js?v=11.8.127",
+  "./battle-feature.js?v=11.8.127",
+  "./reset-feature.js?v=11.8.127",
   "./training-plan-quality-feature.js?v=11.8.70",
-  "./exercise-images-feature.js?v=11.8.126",
-  "./update-feature.js?v=11.8.126"
+  "./exercise-images-feature.js?v=11.8.127",
+  "./update-feature.js?v=11.8.127"
 ];
 
 self.addEventListener("install",event=>{
@@ -133,7 +133,6 @@ self.addEventListener("activate",event=>{
 
 self.addEventListener("fetch",event=>{
   if(event.request.method!=="GET")return;
-  // Versioned image URLs are immutable; use their offline copy without re-downloading.
   if(event.request.url.startsWith(new URL("./assets/exercises/",self.registration.scope).href)){
     event.respondWith((async()=>{
       const cache=await caches.open(CACHE);
