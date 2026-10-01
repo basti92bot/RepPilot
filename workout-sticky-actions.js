@@ -131,7 +131,7 @@
       btn.textContent || "",
       btn.className || "",
       btn.disabled ? "1" : "0"
-    ].join(":")) .join("|");
+    ].join(":")).join("|");
   }
 
   function update(){
