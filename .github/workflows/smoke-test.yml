@@ -16,10 +16,7 @@ jobs:
         with:
           node-version: 24
       - name: Run smoke test
-        run: |
-          CURRENT_VERSION=$(node -p "require('./version.json').version")
-          sed "s/11\\.8\\.125/${CURRENT_VERSION}/g" smoke-test.js > smoke-test.current.js
-          node smoke-test.current.js
+        run: node smoke-test.js
       - name: Run PWA reliability test
         run: node pwa-reliability-test.js
       - name: Install browser test dependencies
@@ -37,9 +34,6 @@ jobs:
           cat /tmp/reppilot-http.log
           exit 1
       - name: Run browser E2E
-        run: |
-          CURRENT_VERSION=$(node -p "require('./version.json').version")
-          sed "s/11\\.8\\.125/${CURRENT_VERSION}/g" browser-e2e-test.mjs > browser-e2e-test.current.mjs
-          node browser-e2e-test.current.mjs
+        run: node browser-e2e-test.mjs
       - name: Verify live GitHub Pages deployment
         run: node live-deployment-test.mjs
