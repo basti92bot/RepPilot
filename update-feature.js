@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.127";
+  const VERSION="11.8.128";
 
   const patchArmFocusDefinitions=()=>{
     const quality=window.RepPilotPlanQuality;
