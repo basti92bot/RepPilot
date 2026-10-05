@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.129";
+  const VERSION="11.8.130";
   const PLAN_KEY="reppilot-selected-training-plan";
 
   const DEFINITIONS={
@@ -13,7 +13,7 @@
     "personal-upper-b":[["Brustpresse",3,50],["Latzug breit",3,50],["Brustgestütztes Rudern",3,45],["Kabel-Flys",2,20],["Seitheben",2,8],["Reverse Butterfly am Kabelzug",2,10],["Einarmiger Trizeps am Kabelzug",2,10],["Scott-Curls",2,20],["Crunch-Maschine",2,30]],
     "personal-lower-b":[["Beinpresse",3,100],["Beinbeuger",3,35],["Beinstrecker",3,35],["Wadenheben",3,55],["Hängendes Beinheben",2,0]],
     "personal-pull":[["Brustgestütztes Rudern",3,50],["Latzug neutral",3,55],["Reverse Butterfly am Kabelzug",2,10],["Schrägbank-Curls",3,12],["Scott-Curls",3,20],["Hammercurls",2,12],["Hängendes Beinheben",2,0]],
-    "personal-legs":[["Hack Squat",3,60],["Beinstrecker",3,40],["Beinbeuger",3,40],["Stationäre Ausfallschritte",3,0],["Wadenheben",3,60],["Crunch-Maschine",2,30]],
+    "personal-legs":[["Hack Squat",3,60],["Bulgarian Split Squats",3,0],["Beinbeuger",3,40],["Beinstrecker",3,40],["Abduktoren",2,30],["Adduktoren",2,30],["Wadenheben",3,60],["Crunch-Maschine",2,30]],
     "home-a":[["Kniebeugen",3,0],["Liegestütze bis Maximum",3,0],["Hüftheben",3,0],["Rückenstrecker in Bauchlage",3,0],["Rückwärts-Ausfallschritte",3,0],["Schulter-Liegestütze",2,0],["Diagonales Arm-Bein-Strecken",3,0],["Unterarmstütz",3,0]],
     "home-b":[["Stationäre Ausfallschritte",3,0],["Enge Liegestütze",3,0],["Einbeiniges Hüftheben",3,0],["Schneeengel in Bauchlage",3,0],["Wadenheben",3,0],["Diagonales Arm-Bein-Strecken im Vierfüßlerstand",3,0],["Seitstütz",2,0],["Beinheben",3,0]],
     "home-c":[["Tempo-Kniebeugen",3,0],["Liegestütze bis Maximum",3,0],["Hüftheben mit Beinwechsel",3,0],["Y-T-Heben in Bauchlage",3,0],["Rückwärts-Ausfallschritte",3,0],["Schulter-Liegestütze",2,0],["Bergsteiger",3,0],["Unterarmstütz",3,0]]
@@ -73,7 +73,7 @@
     ["Kabel-Flys","Crunch-Maschine","Seitheben Maschine","Bauch Rotation"].forEach(name=>{if(!WORKOUTS.some(w=>(w.exercises||[]).some(e=>e[0]===name)))issues.push(`${name}: bevorzugter Name fehlt`);});
     if(WORKOUTS.some(w=>(w.exercises||[]).some(e=>e[0]==="Rumänisches Kreuzheben")))issues.push("Rumänisches Kreuzheben: darf in keinem aktiven Plan enthalten sein");
     const skiLegs=WORKOUTS.find(w=>w.id==="personal-legs");
-    ["Hack Squat","Beinstrecker","Beinbeuger","Stationäre Ausfallschritte","Wadenheben"].forEach(name=>{if(skiLegs&&!skiLegs.exercises.some(e=>e[0]===name))issues.push(`Beine + Ski: ${name} fehlt`);});
+    ["Hack Squat","Bulgarian Split Squats","Beinbeuger","Beinstrecker","Abduktoren","Adduktoren","Wadenheben"].forEach(name=>{if(skiLegs&&!skiLegs.exercises.some(e=>e[0]===name))issues.push(`Beine + Ski: ${name} fehlt`);});
     const push=WORKOUTS.find(w=>w.id==="push");
     if(push&&push.exercises.some(e=>e[0]==="Seitheben am Kabelzug"))issues.push("Push: falsche Seitheben-Variante");
     if(isMusclePlan()){
