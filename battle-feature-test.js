@@ -12,8 +12,9 @@ const sql=fs.readFileSync(path.join(root,"supabase/migrations/20260904_add_stren
 
 new Function(feature);
 assert.ok(hub.includes("Kraft-Duell")&&hub.includes("openStrengthBattle"),"Duellkarte fehlt im Trainingsbereich");
-assert.ok(index.includes("battle-feature.js?v=11.8.125"),"Duell-Feature fehlt in index.html");
-assert.ok(sw.includes("battle-feature.js?v=11.8.125"),"Duell-Feature fehlt im Offline-Cache");
+const battleRef=text=>text.match(/battle-feature\.js\?v=([^"'\s]+)/)?.[1]||"";
+assert.ok(battleRef(index),"Duell-Feature fehlt in index.html");
+assert.equal(battleRef(index),battleRef(sw),"Duell-Feature ist zwischen App und Offline-Cache nicht versionsgleich");
 assert.ok(feature.includes('rpc("create_strength_battle"')&&feature.includes('rpc("accept_strength_battle"')&&feature.includes('rpc("submit_strength_battle_result"'),"Duell-RPCs fehlen");
 assert.ok(feature.includes("relative_score")&&feature.includes("estimated_1rm"),"Beide Vergleichswerte müssen angezeigt werden");
 assert.ok(feature.includes("requestBattleTest")&&strength.includes("BATTLE_TEST_KEY")&&strength.includes("requestBattleTest"),"Aktive Duelle müssen eine neue Kraftmessung außerhalb des 28-Tage-Zyklus vormerken");
