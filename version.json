@@ -1,5 +1,5 @@
 {
-  "version": "11.8.128",
-  "releasedAt": "2026-10-01",
-  "notes": "Pause überspringen reagiert wieder zuverlässig auf den ersten Tipp. Die feste Workout-Aktionsleiste ersetzt ihre Buttons während des laufenden Pausentimers nicht mehr ständig."
+  "version": "11.8.129",
+  "releasedAt": "2026-10-05",
+  "notes": "Muskelaufbauplan auf 4 Krafttage erweitert: Push, Pull, Beine + Ski und Oberkörper + Arme. Eigener Ski-Beintag mit Hack Squat, Beinbeuger, Beinstrecker, stationären Ausfallschritten und Wadenheben. Zwei Läufe bleiben erhalten, Freitag ist Ruhetag."
 }
