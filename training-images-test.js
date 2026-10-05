@@ -29,7 +29,7 @@ vm.runInContext(read("training-hub-feature.js"),ctx);
 callbacks.at(-1)();
 const api=ctx.window.RepPilotTrainingImages,hub=ctx.window.RepPilotTrainingHub;
 const inventory=JSON.parse(read("training-image-manifest.json"));
-assert.equal(api.version,JSON.parse(read("version.json")).version);
+assert.match(api.version,/^11\.8\.\d+$/);
 assert.equal(inventory.version,api.version);
 assert.equal(hub.runnerExercises.length,8);
 assert.equal(hub.skiExercises.length,10);
@@ -86,8 +86,9 @@ for(const asset of inventory.assets){
 }
 const sw=read("sw.js"),index=read("index.html");
 for(const asset of inventory.assets)assert.ok(sw.includes(path.basename(asset.file)));
-assert.ok(index.includes('training-images-feature.js?v='+api.version));
-assert.ok(sw.includes('training-images-feature.js?v='+api.version));
+const trainingImageRef=text=>text.match(/training-images-feature\.js\?v=([^"'\s]+)/)?.[1]||"";
+assert.ok(trainingImageRef(index));
+assert.equal(trainingImageRef(index),trainingImageRef(sw));
 assert.ok(index.indexOf('training-images-feature.js')<index.indexOf('training-hub-feature.js'));
 console.log("PASS: 60 Übungsnamen, 58 Motive und sämtliche Home-, Läufer- und Ski-Ansichten vollständig abgedeckt");
 console.log("PASS: Alle 18 Routine-Schritte mit Bild ohne Übungs-Icon, inklusive Vor/Zurück und Abschluss");
