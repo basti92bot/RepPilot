@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.130";
+  const VERSION="11.8.131";
   const PLAN_KEY="reppilot-selected-training-plan";
 
   const DEFINITIONS={
