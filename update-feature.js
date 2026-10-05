@@ -1,5 +1,5 @@
 (() => {
-  const VERSION="11.8.129";
+  const VERSION="11.8.130";
 
   const patchArmFocusDefinitions=()=>{
     const quality=window.RepPilotPlanQuality;
@@ -42,9 +42,11 @@
 
     defs["personal-legs"]=[
       ["Hack Squat",3,60],
-      ["Beinstrecker",3,40],
+      ["Bulgarian Split Squats",3,0],
       ["Beinbeuger",3,40],
-      ["Stationäre Ausfallschritte",3,0],
+      ["Beinstrecker",3,40],
+      ["Abduktoren",2,30],
+      ["Adduktoren",2,30],
       ["Wadenheben",3,60],
       ["Crunch-Maschine",2,30]
     ];
