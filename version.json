@@ -1,5 +1,5 @@
 {
-  "version": "11.8.130",
+  "version": "11.8.131",
   "releasedAt": "2026-10-05",
-  "notes": "Beine + Ski finalisiert: 21 Sätze mit Hack Squat, Bulgarian Split Squats, Beinbeuger, Beinstrecker, Abduktoren, Adduktoren, Wadenheben und Crunch-Maschine. Bulgarian Split Squats nutzen das vorhandene lokale Übungsbild."
+  "notes": "Beine + Ski ist jetzt als eigener Krafttag veröffentlicht: 21 Sätze mit Hack Squat, Bulgarian Split Squats, Beinbeuger, Beinstrecker, Abduktoren, Adduktoren, Wadenheben und Crunch-Maschine. Release- und PWA-Smoke-Tests wurden auf versionssichere Prüfungen korrigiert."
 }
