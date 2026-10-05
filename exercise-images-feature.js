@@ -1,5 +1,5 @@
 (() => {
-  const VERSION = "11.8.130";
+  const VERSION = "11.8.120";
   const BASE = "./assets/exercises/v11.8.120/";
   const ASSET_OVERRIDES = Object.freeze({
     "rope-triceps-pushdown": "./assets/exercises/v11.8.124/rope-triceps-pushdown.webp",
