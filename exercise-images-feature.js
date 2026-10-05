@@ -1,8 +1,9 @@
 (() => {
-  const VERSION = "11.8.120";
+  const VERSION = "11.8.130";
   const BASE = "./assets/exercises/v11.8.120/";
   const ASSET_OVERRIDES = Object.freeze({
-    "rope-triceps-pushdown": "./assets/exercises/v11.8.124/rope-triceps-pushdown.webp"
+    "rope-triceps-pushdown": "./assets/exercises/v11.8.124/rope-triceps-pushdown.webp",
+    "bulgarian-split-squat": "./assets/exercises/v11.8.122/bulgarian-split-squat.webp"
   });
   const SOURCE_SERIES = "RepPilot originals 2026-09-02 + matching additions 2026-09-04";
   const WIDTH = 1254;
@@ -22,6 +23,7 @@
     "Beinstrecker": art("leg-extension", "original", 189),
     "Bergsteiger": art("mountain-climber", "original"),
     "Brustgestütztes Rudern": art("chest-supported-dumbbell-row", "generated"),
+    "Bulgarian Split Squats": art("bulgarian-split-squat", "generated"),
     "Brustpresse": art("chest-press", "original", 197),
     "Crunch-Maschine": art("abdominal-crunch-machine", "original", 204),
     "Diagonales Arm-Bein-Strecken": art("dead-bug", "original"),
