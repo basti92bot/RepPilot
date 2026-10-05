@@ -262,13 +262,13 @@ try {
   check((await activeView())==="workout","Krafttraining startet");
   const exerciseImageAudit=await page.evaluate(()=>window.RepPilotExerciseImages?.audit?.());
   check(
-    exerciseImageAudit?.total===47 &&
-    exerciseImageAudit?.mapped===44 &&
+    exerciseImageAudit?.total===48 &&
+    exerciseImageAudit?.mapped===45 &&
     JSON.stringify(exerciseImageAudit?.missing||[])===JSON.stringify(["Hack Squat","Abduktoren","Adduktoren"]) &&
     exerciseImageAudit?.missingContexts?.filter(x=>!["Hack Squat","Abduktoren","Adduktoren"].includes(x?.name)).length===0 &&
     exerciseImageAudit?.localFiles===44 &&
     exerciseImageAudit?.remoteUrls?.length===0,
-    "44 von 47 Übungen sind bebildert; Hack Squat, Abduktoren und Adduktoren bleiben ohne falsches Ersatzbild",
+    "45 von 48 Übungen sind bebildert; Hack Squat, Abduktoren und Adduktoren bleiben ohne falsches Ersatzbild",
     JSON.stringify(exerciseImageAudit)
   );
 
@@ -289,9 +289,9 @@ try {
     return {count:urls.length,results};
   });
   check(
-    exerciseAssetAudit.count===43 &&
+    exerciseAssetAudit.count===44 &&
     exerciseAssetAudit.results.every(x=>x.status===200&&x.width===1254&&x.height===1254&&x.url.includes("/assets/exercises/")),
-    "Alle 43 bestätigten Übungsmotive laden lokal und hochauflösend",
+    "Alle 44 bestätigten Übungsmotive laden lokal und hochauflösend",
     JSON.stringify(exerciseAssetAudit.results.filter(x=>x.status!==200||x.width!==1254||x.height!==1254))
   );
 
