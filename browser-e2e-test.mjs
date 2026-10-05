@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 
 const BASE = process.env.REPPILOT_BASE_URL || "http://127.0.0.1:4173";
-const VERSION = "11.8.125";
+const VERSION = "11.8.129";
 const CACHE = "reppilot-v" + VERSION.replaceAll(".", "-");
 const failures = [];
 const pass = label => console.log("PASS:", label);
@@ -134,6 +134,27 @@ try {
   const navLabels = await page.locator("nav button").allTextContents();
   check(["Heute","Training","Verlauf","Profil"].every(x=>navLabels.includes(x)),"Alle vier Navigationstitel vorhanden",navLabels.join(", "));
 
+  await page.evaluate(()=>{
+    localStorage.setItem("reppilot-selected-training-plan","muscle");
+    window.RepPilotTrainingPlan?.refresh?.();
+  });
+  const muscleWeek=await page.evaluate(()=>window.RepPilotTrainingPlan?.selectedWeek?.()||[]);
+  const strengthDays=muscleWeek.filter(x=>x.type==="strength");
+  check(
+    strengthDays.length===4 &&
+    strengthDays.map(x=>x.workoutId).join("|")==="push|personal-pull|personal-legs|upper-hypertrophy",
+    "Muskelaufbauplan enthält vier Krafttage in der richtigen Reihenfolge",
+    JSON.stringify(muscleWeek)
+  );
+  const skiDay=muscleWeek.find(x=>x.workoutId==="personal-legs");
+  check(skiDay?.title==="Beine + Ski","Eigener Beine- und Ski-Tag ist eingeplant",JSON.stringify(skiDay));
+  const planAudit=await page.evaluate(()=>window.RepPilotPlanQuality?.audit?.());
+  check(planAudit?.ok===true,"Trainingsplan-Audit besteht",JSON.stringify(planAudit?.issues||[]));
+  await page.evaluate(()=>{
+    localStorage.setItem("reppilot-selected-training-plan","personalized");
+    window.RepPilotTrainingPlan?.refresh?.();
+  });
+
   for(const [label,view] of [["Heute","home"],["Training","trainingHub"],["Verlauf","history"],["Profil","profile"]]){
     await page.getByRole("button",{name:label,exact:true}).click();
     await page.waitForTimeout(50);
@@ -234,13 +255,13 @@ try {
   check((await activeView())==="workout","Krafttraining startet");
   const exerciseImageAudit=await page.evaluate(()=>window.RepPilotExerciseImages?.audit?.());
   check(
-    exerciseImageAudit?.total===44 &&
+    exerciseImageAudit?.total===45 &&
     exerciseImageAudit?.mapped===44 &&
-    exerciseImageAudit?.missing?.length===0 &&
-    exerciseImageAudit?.missingContexts?.length===0 &&
+    JSON.stringify(exerciseImageAudit?.missing||[])===JSON.stringify(["Hack Squat"]) &&
+    exerciseImageAudit?.missingContexts?.filter(x=>x?.name!=="Hack Squat").length===0 &&
     exerciseImageAudit?.localFiles===43 &&
     exerciseImageAudit?.remoteUrls?.length===0,
-    "44 von 44 Übungen sind mit lokalen Einzelbildern zugeordnet",
+    "44 von 45 Übungen sind bebildert; Hack Squat bleibt ohne falsches Ersatzbild",
     JSON.stringify(exerciseImageAudit)
   );
 
@@ -450,16 +471,16 @@ try {
   }, CACHE);
   check(swState.supported,"Service Worker API verfügbar");
   check(swState.registrations===1,"Genau eine Service-Worker-Registrierung aktiv",JSON.stringify(swState));
-  check(swState.script.includes("sw.js?v=11.8.125"),"Aktiver Service Worker hat aktuelle Version",swState.script);
+  check(swState.script.includes("sw.js?v=11.8.129"),"Aktiver Service Worker hat aktuelle Version",swState.script);
   check(swState.keys.includes(CACHE),"Aktueller PWA-Cache vorhanden",swState.keys.join(","));
-  check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.125")),"192er Icon im Runtime-Cache");
-  check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.125")),"512er Icon im Runtime-Cache");
+  check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.129")),"192er Icon im Runtime-Cache");
+  check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.129")),"512er Icon im Runtime-Cache");
   check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.120/")||x.includes("/assets/exercises/v11.8.124/rope-triceps-pushdown.webp")).length===43,"Alle 43 Übungsmotive im Runtime-Cache");
   check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.122/")).length===15,"Alle 15 zusätzlichen Läufer-/Ski-Motive im Runtime-Cache");
 
   // Manifest runtime fetch
   const manifestRuntime=await page.evaluate(async()=>{
-    const r=await fetch("./manifest.json?v=11.8.125",{cache:"no-store"});
+    const r=await fetch("./manifest.json?v=11.8.129",{cache:"no-store"});
     return {status:r.status,json:await r.json()};
   });
   check(manifestRuntime.status===200,"Manifest wird zur Laufzeit ausgeliefert");
@@ -487,7 +508,7 @@ try {
     await caches.open("reppilot-old-test-cache");
     const regs=await navigator.serviceWorker.getRegistrations();
     await Promise.all(regs.map(r=>r.unregister()));
-    const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.125&reinstall=1",{updateViaCache:"none"});
+    const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.129&reinstall=1",{updateViaCache:"none"});
     const worker=reg.installing||reg.waiting||reg.active;
     if(worker&&worker.state!=="activated"){
       await Promise.race([
