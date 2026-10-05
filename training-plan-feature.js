@@ -1,5 +1,5 @@
 (() => {
-const VERSION="11.8.86";
+const VERSION="11.8.129";
 const KEY="reppilot-selected-training-plan";
 const PROFILE_KEY="reppilot-user-profile";
 const STRENGTH_KEY="reppilot-strength-tests-v1";
@@ -10,7 +10,7 @@ const VALID_FREQUENCIES=[2,3,4,5];
 
 const PLANS=[
 {id:"personalized",title:"Mein Trainingsplan",subtitle:"Automatisch aus deinen Trainingstagen und Zielen erstellt",icon:"🎯"},
-{id:"muscle",title:"Muskelaufbau Trainingsplan",subtitle:"Krafttraining im Studio mit Fokus auf Muskelaufbau",icon:"🏋️"},
+{id:"muscle",title:"Muskelaufbau Trainingsplan",subtitle:"4 Krafttage + 2 Läufe · Arm- und Ski-Fokus",icon:"🏋️"},
 {id:"weightloss",title:"Abnehmtrainingsplan",subtitle:"Kraft und Cardio mit Fokus auf höheren Kalorienverbrauch",icon:"🔥"}
 ];
 
@@ -22,13 +22,13 @@ const EXERCISE_NAME_MAP={
 };
 
 const MUSCLE_WEEK=[
-{day:1,dayName:"Montag",title:"Push",type:"strength",workoutId:"push",meta:"Brust, Schulter, Trizeps · ca. 45–55 Min."},
+{day:1,dayName:"Montag",title:"Push",type:"strength",workoutId:"push",meta:"Brust, Schulter, Trizeps · ca. 50–60 Min."},
 {day:2,dayName:"Dienstag",title:"Intervalltraining Laufband",type:"run",runId:"interval",meta:"37 Minuten · 1 % Steigung"},
-{day:3,dayName:"Mittwoch",title:"Ruhetag",type:"rest",meta:"Erholung, Spaziergang oder Mobilität"},
-{day:4,dayName:"Donnerstag",title:"Pull + Beine",type:"strength",workoutId:"pull-legs",meta:"Rücken, Beine, Bizeps · ca. 65–75 Min."},
-{day:5,dayName:"Freitag",title:"Oberkörper",type:"strength",workoutId:"upper-hypertrophy",meta:"Brust, Rücken, Schulter, Arme · ca. 45–55 Min."},
-{day:6,dayName:"Samstag",title:"Lockerer Dauerlauf",type:"run",runId:"easy",meta:"Ruhiges Gesprächstempo"},
-{day:0,dayName:"Sonntag",title:"Ruhetag",type:"rest",meta:"Erholung und Vorbereitung"}
+{day:3,dayName:"Mittwoch",title:"Pull",type:"strength",workoutId:"personal-pull",meta:"Rücken, hintere Schulter, Bizeps · ca. 50–60 Min."},
+{day:4,dayName:"Donnerstag",title:"Beine + Ski",type:"strength",workoutId:"personal-legs",meta:"Quadrizeps, Beinbeuger, Stabilität, Waden · ca. 50–60 Min."},
+{day:5,dayName:"Freitag",title:"Ruhetag",type:"rest",meta:"Erholung, Spaziergang oder Mobilität"},
+{day:6,dayName:"Samstag",title:"Lockerer Dauerlauf",type:"run",runId:"easy",meta:"Ruhiges Gesprächstempo · bewusst locker"},
+{day:0,dayName:"Sonntag",title:"Oberkörper + Arme",type:"strength",workoutId:"upper-hypertrophy",meta:"Brust, Rücken, Schulter, Arme, Core · ca. 50–60 Min."}
 ];
 const HOME_WEEK=[
 {day:1,dayName:"Montag",title:"Home Workout A",type:"strength",workoutId:"home-a",meta:"Ganzkörper · nur Bodenmatte · ca. 35–45 Min."},{day:2,dayName:"Dienstag",title:"Dehnen: Rücken, Beine & Füße",type:"stretch",meta:"Geführte Mobilität · ca. 10–12 Min."},{day:3,dayName:"Mittwoch",title:"Home Workout B",type:"strength",workoutId:"home-b",meta:"Ganzkörper · nur Bodenmatte · ca. 35–45 Min."},{day:4,dayName:"Donnerstag",title:"Lockerer Dauerlauf",type:"run",runId:"easy",meta:"Ruhiges Gesprächstempo"},{day:5,dayName:"Freitag",title:"Home Workout C",type:"strength",workoutId:"home-c",meta:"Ganzkörper · nur Bodenmatte · ca. 35–45 Min."},{day:6,dayName:"Samstag",title:"Dehnen: Rücken, Beine & Füße",type:"stretch",meta:"Geführte Mobilität · ca. 10–12 Min."},{day:0,dayName:"Sonntag",title:"Erholung",type:"rest",meta:"Regeneration"}
@@ -69,8 +69,8 @@ function ensureCustomWorkouts(){
     put({id:"personal-lower-a",day:2,dayName:"",title:"Unterkörper A",exercises:[["Beinpresse",3,120],["Beinstrecker",3,40],["Beinbeuger",3,40],["Wadenheben",3,60],["Hängendes Beinheben",2,0]]});
     put({id:"personal-upper-b",day:4,dayName:"",title:"Oberkörper B",exercises:[["Brustpresse",3,50],["Latzug breit",3,50],["Brustgestütztes Rudern",3,45],["Kabel-Flys",2,20],["Seitheben",2,8],["Einarmiger Trizeps am Kabelzug",2,10],["Scott-Curls",2,20],["Crunch-Maschine",2,30]]});
     put({id:"personal-lower-b",day:5,dayName:"",title:"Unterkörper B",exercises:[["Beinpresse",3,100],["Beinbeuger",3,35],["Beinstrecker",3,35],["Wadenheben",3,55],["Hängendes Beinheben",2,0]]});
-    put({id:"personal-pull",day:2,dayName:"",title:"Pull",exercises:[["Brustgestütztes Rudern",3,50],["Latzug neutral",3,55],["Reverse Butterfly am Kabelzug",3,12],["Scott-Curls",3,20],["Schrägbank-Curls",2,12],["Hängendes Beinheben",2,0]]});
-    put({id:"personal-legs",day:3,dayName:"",title:"Beine",exercises:[["Beinpresse",3,120],["Beinstrecker",3,40],["Beinbeuger",3,40],["Wadenheben",3,60],["Crunch-Maschine",2,30]]});
+    put({id:"personal-pull",day:3,dayName:"Mittwoch",title:"Pull",exercises:[["Brustgestütztes Rudern",3,50],["Latzug neutral",3,55],["Reverse Butterfly am Kabelzug",2,10],["Schrägbank-Curls",3,12],["Scott-Curls",3,20],["Hammercurls",2,12],["Hängendes Beinheben",2,0]]});
+    put({id:"personal-legs",day:4,dayName:"Donnerstag",title:"Beine + Ski",exercises:[["Hack Squat",3,60],["Beinstrecker",3,40],["Beinbeuger",3,40],["Stationäre Ausfallschritte",3,0],["Wadenheben",3,60],["Crunch-Maschine",2,30]]});
   }catch(e){console.error("Trainingsplan-Erweiterung fehlgeschlagen",e)}
 }
 
@@ -86,7 +86,7 @@ function ensureRunPlans(){
 function ensureExerciseTips(){
   try{
     if(typeof TIPS==="undefined")return;
-    Object.assign(TIPS,{"Kniebeugen":"Füße etwa schulterbreit. Knie folgen den Fußspitzen und der Rücken bleibt stabil.","Rückwärts-Ausfallschritte":"Einen großen Schritt nach hinten machen. Vorderes Knie stabil über dem Fuß halten.","Rückenstrecker in Bauchlage":"Bauch und Gesäß anspannen. Kontrolliert anheben.","Hüftheben":"Fersen in den Boden drücken und das Becken aus dem Gesäß anheben.","Schulter-Liegestütze":"Hüfte hoch, Kopf kontrolliert zwischen den Händen Richtung Matte absenken.","Diagonales Arm-Bein-Strecken":"Unteren Rücken auf der Matte halten und langsam strecken.","Unterarmstütz":"Körper in einer Linie halten und den Rumpf fest anspannen.","Stationäre Ausfallschritte":"Senkrecht absenken und über das vordere Bein hochdrücken.","Enge Liegestütze":"Ellenbogen nah am Körper führen.","Einbeiniges Hüftheben":"Becken gerade halten und über die Ferse hochdrücken.","Schneeengel in Bauchlage":"Arme knapp über der Matte in einem großen Bogen führen.","Diagonales Arm-Bein-Strecken im Vierfüßlerstand":"Hüfte stabil halten und diagonal strecken.","Seitstütz":"Körper in einer Linie halten und Hüfte aktiv oben lassen.","Beinheben":"Unteren Rücken auf der Matte halten.","Tempo-Kniebeugen":"Drei Sekunden absenken, kurz halten und kontrolliert hochkommen.","Y-T-Heben in Bauchlage":"Schulterblätter nach hinten unten ziehen.","Hüftheben mit Beinwechsel":"Becken oben und stabil halten.","Bergsteiger":"Rumpf fest halten und Knie kontrolliert nach vorne führen.","Überkopf-Trizepsstrecken am Kabelzug":"Ellenbogen eng neben dem Kopf halten.","Trizepsdrücken am Seilzug":"Oberarme ruhig am Körper lassen.","Schrägbank-Curls":"Oberarme hinter dem Körper lassen und ohne Schwung beugen.","Reverse Butterfly am Kabelzug":"Kontrolliert aus der hinteren Schulter öffnen.","Scott-Curls":"Oberarme fest auflegen und kontrolliert absenken.","Hängendes Beinheben":"Langsam absenken und nicht schwingen.","Einarmiger Trizeps am Kabelzug":"Oberarm ruhig halten und Unterarm kontrolliert strecken.","Kabel-Flys":"Ellenbogen leicht gebeugt halten und kontrolliert schließen.","Seitheben am Kabelzug":"Ellenbogen führen und Schulter unten lassen.","Crunch-Maschine":"Aus dem Bauch einrollen und ohne Schwung zurückführen."});
+    Object.assign(TIPS,{"Hack Squat":"Füße etwa schulterbreit. Tief und kontrolliert absenken, Knie folgen den Fußspitzen und der Rücken bleibt vollständig an der Lehne.","Kniebeugen":"Füße etwa schulterbreit. Knie folgen den Fußspitzen und der Rücken bleibt stabil.","Rückwärts-Ausfallschritte":"Einen großen Schritt nach hinten machen. Vorderes Knie stabil über dem Fuß halten.","Rückenstrecker in Bauchlage":"Bauch und Gesäß anspannen. Kontrolliert anheben.","Hüftheben":"Fersen in den Boden drücken und das Becken aus dem Gesäß anheben.","Schulter-Liegestütze":"Hüfte hoch, Kopf kontrolliert zwischen den Händen Richtung Matte absenken.","Diagonales Arm-Bein-Strecken":"Unteren Rücken auf der Matte halten und langsam strecken.","Unterarmstütz":"Körper in einer Linie halten und den Rumpf fest anspannen.","Stationäre Ausfallschritte":"Senkrecht absenken und über das vordere Bein hochdrücken.","Enge Liegestütze":"Ellenbogen nah am Körper führen.","Einbeiniges Hüftheben":"Becken gerade halten und über die Ferse hochdrücken.","Schneeengel in Bauchlage":"Arme knapp über der Matte in einem großen Bogen führen.","Diagonales Arm-Bein-Strecken im Vierfüßlerstand":"Hüfte stabil halten und diagonal strecken.","Seitstütz":"Körper in einer Linie halten und Hüfte aktiv oben lassen.","Beinheben":"Unteren Rücken auf der Matte halten.","Tempo-Kniebeugen":"Drei Sekunden absenken, kurz halten und kontrolliert hochkommen.","Y-T-Heben in Bauchlage":"Schulterblätter nach hinten unten ziehen.","Hüftheben mit Beinwechsel":"Becken oben und stabil halten.","Bergsteiger":"Rumpf fest halten und Knie kontrolliert nach vorne führen.","Überkopf-Trizepsstrecken am Kabelzug":"Ellenbogen eng neben dem Kopf halten.","Trizepsdrücken am Seilzug":"Oberarme ruhig am Körper lassen.","Schrägbank-Curls":"Oberarme hinter dem Körper lassen und ohne Schwung beugen.","Reverse Butterfly am Kabelzug":"Kontrolliert aus der hinteren Schulter öffnen.","Scott-Curls":"Oberarme fest auflegen und kontrolliert absenken.","Hängendes Beinheben":"Langsam absenken und nicht schwingen.","Einarmiger Trizeps am Kabelzug":"Oberarm ruhig halten und Unterarm kontrolliert strecken.","Kabel-Flys":"Ellenbogen leicht gebeugt halten und kontrolliert schließen.","Seitheben am Kabelzug":"Ellenbogen führen und Schulter unten lassen.","Crunch-Maschine":"Aus dem Bauch einrollen und ohne Schwung zurückführen."});
     Object.entries(EXERCISE_NAME_MAP).forEach(([oldName,newName])=>{if(TIPS[newName])TIPS[oldName]=TIPS[newName];else if(TIPS[oldName]&&!TIPS[newName])TIPS[newName]=TIPS[oldName]});
   }catch(e){console.error("Übungstipps konnten nicht aktualisiert werden",e)}
 }
