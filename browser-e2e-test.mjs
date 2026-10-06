@@ -159,8 +159,9 @@ try {
   check(planAudit?.ok===true,"Trainingsplan-Audit besteht",JSON.stringify(planAudit?.issues||[]));
   await page.evaluate(()=>{
     localStorage.setItem("reppilot-selected-training-plan","personalized");
+    const current=JSON.parse(localStorage.getItem("reppilot-user-profile")||"{}");
     localStorage.setItem("reppilot-user-profile",JSON.stringify({
-      onboardingCompletedAt:new Date().toISOString(),
+      ...current,
       trainingFocus:"mixed",
       trainingDaysPerWeek:5,
       trainingDays:[1,2,3,4,5]
