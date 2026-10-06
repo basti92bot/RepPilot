@@ -35,7 +35,7 @@ vm.runInContext(read("training-plan-quality-feature.js"), context);
 vm.runInContext(read("exercise-images-feature.js"), context);
 const api = context.window.RepPilotExerciseImages;
 assert.equal(api.version, spec.version);
-const expectedMappings={...spec.mappings,"Bulgarian Split Squats":"bulgarian-split-squat"};
+const expectedMappings={...spec.mappings,"Bulgarian Split Squats":"bulgarian-split-squat","Hack Squat":"hack-squat","Abduktoren":"hip-abductor-machine","Adduktoren":"hip-adductor-machine"};
 assert.deepEqual(JSON.parse(JSON.stringify(Object.fromEntries(Object.entries(api.map).map(([name,entry]) => [name,entry.id])))), expectedMappings);
 const names = [...new Set(Object.values(context.window.RepPilotPlanQuality.definitions).flat().map(row=>row[0]))].sort();
 assert.equal(names.length,47);
@@ -46,15 +46,15 @@ assert.equal(api.resolve("Wadenheben","personal-legs").id,"machine-calf-raise");
 assert.equal(api.resolve("Unbekannte Übung"),null);
 for(const [a,b] of [["Diagonales Arm-Bein-Strecken","Diagonales Arm-Bein-Strecken im Vierfüßlerstand"],["Unterarmstütz","Seitstütz"],["Brustpresse","Kabel-Flys"],["Latzug breit","Latzug neutral"],["Seitheben","Seitheben Maschine"],["Seitheben Maschine","Seitheben am Kabelzug"],["Hammercurls","Scott-Curls"],["Scott-Curls","Schrägbank-Curls"],["Hüftheben","Hüftheben mit Beinwechsel"],["Hüftheben","Einbeiniges Hüftheben"]]) assert.notEqual(api.resolve(a).id,api.resolve(b).id);
 const audit = api.audit();
-assert.equal(audit.total,47); assert.equal(audit.mapped,44); assert.equal(audit.localFiles,44);
-assert.deepEqual([...audit.missing].sort(),["Abduktoren","Adduktoren","Hack Squat"].sort());
-assert.equal(audit.missingContexts.filter(x=>!["Abduktoren","Adduktoren","Hack Squat"].includes(x.name)).length,0);
+assert.equal(audit.total,47); assert.equal(audit.mapped,47); assert.equal(audit.localFiles,47);
+assert.deepEqual(audit.missing,[]);
+assert.deepEqual(audit.missingContexts,[]);
 assert.equal(audit.remoteUrls.length,0);
 log("45 von 48 Plan-Übungen haben eine exakte lokale Bildzuordnung; keine falschen Ersatzbilder");
 
 assert.equal(manifest.version,spec.version); assert.equal(manifest.assets.length,43);
 const files = Array.from(api.assetFiles(),p=>p.replace(/^\.\//,"")).sort();
-const expectedFiles=[...manifest.assets.map(a=>a.file),"assets/exercises/v11.8.122/bulgarian-split-squat.webp"].sort();
+const expectedFiles=[...manifest.assets.map(a=>a.file),"assets/exercises/v11.8.122/bulgarian-split-squat.webp","assets/exercises/v11.8.134/hack-squat.svg","assets/exercises/v11.8.134/hip-abductor-machine.svg","assets/exercises/v11.8.134/hip-adductor-machine.svg"].sort();
 assert.deepEqual(files,expectedFiles);
 const dir = "assets/exercises/v"+spec.version;
 for(const file of files) assert.ok(fs.existsSync(path.join(root,file)),"Bilddatei fehlt: "+file);
@@ -75,7 +75,7 @@ for(const asset of manifest.assets) {
   assert.equal(asset.cropBottom,spec.cropBottom[asset.id]||0);
 }
 assert.equal(manifest.assets.filter(a=>a.origin==="original").length,19);
-log("43 geprüfte Basis-Motive plus vorhandenes Bulgarian-Split-Squat-Motiv sind lokal und offline verfügbar");
+log("Alle 47 Workout-Bildreferenzen sind lokal und offline verfügbar");
 
 // Focused DOM simulation: real browser coverage remains in browser-e2e-test.mjs.
 callbacks.at(-1)();
@@ -98,6 +98,9 @@ assert.equal(card.dataset.assetId,"kneeling-torso-rotation-machine");
 img=select("Wadenheben","home-b"); assert.match(img.src,/bodyweight-calf-raise\.webp$/);
 img=select("Wadenheben","personal-legs"); assert.match(img.src,/machine-calf-raise\.webp$/);
 img=select("Bulgarian Split Squats","personal-legs"); assert.equal(img.src,"./assets/exercises/v11.8.122/bulgarian-split-squat.webp");
+img=select("Hack Squat","personal-legs"); assert.equal(img.src,"./assets/exercises/v11.8.134/hack-squat.svg");
+img=select("Abduktoren","personal-legs"); assert.equal(img.src,"./assets/exercises/v11.8.134/hip-abductor-machine.svg");
+img=select("Adduktoren","personal-legs"); assert.equal(img.src,"./assets/exercises/v11.8.134/hip-adductor-machine.svg");
 img=select("Trizepsdrücken am Seilzug"); assert.equal(img.src,"./assets/exercises/v11.8.124/rope-triceps-pushdown.webp");
 img.onerror(); assert.equal(card.hidden,true); assert.equal(viewport.children.length,0);
 api.refresh(); assert.ok(viewport.querySelector("img"));
@@ -112,9 +115,9 @@ log("Bildwechsel, Ladefehler, veraltete Callbacks, doppelte Überschriften und B
   const swContext=vm.createContext({URL,Response,console,self:{registration:{scope},skipWaiting:()=>{},clients:{claim:async()=>{}},addEventListener:(event,fn)=>handlers[event]=fn},caches:{open:async()=>cache,keys:async()=>[],match:cache.match,delete:async()=>true},fetch:async()=>{fetches++;return {ok:true,clone:()=>({ok:true})};}});
   vm.runInContext(sw,swContext);
   let install; handlers.install({waitUntil:promise=>install=promise}); await install;
-  assert.equal([...cached.keys()].filter(url=>url.includes("/assets/exercises/v"+spec.version+"/")||url.endsWith("/assets/exercises/v11.8.124/rope-triceps-pushdown.webp")||url.endsWith("/assets/exercises/v11.8.122/bulgarian-split-squat.webp")).length,44);
+  assert.equal([...cached.keys()].filter(url=>url.includes("/assets/exercises/v"+spec.version+"/")||url.endsWith("/assets/exercises/v11.8.124/rope-triceps-pushdown.webp")||url.endsWith("/assets/exercises/v11.8.122/bulgarian-split-squat.webp")||url.includes("/assets/exercises/v11.8.134/")).length,47);
   let response; handlers.fetch({request:{method:"GET",url:scope+files[0]},respondWith:promise=>response=promise});
   assert.equal((await response).cached,true); assert.equal(fetches,0);
-  log("Service Worker speichert alle 44 Workout-Bildreferenzen und nutzt vorhandene Bilder ohne erneuten Download");
+  log("Service Worker speichert alle 47 Workout-Bildreferenzen und nutzt vorhandene Bilder ohne erneuten Download");
   console.log("Übungsbilder-Test bestanden.");
 })().catch(error=>{console.error(error);process.exitCode=1;});
