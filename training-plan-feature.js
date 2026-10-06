@@ -109,7 +109,7 @@ function sessionsFor(focus,count){
   if(count===2)return[strengthSession("loss-a","Ganzkörper Kraft","Ganzkörper · ca. 50–60 Min."),runSession("easy","Lockerer Dauerlauf","Ruhiges Gesprächstempo")];
   if(count===3)return[strengthSession("loss-a","Ganzkörper A","Ganzkörper · ca. 50–60 Min."),runSession("interval","Intervalltraining","Schnelle Intervalle + lockere Pausen"),strengthSession("loss-b","Ganzkörper B","Ganzkörper · ca. 50–60 Min.")];
   if(count===4)return[strengthSession("loss-a","Ganzkörper A","Ganzkörper · ca. 50–60 Min."),runSession("interval","Intervalltraining","Schnelle Intervalle + lockere Pausen"),strengthSession("loss-b","Ganzkörper B","Ganzkörper · ca. 50–60 Min."),runSession("easy","Lockerer Dauerlauf","Ruhiges Gesprächstempo")];
-  return[strengthSession("push","Push","Brust, Schulter, Trizeps"),runSession("interval","Intervalltraining","Schnelle Intervalle + lockere Pausen"),strengthSession("pull-legs","Pull + Beine","Rücken, Beine, Bizeps"),runSession("easy","Lockerer Dauerlauf","Ruhiges Gesprächstempo"),strengthSession("upper-hypertrophy","Oberkörper","Brust, Rücken, Schulter, Arme")];
+  return[strengthSession("push","Push","Brust, Schulter, Trizeps"),strengthSession("personal-pull","Pull","Rücken, hintere Schulter, Bizeps"),runSession("interval","Intervalltraining","Schnelle Intervalle + lockere Pausen"),strengthSession("personal-legs","Beine + Ski","Quadrizeps, Beinbeuger, Stabilität, Waden"),strengthSession("upper-hypertrophy","Oberkörper + Arme","Brust, Rücken, Schulter, Arme")];
 }
 
 function personalizedWeek(){
