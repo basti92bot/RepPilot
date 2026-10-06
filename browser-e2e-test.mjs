@@ -278,12 +278,12 @@ try {
   const exerciseImageAudit=await page.evaluate(()=>window.RepPilotExerciseImages?.audit?.());
   check(
     exerciseImageAudit?.total===47 &&
-    exerciseImageAudit?.mapped===44 &&
-    JSON.stringify(exerciseImageAudit?.missing||[])===JSON.stringify(["Hack Squat","Abduktoren","Adduktoren"]) &&
-    exerciseImageAudit?.missingContexts?.filter(x=>!["Hack Squat","Abduktoren","Adduktoren"].includes(x?.name)).length===0 &&
-    exerciseImageAudit?.localFiles===44 &&
+    exerciseImageAudit?.mapped===47 &&
+    exerciseImageAudit?.missing?.length===0 &&
+    exerciseImageAudit?.missingContexts?.length===0 &&
+    exerciseImageAudit?.localFiles===47 &&
     exerciseImageAudit?.remoteUrls?.length===0,
-    "44 von 47 Übungen sind bebildert; Hack Squat, Abduktoren und Adduktoren bleiben ohne falsches Ersatzbild",
+    "47 von 47 Übungen sind bebildert",
     JSON.stringify(exerciseImageAudit)
   );
 
@@ -304,7 +304,7 @@ try {
     return {count:urls.length,results};
   });
   check(
-    exerciseAssetAudit.count===44 &&
+    exerciseAssetAudit.count===47 &&
     exerciseAssetAudit.results.every(x=>x.status===200&&x.width===1254&&x.height===1254&&x.url.includes("/assets/exercises/")),
     "Alle 44 bestätigten Übungsmotive laden lokal und hochauflösend",
     JSON.stringify(exerciseAssetAudit.results.filter(x=>x.status!==200||x.width!==1254||x.height!==1254))
@@ -445,7 +445,7 @@ try {
   // Home, runner and ski imagery must be tested in their own screens.
   await page.getByRole("button",{name:"Training",exact:true}).click();
   const trainingAudit=await page.evaluate(()=>RepPilotTrainingImages.audit());
-  check(trainingAudit.ready&&trainingAudit.total===62&&trainingAudit.mapped===59&&trainingAudit.localFiles===58&&JSON.stringify([...new Set(trainingAudit.missing.map(x=>x.name))].sort())===JSON.stringify(["Abduktoren","Adduktoren","Hack Squat"].sort()),"62 Übungsnamen geprüft; 3 bleiben bewusst ohne falsches Ersatzbild",JSON.stringify(trainingAudit));
+  check(trainingAudit.ready&&trainingAudit.total===62&&trainingAudit.mapped===62&&trainingAudit.localFiles===61&&trainingAudit.missing.length===0,"Alle 62 Übungsnamen sind bebildert",JSON.stringify(trainingAudit));
   for(const id of ["home-a","home-b","home-c"]){
     const box=page.locator('[data-home-workout="'+id+'"]').locator('..');
     await box.locator("summary").click();
@@ -499,6 +499,7 @@ try {
   check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.133")),"512er Icon im Runtime-Cache");
   check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.120/")||x.includes("/assets/exercises/v11.8.124/rope-triceps-pushdown.webp")).length===43,"Alle 43 Übungsmotive im Runtime-Cache");
   check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.122/")).length===15,"Alle 15 zusätzlichen Läufer-/Ski-Motive im Runtime-Cache");
+  check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.134/")).length===3,"Hack Squat, Abduktoren und Adduktoren im Runtime-Cache");
 
   // Manifest runtime fetch
   const manifestRuntime=await page.evaluate(async()=>{
