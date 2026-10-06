@@ -47,8 +47,8 @@ assert.equal(api.resolve("Unbekannte Übung"),null);
 for(const [a,b] of [["Diagonales Arm-Bein-Strecken","Diagonales Arm-Bein-Strecken im Vierfüßlerstand"],["Unterarmstütz","Seitstütz"],["Brustpresse","Kabel-Flys"],["Latzug breit","Latzug neutral"],["Seitheben","Seitheben Maschine"],["Seitheben Maschine","Seitheben am Kabelzug"],["Hammercurls","Scott-Curls"],["Scott-Curls","Schrägbank-Curls"],["Hüftheben","Hüftheben mit Beinwechsel"],["Hüftheben","Einbeiniges Hüftheben"]]) assert.notEqual(api.resolve(a).id,api.resolve(b).id);
 const audit = api.audit();
 assert.equal(audit.total,47); assert.equal(audit.mapped,47); assert.equal(audit.localFiles,47);
-assert.deepEqual(audit.missing,[]);
-assert.deepEqual(audit.missingContexts,[]);
+assert.equal(audit.missing.length,0);
+assert.equal(audit.missingContexts.length,0);
 assert.equal(audit.remoteUrls.length,0);
 log("45 von 48 Plan-Übungen haben eine exakte lokale Bildzuordnung; keine falschen Ersatzbilder");
 
