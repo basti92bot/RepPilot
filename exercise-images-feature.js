@@ -3,7 +3,10 @@
   const BASE = "./assets/exercises/v11.8.120/";
   const ASSET_OVERRIDES = Object.freeze({
     "rope-triceps-pushdown": "./assets/exercises/v11.8.124/rope-triceps-pushdown.webp",
-    "bulgarian-split-squat": "./assets/exercises/v11.8.122/bulgarian-split-squat.webp"
+    "bulgarian-split-squat": "./assets/exercises/v11.8.122/bulgarian-split-squat.webp",
+    "hack-squat": "./assets/exercises/v11.8.134/hack-squat.svg",
+    "hip-abductor-machine": "./assets/exercises/v11.8.134/hip-abductor-machine.svg",
+    "hip-adductor-machine": "./assets/exercises/v11.8.134/hip-adductor-machine.svg"
   });
   const SOURCE_SERIES = "RepPilot originals 2026-09-02 + matching additions 2026-09-04";
   const WIDTH = 1254;
@@ -24,6 +27,9 @@
     "Bergsteiger": art("mountain-climber", "original"),
     "Brustgestütztes Rudern": art("chest-supported-dumbbell-row", "generated"),
     "Bulgarian Split Squats": art("bulgarian-split-squat", "generated"),
+    "Hack Squat": art("hack-squat", "generated"),
+    "Abduktoren": art("hip-abductor-machine", "generated"),
+    "Adduktoren": art("hip-adductor-machine", "generated"),
     "Brustpresse": art("chest-press", "original", 197),
     "Crunch-Maschine": art("abdominal-crunch-machine", "original", 204),
     "Diagonales Arm-Bein-Strecken": art("dead-bug", "original"),
