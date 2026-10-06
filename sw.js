@@ -44,7 +44,9 @@ const EXERCISE_ASSET_FILES=[
   "supine-leg-raise.webp",
   "wide-lat-pulldown.webp"
 ];
-const EXERCISE_ASSET_OVERRIDES=["./assets/exercises/v11.8.124/rope-triceps-pushdown.webp"];
+const EXERCISE_ASSET_OVERRIDES=["./assets/exercises/v11.8.124/rope-triceps-pushdown.webp",
+  "./assets/exercises/v11.8.122/bulgarian-split-squat.webp"
+];
 const EXERCISE_ASSETS=[...EXERCISE_ASSET_FILES.map(file=>"./assets/exercises/v11.8.120/"+file),...EXERCISE_ASSET_OVERRIDES];
 const TRAINING_ASSET_FILES=[
   "short-foot.webp",
