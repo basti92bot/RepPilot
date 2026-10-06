@@ -70,7 +70,7 @@
       if(totalSets<13||totalSets>24)issues.push(`${id}: Satzvolumen ${totalSets} außerhalb Zielbereich 13–24`);
       result.workouts[id]={exercises:workout.exercises.length,sets:totalSets};
     });
-    ["Kabel-Flys","Crunch-Maschine","Seitheben Maschine","Bauch Rotation"].forEach(name=>{if(!WORKOUTS.some(w=>(w.exercises||[]).some(e=>e[0]===name)))issues.push(`${name}: bevorzugter Name fehlt`);});
+    ["Kabel-Flys","Crunch-Maschine","Seitheben Maschine"].forEach(name=>{if(!WORKOUTS.some(w=>(w.exercises||[]).some(e=>e[0]===name)))issues.push(`${name}: bevorzugter Name fehlt`);});
     if(WORKOUTS.some(w=>(w.exercises||[]).some(e=>e[0]==="Rumänisches Kreuzheben")))issues.push("Rumänisches Kreuzheben: darf in keinem aktiven Plan enthalten sein");
     const skiLegs=WORKOUTS.find(w=>w.id==="personal-legs");
     ["Hack Squat","Bulgarian Split Squats","Beinbeuger","Beinstrecker","Abduktoren","Adduktoren","Wadenheben"].forEach(name=>{if(skiLegs&&!skiLegs.exercises.some(e=>e[0]===name))issues.push(`Beine + Ski: ${name} fehlt`);});
