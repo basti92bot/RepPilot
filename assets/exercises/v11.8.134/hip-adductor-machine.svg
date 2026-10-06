@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1254" height="1254" viewBox="0 0 1254 1254"><defs>
+  <linearGradient id="bg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f4f6f8"/></linearGradient>
+  <style>
+    .machine{fill:#d1d5db;stroke:#7b8794;stroke-width:12;stroke-linejoin:round}
+    .rail{stroke:#8b97a3;stroke-width:26;stroke-linecap:round}
+    .body{fill:#d8dde3;stroke:#858f99;stroke-width:8}
+    .joint{fill:#cfd5dc;stroke:#858f99;stroke-width:7}
+    .limb{stroke:#cbd1d8;stroke-width:38;stroke-linecap:round;stroke-linejoin:round}
+    .limb2{stroke:#bfc7cf;stroke-width:26;stroke-linecap:round}
+    .muscle{fill:#ee6b55;stroke:#d95b48;stroke-width:5}
+    .pad{fill:#9aa4af;stroke:#69737d;stroke-width:8}
+    .dark{fill:#4b5563}
+  </style>
+</defs>
+<rect width="1254" height="1254" fill="url(#bg)"/>
+<rect x="35" y="35" width="1184" height="1184" rx="42" fill="none" stroke="#e1e5e9" stroke-width="8"/>
+<g transform="translate(55,100)">
+  <rect class="machine" x="80" y="710" width="420" height="110" rx="25"/><rect class="pad" x="160" y="560" width="260" height="90" rx="30"/>
+  <rect class="pad" x="35" y="500" width="70" height="180" rx="25"/><rect class="pad" x="475" y="500" width="70" height="180" rx="25"/>
+  <circle class="body" cx="290" cy="230" r="52"/><path class="body" d="M225 300 Q290 260 355 300 L380 500 Q290 545 200 500 Z"/>
+  <line class="limb" x1="245" y1="500" x2="95" y2="680"/><line class="limb" x1="335" y1="500" x2="485" y2="680"/>
+  <line class="limb2" x1="220" y1="345" x2="140" y2="465"/><line class="limb2" x1="360" y1="345" x2="440" y2="465"/>
+  <ellipse class="muscle" cx="260" cy="555" rx="25" ry="78" transform="rotate(-25 260 555)"/><ellipse class="muscle" cx="320" cy="555" rx="25" ry="78" transform="rotate(25 320 555)"/>
+</g>
+<g transform="translate(655,100)">
+  <rect class="machine" x="80" y="710" width="420" height="110" rx="25"/><rect class="pad" x="160" y="560" width="260" height="90" rx="30"/>
+  <rect class="pad" x="190" y="500" width="70" height="180" rx="25"/><rect class="pad" x="320" y="500" width="70" height="180" rx="25"/>
+  <circle class="body" cx="290" cy="230" r="52"/><path class="body" d="M225 300 Q290 260 355 300 L380 500 Q290 545 200 500 Z"/>
+  <line class="limb" x1="255" y1="500" x2="255" y2="690"/><line class="limb" x1="325" y1="500" x2="325" y2="690"/>
+  <line class="limb2" x1="220" y1="345" x2="140" y2="465"/><line class="limb2" x1="360" y1="345" x2="440" y2="465"/>
+  <ellipse class="muscle" cx="270" cy="555" rx="24" ry="78"/><ellipse class="muscle" cx="310" cy="555" rx="24" ry="78"/>
+</g></svg>
