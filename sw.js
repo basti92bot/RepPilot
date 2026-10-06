@@ -45,7 +45,10 @@ const EXERCISE_ASSET_FILES=[
   "wide-lat-pulldown.webp"
 ];
 const EXERCISE_ASSET_OVERRIDES=["./assets/exercises/v11.8.124/rope-triceps-pushdown.webp",
-  "./assets/exercises/v11.8.122/bulgarian-split-squat.webp"
+  "./assets/exercises/v11.8.122/bulgarian-split-squat.webp",
+  "./assets/exercises/v11.8.134/hack-squat.svg",
+  "./assets/exercises/v11.8.134/hip-abductor-machine.svg",
+  "./assets/exercises/v11.8.134/hip-adductor-machine.svg"
 ];
 const EXERCISE_ASSETS=[...EXERCISE_ASSET_FILES.map(file=>"./assets/exercises/v11.8.120/"+file),...EXERCISE_ASSET_OVERRIDES];
 const TRAINING_ASSET_FILES=[
