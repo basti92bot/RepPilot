@@ -1,5 +1,5 @@
 {
-  "version": "11.8.133",
+  "version": "11.8.134",
   "releasedAt": "2026-10-06",
-  "notes": "Der persönliche 5-Tage-Mix enthält jetzt 4 Krafttage: Push, Pull, Beine + Ski und Oberkörper + Arme, plus 1 Intervalllauf. Der Beine + Ski-Tag hat 21 Sätze mit Hack Squat, Bulgarian Split Squats, Beinbeuger, Beinstrecker, Abduktoren, Adduktoren, Wadenheben und Crunch-Maschine."
+  "notes": "Alle Übungen im Beine + Ski-Tag sind jetzt bebildert. Neue Einzelbilder für Hack Squat, Abduktoren und Adduktoren wurden ergänzt und für Offline/PWA gecacht."
 }
