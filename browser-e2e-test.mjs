@@ -159,8 +159,22 @@ try {
   check(planAudit?.ok===true,"Trainingsplan-Audit besteht",JSON.stringify(planAudit?.issues||[]));
   await page.evaluate(()=>{
     localStorage.setItem("reppilot-selected-training-plan","personalized");
+    localStorage.setItem("reppilot-user-profile",JSON.stringify({
+      onboardingCompletedAt:new Date().toISOString(),
+      trainingFocus:"mixed",
+      trainingDaysPerWeek:5,
+      trainingDays:[1,2,3,4,5]
+    }));
     window.RepPilotTrainingPlan?.refresh?.();
   });
+  const personalizedFiveDay=await page.evaluate(()=>window.RepPilotTrainingPlan?.selectedWeek?.()||[]);
+  check(
+    personalizedFiveDay.filter(x=>x.type==="strength").length===4 &&
+    personalizedFiveDay.some(x=>x.workoutId==="personal-legs") &&
+    personalizedFiveDay.filter(x=>x.type==="run").length===1,
+    "Persönlicher 5-Tage-Mix enthält 4 Krafttage inklusive Beine + Ski",
+    JSON.stringify(personalizedFiveDay)
+  );
 
   for(const [label,view] of [["Heute","home"],["Training","trainingHub"],["Verlauf","history"],["Profil","profile"]]){
     await page.getByRole("button",{name:label,exact:true}).click();
@@ -262,13 +276,13 @@ try {
   check((await activeView())==="workout","Krafttraining startet");
   const exerciseImageAudit=await page.evaluate(()=>window.RepPilotExerciseImages?.audit?.());
   check(
-    exerciseImageAudit?.total===48 &&
-    exerciseImageAudit?.mapped===45 &&
+    exerciseImageAudit?.total===47 &&
+    exerciseImageAudit?.mapped===44 &&
     JSON.stringify(exerciseImageAudit?.missing||[])===JSON.stringify(["Hack Squat","Abduktoren","Adduktoren"]) &&
     exerciseImageAudit?.missingContexts?.filter(x=>!["Hack Squat","Abduktoren","Adduktoren"].includes(x?.name)).length===0 &&
     exerciseImageAudit?.localFiles===44 &&
     exerciseImageAudit?.remoteUrls?.length===0,
-    "45 von 48 Übungen sind bebildert; Hack Squat, Abduktoren und Adduktoren bleiben ohne falsches Ersatzbild",
+    "44 von 47 Übungen sind bebildert; Hack Squat, Abduktoren und Adduktoren bleiben ohne falsches Ersatzbild",
     JSON.stringify(exerciseImageAudit)
   );
 
@@ -430,7 +444,7 @@ try {
   // Home, runner and ski imagery must be tested in their own screens.
   await page.getByRole("button",{name:"Training",exact:true}).click();
   const trainingAudit=await page.evaluate(()=>RepPilotTrainingImages.audit());
-  check(trainingAudit.ready&&trainingAudit.total===60&&trainingAudit.mapped===60&&trainingAudit.localFiles===58&&trainingAudit.missing.length===0,"Alle 60 Übungsnamen einschließlich Läuferstabi und Ski sind zugeordnet",JSON.stringify(trainingAudit));
+  check(trainingAudit.ready&&trainingAudit.total===62&&trainingAudit.mapped===59&&trainingAudit.localFiles===58&&JSON.stringify([...new Set(trainingAudit.missing.map(x=>x.name))].sort())===JSON.stringify(["Abduktoren","Adduktoren","Hack Squat"].sort()),"62 Übungsnamen geprüft; 3 bleiben bewusst ohne falsches Ersatzbild",JSON.stringify(trainingAudit));
   for(const id of ["home-a","home-b","home-c"]){
     const box=page.locator('[data-home-workout="'+id+'"]').locator('..');
     await box.locator("summary").click();
