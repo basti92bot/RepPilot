@@ -1,5 +1,5 @@
 (() => {
-const VERSION="11.8.132";
+const VERSION="11.8.133";
 const KEY="reppilot-selected-training-plan";
 const PROFILE_KEY="reppilot-user-profile";
 const STRENGTH_KEY="reppilot-strength-tests-v1";
