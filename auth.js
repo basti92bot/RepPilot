@@ -126,7 +126,5 @@
         localStorage.setItem("reppilot-last-cloud-sync",JSON.stringify({ok:false,at:new Date().toISOString(),message:err?.message||String(err)}));
       });
     };
-    const btn=document.getElementById("finishWorkoutBtn");
-    if(btn)btn.onclick=finish;
   });
 })();

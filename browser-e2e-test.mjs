@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 
 const BASE = process.env.REPPILOT_BASE_URL || "http://127.0.0.1:4173";
-const VERSION = "11.8.134";
+const VERSION = "11.8.135";
 const CACHE = "reppilot-v" + VERSION.replaceAll(".", "-");
 const failures = [];
 const pass = label => console.log("PASS:", label);
@@ -130,6 +130,15 @@ try {
   check(onboardingState.plan==="personalized","Onboarding aktiviert personalisierten Plan");
 
   check(await page.locator("nav button").count()===4,"Vier Bottom-Navigation-Reiter vorhanden");
+  const mobileBar = await page.evaluate(()=>{
+    const fix=window.RepPilotViewportFix;
+    if(!fix)return {present:false};
+    const nav=document.querySelector("body > nav"),before=nav.getBoundingClientRect().bottom;
+    const correction=fix.refresh();
+    return {present:true,before,correction,after:nav.getBoundingClientRect().bottom};
+  });
+  check(mobileBar.present&&Math.abs(mobileBar.after-mobileBar.before)<2,
+    "Navigation bleibt bei normalem Viewport stabil",JSON.stringify(mobileBar));
 
   const navLabels = await page.locator("nav button").allTextContents();
   check(["Heute","Training","Verlauf","Profil"].every(x=>navLabels.includes(x)),"Alle vier Navigationstitel vorhanden",navLabels.join(", "));
@@ -493,17 +502,17 @@ try {
   }, CACHE);
   check(swState.supported,"Service Worker API verfügbar");
   check(swState.registrations===1,"Genau eine Service-Worker-Registrierung aktiv",JSON.stringify(swState));
-  check(swState.script.includes("sw.js?v=11.8.134"),"Aktiver Service Worker hat aktuelle Version",swState.script);
+  check(swState.script.includes("sw.js?v=11.8.135"),"Aktiver Service Worker hat aktuelle Version",swState.script);
   check(swState.keys.includes(CACHE),"Aktueller PWA-Cache vorhanden",swState.keys.join(","));
-  check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.134")),"192er Icon im Runtime-Cache");
-  check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.134")),"512er Icon im Runtime-Cache");
+  check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.135")),"192er Icon im Runtime-Cache");
+  check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.135")),"512er Icon im Runtime-Cache");
   check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.120/")||x.includes("/assets/exercises/v11.8.124/rope-triceps-pushdown.webp")).length===43,"Alle 43 Übungsmotive im Runtime-Cache");
   check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.122/")).length===15,"Alle 15 zusätzlichen Läufer-/Ski-Motive im Runtime-Cache");
   check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.134/")).length===3,"Hack Squat, Abduktoren und Adduktoren im Runtime-Cache");
 
   // Manifest runtime fetch
   const manifestRuntime=await page.evaluate(async()=>{
-    const r=await fetch("./manifest.json?v=11.8.134",{cache:"no-store"});
+    const r=await fetch("./manifest.json?v=11.8.135",{cache:"no-store"});
     return {status:r.status,json:await r.json()};
   });
   check(manifestRuntime.status===200,"Manifest wird zur Laufzeit ausgeliefert");
@@ -531,7 +540,7 @@ try {
     await caches.open("reppilot-old-test-cache");
     const regs=await navigator.serviceWorker.getRegistrations();
     await Promise.all(regs.map(r=>r.unregister()));
-    const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.134&reinstall=1",{updateViaCache:"none"});
+    const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.135&reinstall=1",{updateViaCache:"none"});
     const worker=reg.installing||reg.waiting||reg.active;
     if(worker&&worker.state!=="activated"){
       await Promise.race([

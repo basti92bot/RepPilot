@@ -26,7 +26,7 @@
     if (id) return {id, src:BASE + id + ".webp", width:1254, height:1254, cropBottom:0};
     const entry = window.RepPilotExerciseImages?.resolve(name, context);
     if (!entry) return null;
-    return {...entry, src:window.RepPilotExerciseImages.base + entry.files[0]};
+    return {...entry, src:window.RepPilotExerciseImages.assetUrl(entry)};
   }
 
   function ensureStyles() {

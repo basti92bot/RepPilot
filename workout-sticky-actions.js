@@ -26,8 +26,7 @@
       body.rp-sticky-workout #deferExerciseBtn,
       body.rp-sticky-workout #restPanel .actions,
       body.rp-sticky-workout #startNextBtn,
-      body.rp-sticky-workout #skipNextBtn,
-      body.rp-sticky-workout #finishWorkoutBtn{display:none!important}
+      body.rp-sticky-workout #skipNextBtn{display:none!important}
       @media(max-width:380px){#rpWorkoutActions button{font-size:14px;padding-left:7px;padding-right:7px}}
     `;
     document.head.appendChild(s);
@@ -57,8 +56,7 @@
     addRestBtn:"addRest",
     skipRestBtn:"finishRest",
     startNextBtn:"nextExercise",
-    skipNextBtn:"skipExercise",
-    finishWorkoutBtn:"finish"
+    skipNextBtn:"skipExercise"
   };
 
   function runAction(original){
@@ -111,15 +109,10 @@
 
     if(visible(completePanel)){
       const next = document.getElementById("nextExerciseBlock");
-      const finishBlock = document.getElementById("finishWorkoutBlock");
       if(visible(next)){
         const secondary = proxy(document.getElementById("skipNextBtn"), "Überspringen", true);
         const primary = proxy(document.getElementById("startNextBtn"), "Nächste Übung");
         return [secondary, primary].filter(Boolean);
-      }
-      if(visible(finishBlock)){
-        const primary = proxy(document.getElementById("finishWorkoutBtn"), "Training speichern");
-        return [primary].filter(Boolean);
       }
     }
     return [];

@@ -56,18 +56,20 @@
   renderRest=function(){
     if(!isHomeWorkout())return baseRenderRest();
     document.getElementById("restSetSummary").textContent=`${lastSet.name}: Satz ${lastSet.no} erledigt`;
-    document.getElementById("restNext").textContent=afterRest.type==="set"?`Danach: Satz ${afterRest.index+1}`:ei<active.exercises.length-1?`Danach: ${active.exercises[ei+1].name}`:"Danach Training speichern.";
+    document.getElementById("restNext").textContent=afterRest.type==="set"?`Danach: Satz ${afterRest.index+1}`:ei<active.exercises.length-1?`Danach: ${active.exercises[ei+1].name}`:"Danach: Trainingsabschluss.";
     updateRest();
   };
 
   const baseCompleteSet=completeSet;
   function completeHomeSet(){
+    if(!active||phase!=="set")return;
     const e=current(),s=e.sets[si];
     s.weight=0;
     s.reps=isTimedCore(e.name)?30:REPS;
     s.done=true;
     lastSet={name:e.name,no:si+1,weight:0};
     if(si<e.sets.length-1)beginRest({type:"set",index:si+1});
+    else if(ei===active.exercises.length-1)finish();
     else beginRest({type:"complete"});
   }
   completeSet=function(){
@@ -87,8 +89,8 @@
     document.getElementById("completedExercise").textContent=e.name;
     document.getElementById("exerciseSummary").textContent=`${e.sets.filter(x=>x.done).length} Sätze abgeschlossen`;
     const has=ei<active.exercises.length-1;
-    document.getElementById("nextExerciseBlock").hidden=!has;
-    document.getElementById("finishWorkoutBlock").hidden=has;
+    if(!has){finish();return;}
+    document.getElementById("nextExerciseBlock").hidden=false;
     const skip=document.getElementById("skipNextBtn");
     if(skip)skip.style.display="none";
     if(has){
@@ -96,8 +98,6 @@
       document.getElementById("nextExerciseName").textContent=x.name;
       document.getElementById("nextExerciseMeta").textContent=isTimedCore(x.name)?`${x.sets.length} Sätze · jeweils 30 Sekunden`:`${x.sets.length} Sätze · jeweils ${REPS} Wiederholungen`;
       document.getElementById("nextExerciseTip").textContent=TIPS[x.name]||"Ruhig und kontrolliert.";
-    }else{
-      document.getElementById("workoutVolumePreview").textContent="Home Workout abgeschlossen";
     }
   };
 

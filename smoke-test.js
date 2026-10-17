@@ -18,6 +18,17 @@ assert.ok(iconFreeIndex.includes('<div class="exercise-title"><h2 id="exerciseNa
 assert.ok(!iconFreeApp.includes('$("exerciseIcon")'), "renderSet darf nicht mehr auf das entfernte Icon zugreifen");
 assert.ok(iconFreeIndex.includes('class="brand-logo"'), "RepPilot-Logo bleibt erhalten");
 console.log("PASS: Übungstitel ohne Icon, RepPilot-Logo unverändert");
+const homeAutoSave = fs.readFileSync(path.join(root,"home-workout-feature.js"),"utf8");
+const trainingImageResolver = fs.readFileSync(path.join(root,"training-images-feature.js"),"utf8");
+const workoutActions = fs.readFileSync(path.join(root,"workout-sticky-actions.js"),"utf8");
+const viewportFix = fs.readFileSync(path.join(root,"viewport-layout-fix.js"),"utf8");
+assert.ok(iconFreeApp.includes('else if(ei===active.exercises.length-1){finish()}'),"Krafttraining muss nach letztem Satz automatisch speichern");
+assert.ok(homeAutoSave.includes('else if(ei===active.exercises.length-1)finish();'),"Home Workout muss nach letztem Satz automatisch speichern");
+assert.ok(!iconFreeIndex.includes('finishWorkoutBtn')&&!workoutActions.includes('finishWorkoutBtn'),"Speicher-Button muss entfernt sein");
+assert.ok(trainingImageResolver.includes('RepPilotExerciseImages.assetUrl(entry)'),"Training muss Bild-Overrides korrekt auflösen");
+assert.ok(iconFreeIndex.includes('viewport-layout-fix.js?v='),"iOS Viewport-Script muss eingebunden sein");
+assert.ok(viewportFix.includes('visualViewport')&&viewportFix.includes('getBoundingClientRect()'),"Viewport-Fix muss Display-Metriken prüfen");
+console.log("PASS: Automatischer Trainingsabschluss, Bildpfade und iOS-Navigation");
 
 const failures = [];
 const pass = label => console.log("PASS:", label);
