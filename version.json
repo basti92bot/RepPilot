@@ -1,5 +1,5 @@
 {
-  "version": "11.8.135",
-  "releasedAt": "2026-10-17",
-  "notes": "Korrigiert iPhone-Navigation nach Keyboard, Beinübungsbilder in Trainingsübersichten und automatisches Speichern nach dem letzten Satz ohne Speicherbutton."
+  "version": "11.8.136",
+  "releasedAt": "2026-10-19",
+  "notes": "Vorbereitung für erweiterbaren Übungskatalog und eigene Trainingspläne: stabile IDs, versionierter konto-getrennter Entwurfsspeicher und Regressionstests. Keine Änderung an bestehenden Trainingseinträgen oder Oberfläche."
 }

@@ -517,6 +517,13 @@ try {
   fail("Kraft-Duell", e.message);
 }
 
+try {
+  require("node:child_process").execFileSync(process.execPath,[path.join(root,"architecture-test.js")],{stdio:"inherit"});
+  pass("Modulare Übungsbibliothek und sichere Planentwürfe");
+} catch(e) {
+  fail("Modulare Architektur",e.message);
+}
+
 if (failures.length) {
   console.error("\nSmoke-Test fehlgeschlagen:", failures.length, "Fehler");
   process.exit(1);
