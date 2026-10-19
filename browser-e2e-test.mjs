@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 
 const BASE = process.env.REPPILOT_BASE_URL || "http://127.0.0.1:4173";
-const VERSION = "11.8.136";
+const VERSION = "11.8.137";
 const CACHE = "reppilot-v" + VERSION.replaceAll(".", "-");
 const failures = [];
 const pass = label => console.log("PASS:", label);
@@ -140,6 +140,35 @@ try {
   check(mobileBar.present&&Math.abs(mobileBar.after-mobileBar.before)<2,
     "Navigation bleibt bei normalem Viewport stabil",JSON.stringify(mobileBar));
 
+  // Eigener Plan: Bearbeiten, Übungsauswahl, Speichern und echter Trainingsstart.
+  await page.getByRole("button",{name:"Training",exact:true}).click();
+  await page.locator('[data-rp-action="new-plan"]').click();
+  await page.locator("#rpPlanName").fill("Test Beine");
+  await page.locator("#rpPlanName").blur();
+  await page.locator('[data-rp-action="toggle-picker"]').click();
+  await page.locator("#rpCatalogSearch").fill("Hack Squat");
+  check(await page.locator('#rpCatalogResults [data-rp-action="add-exercise"]').count()===1,"Übungsbibliothek durchsucht Übungen");
+  await page.locator('#rpCatalogResults [data-exercise-id="ex-hack-squat"]').click();
+  await page.locator('[data-rp-field="sets"]').fill("1");
+  await page.locator('[data-rp-field="sets"]').blur();
+  await page.locator('[data-rp-field="reps"]').fill("8");
+  await page.locator('[data-rp-field="reps"]').blur();
+  await page.locator('[data-rp-field="restSeconds"]').fill("75");
+  await page.locator('[data-rp-field="restSeconds"]').blur();
+  await page.locator('[data-rp-action="save-plan"]').click();
+  await page.waitForFunction(()=>document.querySelector("#rpPlanStatus")?.textContent?.includes("Plan gespeichert"));
+  await page.locator('[data-rp-action="close-editor"]').click();
+  check(await page.locator(".rp-saved-plan").count()===1,"Eigener Trainingsplan wird gespeichert");
+  await page.locator('[data-rp-action="start-session"]').first().click();
+  check((await activeView())==="workout","Eigene Trainingseinheit kann gestartet werden");
+  const customWorkout=await page.evaluate(()=>({
+    name:active?.exercises?.[0]?.name,reps:active?.exercises?.[0]?.sets?.[0]?.reps,
+    pause:active?.exercises?.[0]?.restSeconds
+  }));
+  check(customWorkout.name==="Hack Squat"&&customWorkout.reps===8&&customWorkout.pause===75,
+    "Eigene Wiederholungen und Pausen werden übernommen",JSON.stringify(customWorkout));
+  await page.locator("#cancelBtn").click();
+  await page.getByRole("button",{name:"Heute",exact:true}).click();
   const navLabels = await page.locator("nav button").allTextContents();
   check(["Heute","Training","Verlauf","Profil"].every(x=>navLabels.includes(x)),"Alle vier Navigationstitel vorhanden",navLabels.join(", "));
 
@@ -502,17 +531,17 @@ try {
   }, CACHE);
   check(swState.supported,"Service Worker API verfügbar");
   check(swState.registrations===1,"Genau eine Service-Worker-Registrierung aktiv",JSON.stringify(swState));
-  check(swState.script.includes("sw.js?v=11.8.136"),"Aktiver Service Worker hat aktuelle Version",swState.script);
+  check(swState.script.includes("sw.js?v=11.8.137"),"Aktiver Service Worker hat aktuelle Version",swState.script);
   check(swState.keys.includes(CACHE),"Aktueller PWA-Cache vorhanden",swState.keys.join(","));
-  check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.136")),"192er Icon im Runtime-Cache");
-  check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.136")),"512er Icon im Runtime-Cache");
+  check(swState.requests.some(x=>x.includes("icon-192.png?v=11.8.137")),"192er Icon im Runtime-Cache");
+  check(swState.requests.some(x=>x.includes("icon-512.png?v=11.8.137")),"512er Icon im Runtime-Cache");
   check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.120/")||x.includes("/assets/exercises/v11.8.124/rope-triceps-pushdown.webp")).length===43,"Alle 43 Übungsmotive im Runtime-Cache");
   check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.122/")).length===15,"Alle 15 zusätzlichen Läufer-/Ski-Motive im Runtime-Cache");
   check(swState.requests.filter(x=>x.includes("/assets/exercises/v11.8.134/")).length===3,"Hack Squat, Abduktoren und Adduktoren im Runtime-Cache");
 
   // Manifest runtime fetch
   const manifestRuntime=await page.evaluate(async()=>{
-    const r=await fetch("./manifest.json?v=11.8.136",{cache:"no-store"});
+    const r=await fetch("./manifest.json?v=11.8.137",{cache:"no-store"});
     return {status:r.status,json:await r.json()};
   });
   check(manifestRuntime.status===200,"Manifest wird zur Laufzeit ausgeliefert");
@@ -540,7 +569,7 @@ try {
     await caches.open("reppilot-old-test-cache");
     const regs=await navigator.serviceWorker.getRegistrations();
     await Promise.all(regs.map(r=>r.unregister()));
-    const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.136&reinstall=1",{updateViaCache:"none"});
+    const reg=await navigator.serviceWorker.register("./sw.js?v=11.8.137&reinstall=1",{updateViaCache:"none"});
     const worker=reg.installing||reg.waiting||reg.active;
     if(worker&&worker.state!=="activated"){
       await Promise.race([

@@ -1,5 +1,5 @@
 {
-  "version": "11.8.136",
+  "version": "11.8.137",
   "releasedAt": "2026-10-19",
-  "notes": "Vorbereitung für erweiterbaren Übungskatalog und eigene Trainingspläne: stabile IDs, versionierter konto-getrennter Entwurfsspeicher und Regressionstests. Keine Änderung an bestehenden Trainingseinträgen oder Oberfläche."
+  "notes": "Trainingsplan-Editor mit Übungsbibliothek, Vorlagen, eigenen Tagen, Sätzen, Wiederholungen und Pausen. Eigene Einheiten starten im vorhandenen Workout-Flow. Speicherung derzeit nur lokal."
 }

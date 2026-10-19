@@ -524,6 +524,16 @@ try {
   fail("Modulare Architektur",e.message);
 }
 
+try {
+  const planEditor = read("plan-editor-feature.js");
+  new Function(planEditor);
+  if(!index.includes("plan-editor-feature.js?v="+releaseVersion)) throw new Error("Planeditor fehlt in der App");
+  if(!sw.includes("./plan-editor-feature.js?v="+releaseVersion)) throw new Error("Planeditor fehlt im PWA-Cache");
+  if(!iconFreeApp.includes("details?.restSeconds??REST")||!iconFreeApp.includes("details?.reps??REPS"))
+    throw new Error("Individuelle Wiederholungen oder Pausen werden ignoriert");
+  pass("Eigener Trainingsplan-Editor, Satzvorgaben und PWA-Cache");
+} catch(error){ fail("Trainingsplan-Editor",error.message); }
+
 if (failures.length) {
   console.error("\nSmoke-Test fehlgeschlagen:", failures.length, "Fehler");
   process.exit(1);

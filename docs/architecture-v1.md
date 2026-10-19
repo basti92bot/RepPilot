@@ -31,3 +31,11 @@ Neue Ideen ergänzen, ohne den Trainingskern bei jedem Release neu zu schreiben.
 - Abonnements: serverseitige Berechtigungen und Store-konforme Abrechnung.
 
 Die folgenden Punkte sind eine Roadmap. Sie sind nicht durch dieses Release umgesetzt.
+
+## Editor v11.8.137
+
+- Sichtbarer Editor im Reiter Training mit Übungssuche und Filtern.
+- Eigenen Plan erstellen oder bestehende Trainingsvorlage kopieren.
+- Trainingstage, Übungsreihenfolge, Sätze, Wiederholungen, Pausen und Anfangsgewichte bearbeiten.
+- Übungen aus gespeicherten Plänen im bisherigen Trainingsablauf starten.
+- Pläne bleiben derzeit nur lokal je Benutzerkennung, keine Cloud-Synchronisierung. Bei Gerätewechsel können Entwürfe verloren gehen.
