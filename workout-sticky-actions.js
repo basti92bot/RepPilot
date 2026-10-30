@@ -48,6 +48,7 @@
     const nav = document.querySelector("nav");
     const h = nav ? Math.ceil(nav.getBoundingClientRect().height) : 72;
     bar.style.bottom = `${h + 8}px`;
+    if(!bar.hidden) window.RepPilotViewportFix?.refresh?.();
   }
 
   const DIRECT_ACTIONS = {
