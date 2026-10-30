@@ -438,6 +438,15 @@ try {
   else await page.evaluate(()=>{ if(typeof completeSet==="function") completeSet(); });
   await page.waitForTimeout(50);
   check(await page.locator("#restPanel").isVisible(),"Pausenansicht nach Satz");
+  const restActionPosition = await page.evaluate(() => {
+    window.RepPilotViewportFix?.refresh?.();
+    const nav = document.querySelector("body > nav");
+    const bar = document.getElementById("rpWorkoutActions");
+    if (!nav || !bar || bar.hidden) return null;
+    return {gap: nav.getBoundingClientRect().top - bar.getBoundingClientRect().bottom};
+  });
+  check(restActionPosition && restActionPosition.gap >= 6 && restActionPosition.gap <= 10,
+    "Pausenleiste sitzt mit 8px Abstand direkt oberhalb der Navigation", JSON.stringify(restActionPosition));
 
   const skipRestProxy=page.locator('[data-proxy-for="skipRestBtn"]');
   const skipRestOriginal=page.locator("#skipRestBtn");
