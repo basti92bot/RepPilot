@@ -38,8 +38,6 @@
         grid-template-columns:repeat(4,minmax(0,1fr))!important;
         align-items:center!important;
         z-index:10000!important;
-        transform:none!important;
-        -webkit-transform:none!important;
         padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px))!important
       }
       body>nav button{min-width:0!important;margin:0!important;padding:10px 4px!important}
