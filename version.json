@@ -1,5 +1,5 @@
 {
-  "version": "11.8.137",
-  "releasedAt": "2026-10-19",
-  "notes": "Trainingsplan-Editor mit Übungsbibliothek, Vorlagen, eigenen Tagen, Sätzen, Wiederholungen und Pausen. Eigene Einheiten starten im vorhandenen Workout-Flow. Speicherung derzeit nur lokal."
+  "version": "11.8.138",
+  "releasedAt": "2026-10-30",
+  "notes": "iPhone-Fix: Pausen-Aktionsleiste wird an der tatsächlichen Position der Bottom-Navigation ausgerichtet. Konflikt zwischen CSS-Transform und Viewport-Korrektur behoben."
 }
