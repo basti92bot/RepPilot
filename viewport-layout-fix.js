@@ -19,21 +19,31 @@
     }
     return bottom;
   }
+  function alignActions(nav, actions) {
+    if (!actions || actions.hidden || getComputedStyle(actions).display === "none") return;
+    // The nav and action bar can have different viewport offsets on iOS.
+    // Measure their actual screen positions rather than copying the nav correction.
+    const desiredBottom = nav.getBoundingClientRect().top - 8;
+    const offset = desiredBottom - actions.getBoundingClientRect().bottom;
+    if (Math.abs(offset) >= 1) {
+      actions.style.transform = "translate3d(-50%," + offset + "px,0)";
+    }
+  }
   function refresh() {
     pending = 0;
     const nav = document.querySelector("body > nav");
     if (!nav) return 0;
     const actions = document.getElementById("rpWorkoutActions");
-    nav.style.transform = "none";
+    nav.style.setProperty("transform", "none", "important");
     if (actions) actions.style.transform = "translateX(-50%)";
     const desired = visibleBottom();
     const actual = nav.getBoundingClientRect().bottom;
     const delta = Math.max(-500, Math.min(500, desired - actual));
     lastCorrection = Math.abs(delta) < 1 ? 0 : delta;
     if (lastCorrection) {
-      nav.style.transform = "translate3d(0," + lastCorrection + "px,0)";
-      if (actions) actions.style.transform = "translate3d(-50%," + lastCorrection + "px,0)";
+      nav.style.setProperty("transform", "translate3d(0," + lastCorrection + "px,0)", "important");
     }
+    alignActions(nav, actions);
     return lastCorrection;
   }
   function schedule() { if (!pending) pending = requestAnimationFrame(refresh); }
